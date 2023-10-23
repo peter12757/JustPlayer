@@ -37,15 +37,14 @@ android {
             version "3.18.1"
         }
     }
-    packagingOptions{
-        doNotStrip "*/armeabi-v7a/*.so"
-        doNotStrip "*/arm64-v8a/*.so"
-        doNotStrip "*/x86/*.so"
-        doNotStrip "**.so"
+    packagingOptions {
+        jniLibs {
+            keepDebugSymbols += ['*/armeabi-v7a/*.so', '*/arm64-v8a/*.so', '*/x86/*.so', '**.so']
+        }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_11
-        targetCompatibility JavaVersion.VERSION_11
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
     kotlinOptions {
         jvmTarget = '1.8'
