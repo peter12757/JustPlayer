@@ -1,11 +1,10 @@
-package com.eathemeat.basedroid.player
+package com.eathemeat.base
 
 import android.media.MediaPlayer.SEEK_PREVIOUS_SYNC
 import android.view.Surface
-import com.alibaba.android.arouter.facade.template.IProvider
 import java.net.URI
 
-interface IMediaPlayer :IProvider{
+interface IMediaPlayer{
 
     var callback: MediaPlayerCallBack?
     fun prepareAsyc(): Unit

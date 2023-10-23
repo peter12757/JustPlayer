@@ -1,24 +1,17 @@
-package com.eathemeat.basedroid.player
+package com.eathemeat.base
 
-import android.content.Context
 import android.media.MediaPlayer
 import android.os.Build
 import android.util.Log
 import android.view.Surface
-import com.alibaba.android.arouter.facade.annotation.Route
-import com.eathemeat.basedroid.data.test.Constants
-import com.eathemeat.basedroid.player.util.MediaProgressGetter
 import java.net.URI
 
-@Route(path=Constants.PLAYER_ANDROID, name = "defaut media player")
-class AndroidMediaPlayer :IMediaPlayer, MediaProgressGetter.OnProgressUpdateListener {
-    val TAG = AndroidMediaPlayer::class.java.name
-
-    var progressGetter: MediaProgressGetter = MediaProgressGetter()
+class AndroidMediaPlayer : IMediaPlayer {
+    val TAG = AndroidMediaPlayer::class.simpleName
 
     var mediaPlayer = MediaPlayer().apply {
         setOnBufferingUpdateListener { mp, percent ->
-            callback?.onBufferingUpdate(this as IMediaPlayer , percent)
+            callback?.onBufferingUpdate(this as IMediaPlayer, percent)
 
         }
         setOnPreparedListener {
@@ -69,6 +62,7 @@ class AndroidMediaPlayer :IMediaPlayer, MediaProgressGetter.OnProgressUpdateList
             }
         }
     }
+
     override var callback: MediaPlayerCallBack? = null
 
 
@@ -78,9 +72,6 @@ class AndroidMediaPlayer :IMediaPlayer, MediaProgressGetter.OnProgressUpdateList
 
     override fun start() {
         mediaPlayer.start()
-        progressGetter = MediaProgressGetter()
-        progressGetter.startGet(mediaPlayer)
-        progressGetter.setListener(this)
     }
 
     override fun pause() {
@@ -88,8 +79,6 @@ class AndroidMediaPlayer :IMediaPlayer, MediaProgressGetter.OnProgressUpdateList
     }
 
     override fun stop() {
-        progressGetter.setListener(null)
-        progressGetter.stopGet()
         mediaPlayer.stop()
     }
 
@@ -125,14 +114,5 @@ class AndroidMediaPlayer :IMediaPlayer, MediaProgressGetter.OnProgressUpdateList
     override fun getPosition(): Long {
         return mediaPlayer.currentPosition.toLong()
     }
-
-    override fun init(context: Context?) {
-        Log.d(TAG, "init() called with: context = $context")
-    }
-
-    override fun onProgressUpdate(progress: Long, mediaPlayer: MediaPlayer) {
-        callback?.onProgressUpdate(this,progress)
-    }
-
 
 }

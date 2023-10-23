@@ -1,25 +1,20 @@
 package com.eathemeat.player
 
-import android.content.Context
 import android.util.Log
 import android.view.Surface
+import com.eathemeat.base.IMediaPlayer
+import com.eathemeat.base.MediaPlayerCallBack
 import com.eathemeat.player.data.MarshallHelper
 import java.net.URI
 
-class JustPlayer {
+class JustPlayer(override var callback: MediaPlayerCallBack?) : IMediaPlayer {
     val TAG = JustPlayer::class.simpleName
     var api:JustApi = JustApi()
     var nativeHandler = -1L
 
-    override var callback: MediaPlayerCallBack? = null
 
     init {
         nativeHandler = api.createPlayer()
-        api.testmain("test".toByteArray(),"just".toByteArray())
-    }
-
-    //must impl
-    constructor() {
     }
 
     override fun prepareAsyc() {
@@ -102,10 +97,6 @@ class JustPlayer {
         api.invoke(nativeHandler, MarshallHelper.packageToByteBuffer(method).array())
         // TODO:
         return 0
-    }
-
-    override fun init(context: Context?) {
-        Log.d(TAG, "init() called with: context = $context")
     }
 
     fun checkNativeAvalible(): Unit {

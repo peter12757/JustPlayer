@@ -1,6 +1,5 @@
-package com.eathemeat.basedroid.player
+package com.eathemeat.base
 
-import android.media.MediaPlayer
 import android.media.TimedText
 
 interface MediaPlayerCallBack {
@@ -15,9 +14,9 @@ interface MediaPlayerCallBack {
 
     fun onInfo(what: Int, extra: Int): Unit
 
-    fun onBufferingUpdate(mp:IMediaPlayer,percent:Int):Unit
+    fun onBufferingUpdate(mp: IMediaPlayer, percent:Int):Unit
 
-    fun onError(mp:IMediaPlayer,what: Int, extra:Int):Unit
+    fun onError(mp: IMediaPlayer, what: Int, extra:Int):Unit
     fun onTimedText(mp: IMediaPlayer, text: TimedText?)
     fun onVideoSizeChanged(iMediaPlayer: IMediaPlayer, width: Int, height: Int)
     fun onProgressUpdate(mediaPlayer: IMediaPlayer, progress: Long)
