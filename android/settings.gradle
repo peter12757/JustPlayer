@@ -20,7 +20,6 @@ dependencyResolutionManagement {
         maven { url 'https://maven.aliyun.com/repository/public' }
 //google镜像地址
         maven { url 'https://maven.aliyun.com/repository/google' }
-        mavenCentral()
     }
 }
 rootProject.name = "JustPlayer"

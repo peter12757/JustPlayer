@@ -8,7 +8,7 @@ class JustApi {
      * A native method that is implemented by the 'ffmpeglib' native library,
      * which is packaged with this application.
      */
-    external fun createPlayer(): Long
+    external fun createPlayer(context: ByteArray): Long
 
     external fun destory(player:Long): Unit
     

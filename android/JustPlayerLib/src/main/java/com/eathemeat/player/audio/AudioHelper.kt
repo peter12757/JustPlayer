@@ -8,8 +8,8 @@ import android.media.AudioManager.AUDIO_SESSION_ID_GENERATE
 import android.media.AudioTrack
 import com.eathemeat.player.IHandle
 import com.eathemeat.player.JustCallBack
-import com.eathemeat.player.data.IMarshallable
-import com.eathemeat.player.data.MarshallHelper
+import com.eathemeat.base.util.protocol.IMarshallable
+import com.eathemeat.base.util.protocol.MarshallHelper
 import java.nio.ByteBuffer
 
 class AudioHelper: IHandle() {
@@ -25,7 +25,7 @@ class AudioHelper: IHandle() {
 
     override fun handle(data: ByteBuffer):Any? {
         var method =data.int
-        var result:IMarshallable? = when(method) {
+        var result: IMarshallable? = when(method) {
             Method_GetMinBufferSize -> {
                 var simpleRateInHz = data.int
                 var channelConfig = data.int
@@ -56,13 +56,14 @@ class AudioHelper: IHandle() {
 
     }
 
-    class AudioGetMinBufferSize(var minBufSize:Int,var uri:Int = Method_GetMinBufferSize): IMarshallable{
+    class AudioGetMinBufferSize(var minBufSize:Int,var uri:Int = Method_GetMinBufferSize):
+        IMarshallable {
 
         override fun size(): Int {
             return Int.SIZE_BYTES+Int.SIZE_BYTES
         }
 
-        override fun marshall(out: ByteBuffer): ByteBuffer {
+        override fun marshal(out: ByteBuffer): ByteBuffer {
             out.putInt(uri)
             out.putInt(minBufSize)
             return out

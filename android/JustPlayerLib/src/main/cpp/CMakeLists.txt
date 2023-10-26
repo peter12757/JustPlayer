@@ -7,7 +7,8 @@ cmake_minimum_required(VERSION 3.18.1)
 
 # Declares and names the project.
 
-project("JustApi")
+project("JustPlayer")
+SET(LIBNAME JUSTPlayer)
 
 set (CMAKE_CXX_STANDARD 11)
 set (CMAKE_C_STANDARD 99)
@@ -28,20 +29,25 @@ set(CMAKE_ASM_FLAGS_RELEASE     "${CMAKE_ASM_FLAGS_RELEASE} -ffunction-sections 
 set(CMAKE_MODULE_LINKER_FLAGS   "${CMAKE_MODULE_LINKER_FLAGS} -Wl,--gc-sections")
 set(CMAKE_SHARED_LINKER_FLAGS   "${CMAKE_SHARED_LINKER_FLAGS} -Wl,--gc-sections")
 
+add_subdirectory(base)
+add_subdirectory(FFMPEGPlayer)
+#add_subdirectory(cpptest)
 
-add_subdirectory(JUSTPlayer)
-add_subdirectory(cpptest)
 
 
 
-add_library(JustApi SHARED
-        JustApi.cpp
+add_library(${LIBNAME} SHARED
+        JustJniApi.cpp
         )
 
-target_include_directories(JustApi PRIVATE
-        justplayer/player
-        justplayer/player/data
-        cpptest
+target_include_directories(${LIBNAME} PRIVATE
+        base
+        )
+
+
+
+target_include_directories(${LIBNAME} PRIVATE
+        FFMPEGPlayer/player
         )
 
 find_library( # 定位 Android 特定的日志支持库并将其路径存储在 log-lib 中
@@ -50,9 +56,9 @@ find_library( # 定位 Android 特定的日志支持库并将其路径存储在 
         # CMake needs to locate.
         log )
 
-target_link_libraries(JustApi
-        JUSTPlayer
-        CPPTest
+target_link_libraries(${LIBNAME}
+        JustBase
+        FFMPEGPlayer
         ${log-lib}
 )
 

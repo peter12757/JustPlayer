@@ -5,11 +5,30 @@
 #ifndef ANDROIDTEST_JUSTDATA_H
 #define ANDROIDTEST_JUSTDATA_H
 
-#include "data/package.h"
-#include "config/constants.h"
+#include "util/protocol/package.h"
+#include "base/const/constants.h"
+#include "util/protocol/package.h"
+#include "util/LogUtil.h"
 
-using namespace JustData;
-using namespace JustData::Package;
+
+//#define JUST_UNMARSHAL(data, up)                                                        \
+//  do                                                                                    \
+//  {                                                                                     \
+//    data.unmarshal(up);                                                                  \
+//    if (up.isUnpackError())                                                             \
+//    {                                                                                   \
+//      LOGE(LOG_TAG, "unmarshal error in func %s, type %u", __FUNCTION__, data.event); \
+//      return 0;                                                                         \
+//    }                                                                                   \
+//  } while (0)
+
+#define JUST_UNMARSHAL(data, up)                                                        \
+  do                                                                                    \
+  {                                                                                     \
+    data.unmarshal(up);                                                                  \
+  } while (0)
+
+using namespace JustPackage;
 
 enum JUST_Method {
     JUSTMETHOD_UNKNOW = 0,
@@ -27,6 +46,41 @@ enum JUST_Method {
 enum JUST_URI {
     URI_UNKNOW =0,
     URI_METHOD=URI_UNKNOW+1,
+};
+
+enum JustPlayerType {
+    MediaCodec = 0,
+    FFMPEGPlayer = MediaCodec+1,
+};
+
+struct JustContext : public IPackage{
+    JustPlayerType playerType = MediaCodec;
+
+    JustContext()
+    {}
+
+    void marshal(Pack &p) const override
+    {
+        p << (::uint32_t) playerType;
+    }
+
+    void unmarshal(const Unpack &up) override
+    {
+        ::uint32_t type = 0;
+        up>>type;
+        playerType = static_cast<JustPlayerType>(type);
+    }
+
+    string PlayerType2Str()
+    {
+        switch (playerType) {
+            case MediaCodec: return "MediaCodec";
+            case FFMPEGPlayer: return "FFMPEGPlayer";
+            default: return "Unknown";
+        }
+    }
+
+
 };
 
 

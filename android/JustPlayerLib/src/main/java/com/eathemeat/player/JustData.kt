@@ -1,14 +1,35 @@
 package com.eathemeat.player
 
-import android.util.Log
-import com.eathemeat.player.data.IMarshallable
+import com.eathemeat.base.util.protocol.IMarshallable
+import com.eathemeat.base.util.protocol.IPackage
 import java.nio.ByteBuffer
-import com.eathemeat.player.data.MarshallHelper
-import java.nio.ByteOrder
+import com.eathemeat.base.util.protocol.MarshallHelper
 
 
 open class JustData {
     val  TAG = "JustData"
+
+    enum class JustPlayerType(val value:UInt) {
+        MediaCodec(0u),
+        FFMPEGPlayer(1u),
+    }
+
+    open class JustContext(var playerType:JustPlayerType = JustPlayerType.MediaCodec) : IPackage {
+        override fun size(): Int {
+            return UShort.SIZE_BYTES
+        }
+
+        override fun marshal(out: ByteBuffer): ByteBuffer {
+            out.putInt(playerType.value.toInt())
+            return out
+        }
+
+        override fun unmarshal(inBuf: ByteBuffer) {
+            playerType = JustPlayerType.values()[inBuf.int]
+        }
+
+    }
+
 
     enum class JUST_URI(val value:Int) {
         URI_UNKNOW(0),
@@ -30,13 +51,14 @@ open class JustData {
     }
 
 
-    open class MethodBase(var method:Int = JUST_Method.JUSTMETHOD_UNKNOW.value,var justUri:Int = JUST_URI.URI_METHOD.value) : IMarshallable {
+    open class MethodBase(var method:Int = JUST_Method.JUSTMETHOD_UNKNOW.value,var justUri:Int = JUST_URI.URI_METHOD.value) :
+        IMarshallable {
 
         override fun size(): Int {
             return Int.SIZE_BYTES +Int.SIZE_BYTES
         }
 
-        override fun marshall(out: ByteBuffer): ByteBuffer {
+        override fun marshal(out: ByteBuffer): ByteBuffer {
             out.putInt(size())
             out.putInt(justUri)
             out.putInt(method)
@@ -60,8 +82,8 @@ open class JustData {
             return super.size()+Long.SIZE_BYTES
         }
 
-        override fun marshall(out: ByteBuffer): ByteBuffer {
-            return super.marshall(out)+prograss
+        override fun marshal(out: ByteBuffer): ByteBuffer {
+            return super.marshal(out)+prograss
         }
 
     }
@@ -72,11 +94,11 @@ open class JustData {
 
     class SetDataSourceMethod(var source:String):MethodBase(JUST_Method.JUSTMETHOD_SET_DATA_SOURCE.value){
         override fun size(): Int {
-            return super.size()+MarshallHelper.calcMarshallSize(source)
+            return super.size()+ MarshallHelper.calcMarshallSize(source)
         }
 
-        override fun marshall(out: ByteBuffer): ByteBuffer {
-            return super.marshall(out)+source
+        override fun marshal(out: ByteBuffer): ByteBuffer {
+            return super.marshal(out)+source
         }
     }
 

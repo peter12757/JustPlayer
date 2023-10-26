@@ -4,17 +4,21 @@ import android.util.Log
 import android.view.Surface
 import com.eathemeat.base.IMediaPlayer
 import com.eathemeat.base.MediaPlayerCallBack
-import com.eathemeat.player.data.MarshallHelper
+import com.eathemeat.base.util.protocol.MarshallHelper
 import java.net.URI
 
-class JustPlayer(override var callback: MediaPlayerCallBack?) : IMediaPlayer {
+class JustPlayer(context: JustData.JustContext, override var callback: MediaPlayerCallBack?) : IMediaPlayer {
     val TAG = JustPlayer::class.simpleName
     var api:JustApi = JustApi()
     var nativeHandler = -1L
 
 
+    companion object{
+    }
+
+
     init {
-        nativeHandler = api.createPlayer()
+        nativeHandler = api.createPlayer(MarshallHelper.packageToByteBuffer(context).array())
     }
 
     override fun prepareAsyc() {
