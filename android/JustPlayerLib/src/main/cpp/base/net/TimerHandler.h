@@ -5,7 +5,7 @@
 #ifndef ANDROIDTEST_TIMERHANDLER_H
 #define ANDROIDTEST_TIMERHANDLER_H
 
-#include "LogUtil.h"
+#include "../log/LogUtil.h"
 #include <atomic>
 #include <math.h>
 #include "TickTime.h"

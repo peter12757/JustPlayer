@@ -1,9 +1,10 @@
 //
-// Created by Peter Xi on 2022/5/30.
+// Created by PeterX on 2023/10/27 0027.
 //
 
-#ifndef ANDROIDTEST_ENDIAN_H
-#define ANDROIDTEST_ENDIAN_H
+#ifndef JUSTPLAYER_ENDIAN_H
+#define JUSTPLAYER_ENDIAN_H
+
 
 #define LIL_ENDIAN  1234
 #define BIG_ENDIAN  4321
@@ -25,4 +26,4 @@
 #endif
 #endif
 
-#endif //ANDROIDTEST_ENDIAN_H
+#endif //JUSTPLAYER_ENDIAN_H

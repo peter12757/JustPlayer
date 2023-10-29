@@ -5,7 +5,7 @@
 #ifndef ANDROIDTEST_SOCKETHANDLER_H
 #define ANDROIDTEST_SOCKETHANDLER_H
 
-#include "common.h"
+#include "../const/common.h"
 
 namespace NET_SOCKET{
 

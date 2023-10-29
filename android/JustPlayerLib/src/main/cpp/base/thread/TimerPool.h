@@ -10,7 +10,7 @@
 #include <set>
 #include <stddef.h>
 #include "../Util.h"
-#include "../../base/config/constants.h"
+#include "../../const/just_base_constants1.h"
 
 namespace XUtil
 {

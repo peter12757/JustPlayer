@@ -2,8 +2,8 @@
 
 #include <jni.h>
 #include <string>
-#include "util/LogUtil.h"
-#include "util/JniHelper.h"
+#include "LogUtil.h"
+#include "JniHelper.h"
 #include "JustData.h"
 #include "base/cpptest/InvokeMain.h"
 #include "IJustPlayer.h"
@@ -48,11 +48,13 @@ Java_com_eathemeat_player_JustApi_createPlayer(
     switch (data.playerType) {
         case MediaCodec:
         {
+
 //            player =
             break;
         }
         case FFMPEGPlayer:
         {
+//            走ffmpeg
             player = new FFMPEGPlayer();
             LOGD(LOG_TAG,"not implement");
             break;

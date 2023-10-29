@@ -1,14 +1,11 @@
 //
-// Created by Peter Xi on 2022/5/20.
+// Created by PeterX on 2023/10/27 0027.
 //
 
-/*
-move from webrtc/tick_util.h
-see api/units/time_delta.h
-*/
+#ifndef JUSTPLAYER_TICKTIME_H
+#define JUSTPLAYER_TICKTIME_H
 
-#ifndef ANDROIDTEST_TICKTIME_H
-#define ANDROIDTEST_TICKTIME_H
+
 
 #include <chrono>
 
@@ -57,4 +54,5 @@ namespace NET_SOCKET {
 }
 
 
-#endif //ANDROIDTEST_TICKTIME_H
+
+#endif //JUSTPLAYER_TICKTIME_H

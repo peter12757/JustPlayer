@@ -7,7 +7,7 @@
 #ifndef ANDROIDTEST_PLAYEREVENTHANDLER_H
 #define ANDROIDTEST_PLAYEREVENTHANDLER_H
 
-#include "../../util/thread/IEventHandler.h"
+#include "../../base/thread/IEventHandler.h"
 
 enum PLAYER_EVENT {
     EVENT_PLAYER_UNKNOW,

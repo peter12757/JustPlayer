@@ -9,7 +9,7 @@
 #include <map>
 #include <deque>
 #include "../Lock.h"
-#include "../LogUtil.h"
+#include "../log/LogUtil.h"
 using namespace Lock;
 
 class IBaseEvent

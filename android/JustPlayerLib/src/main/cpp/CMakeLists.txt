@@ -7,8 +7,8 @@ cmake_minimum_required(VERSION 3.18.1)
 
 # Declares and names the project.
 
-project("JustPlayer")
-SET(LIBNAME JUSTPlayer)
+project("JustMediaPlayer")
+SET(LIBNAME JustPlayer)
 
 set (CMAKE_CXX_STANDARD 11)
 set (CMAKE_C_STANDARD 99)
@@ -30,7 +30,7 @@ set(CMAKE_MODULE_LINKER_FLAGS   "${CMAKE_MODULE_LINKER_FLAGS} -Wl,--gc-sections"
 set(CMAKE_SHARED_LINKER_FLAGS   "${CMAKE_SHARED_LINKER_FLAGS} -Wl,--gc-sections")
 
 add_subdirectory(base)
-add_subdirectory(FFMPEGPlayer)
+#add_subdirectory(FFMPEGPlayer)
 #add_subdirectory(cpptest)
 
 
@@ -40,8 +40,13 @@ add_library(${LIBNAME} SHARED
         JustJniApi.cpp
         )
 
+#base
 target_include_directories(${LIBNAME} PRIVATE
-        base
+        base/const
+        base/net
+        base/util
+        base/log
+        base/protocol
         )
 
 

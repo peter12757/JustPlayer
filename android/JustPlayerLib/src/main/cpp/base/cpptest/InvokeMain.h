@@ -1,13 +1,13 @@
 //
-// Created by Peter Xi on 2022/5/24.
+// Created by Administrator on 2023/10/27 0027.
 //
 
-#ifndef ANDROIDTEST_INVOKEMAIN_H
-#define ANDROIDTEST_INVOKEMAIN_H
+#ifndef JUSTPLAYER_INVOKEMAIN_H
+#define JUSTPLAYER_INVOKEMAIN_H
 
 #include "../util/Util.h"
 #include <iostream>
-#include "../util/LogUtil.h"
+#include "log/LogUtil.h"
 #include <sstream>
 
 using namespace std;
@@ -31,4 +31,4 @@ public:
 };
 
 
-#endif //ANDROIDTEST_INVOKEMAIN_H
+#endif //JUSTPLAYER_INVOKEMAIN_H

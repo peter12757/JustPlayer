@@ -4,7 +4,8 @@
 
 #ifndef ANDROIDTEST_LOCALDATAREADER_H
 #define ANDROIDTEST_LOCALDATAREADER_H
-#include "../../base/util/thread/XThread.h"
+
+#include "XThread.h"
 #include "data/FFinc.h"
 #include <stdio.h>
 #include "data/VideoState.h"

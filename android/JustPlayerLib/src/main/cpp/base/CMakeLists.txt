@@ -11,12 +11,12 @@ add_definitions(-DHAVE_CONFIG_H)
 aux_source_directory(. JustBase_SRC)
 aux_source_directory(const JustBase_SRC)
 #aux_source_directory(cpptest JustBase_SRC)
-aux_source_directory(data JustBase_SRC)
 aux_source_directory(net JustBase_SRC)
+aux_source_directory(log JustBase_SRC)
 aux_source_directory(util JustBase_SRC)
-aux_source_directory(util/protocol JustBase_SRC)
-aux_source_directory(util/statemachine JustBase_SRC)
-aux_source_directory(util/thread JustBase_SRC)
+aux_source_directory(protocol JustBase_SRC)
+aux_source_directory(statemachine JustBase_SRC)
+aux_source_directory(thread JustBase_SRC)
 
 #build
 add_library(${LIBNAME}  SHARED

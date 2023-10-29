@@ -5,7 +5,7 @@
 #ifndef ANDROIDTEST_AUDIOBASEENGINE_H
 #define ANDROIDTEST_AUDIOBASEENGINE_H
 
-#include <XThread.h>
+#include "../../../base/thread/XThread.h"
 #include "../../../base/util/Util.h"
 #include "../../../base/config/constants.h"
 #include "AudioConst.h"

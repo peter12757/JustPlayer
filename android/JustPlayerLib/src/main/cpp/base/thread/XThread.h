@@ -5,7 +5,7 @@
 #include <pthread.h>
 #endif
 #include <stdint.h>
-#include "../Util.h"
+#include "../util/Util.h"
 
 const uint32_t kThreadNameSize = 100;
 const uint32_t kMaxRunUseArraySize = 16;

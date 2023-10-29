@@ -4,8 +4,8 @@
 
 #ifndef ANDROIDTEST_UTIL_H
 #define ANDROIDTEST_UTIL_H
-#include "LogUtil.h"
-#include "../base/config/constants.h"
+#include "../log/LogUtil.h"
+#include "../const/just_base_constants1.h"
 
 
 #ifndef MAX

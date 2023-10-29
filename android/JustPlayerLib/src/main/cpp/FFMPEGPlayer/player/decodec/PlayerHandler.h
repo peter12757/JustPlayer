@@ -5,7 +5,7 @@
 #ifndef ANDROIDTEST_PLAYERHANDLER_H
 #define ANDROIDTEST_PLAYERHANDLER_H
 
-#include "../../util/thread/IEventHandler.h"
+#include "../../../base/thread/IEventHandler.h"
 
 enum PlayerEventType {
     EVENT_UNKNOW,

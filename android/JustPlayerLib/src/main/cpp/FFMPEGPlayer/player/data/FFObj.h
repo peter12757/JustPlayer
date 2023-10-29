@@ -6,6 +6,6 @@
 #define ANDROIDTEST_FFOBJ_H
 
 #include "FFinc.h"
-#include "../../../base/config/constants.h"
+#include "just_base_constants1.h"
 
 #endif //ANDROIDTEST_FFOBJ_H

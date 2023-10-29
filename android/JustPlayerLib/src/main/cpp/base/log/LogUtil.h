@@ -6,7 +6,7 @@
 #define ANDROIDTEST_LOGUTIL_H
 
 #include <android/log.h>
-#define LOG_TAG "FFMPEGPlayer"
+#define LOG_TAG "JustPlayer"
 
 
 #define LOGV(...) \

@@ -6,14 +6,14 @@
 #define ANDROIDTEST_SOCKETBASE_H
 
 //======================================================================================
-#include "common.h"
+#include "../const/common.h"
 #include "SocketHandler.h"
 #include <atomic>
 //#include "openssl/ssl.h"
-#include "../base/data/package.h"
+#include "../protocol/package.h"
 //======================================================================================
 namespace NET_SOCKET {
-    using namespace JustData::Package;
+    using namespace JustPackage;
 
 
     class SocketBase
@@ -45,7 +45,7 @@ namespace NET_SOCKET {
         virtual int onWriteSocket() = 0;
         virtual void onError() = 0;
         virtual void CloseSocket() = 0;
-        virtual int SendBin(uint32_t ip, uint16_t port, Marshallable& pPkg, uint32_t uri) = 0;
+        virtual int SendBin(uint32_t ip, uint16_t port, IMarshallable& pPkg, uint32_t uri) = 0;
         virtual int SendBin(uint32_t ip, uint16_t port, const char* data, uint32_t len) = 0;
         virtual void setTimeout(uint32_t interval) = 0;
         virtual bool isProxyUsed() {return false;}

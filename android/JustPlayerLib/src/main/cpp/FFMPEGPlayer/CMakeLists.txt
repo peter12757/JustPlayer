@@ -1,12 +1,12 @@
-
+#request project define
+cmake_minimum_required(VERSION 3.18.0)
 
 SET(LIBNAME FFMPEGPlayer)
+project(${LIBNAME})
 
-message("CMAKE_CURRENT_SOURCE_DIR:${CMAKE_CURRENT_SOURCE_DIR}")
-message("CMAKE_SOURCE_DIR:${CMAKE_SOURCE_DIR}")
 
-message("ANDROID_ABI : ${ANDROID_ABI}")
 SET(FFLIB_DIR ${CMAKE_SOURCE_DIR}/../../../libs)
+message("FFLIB_DIR : ${FFLIB_DIR}")
 
 set(AVCODEC  libavcodec)
 add_library(${AVCODEC} SHARED IMPORTED)
@@ -78,7 +78,7 @@ target_include_directories(${SWSCALE} INTERFACE ffmpeginc/libswscale)
 AUX_SOURCE_DIRECTORY(player FFMPEGPlayerSrc)
 AUX_SOURCE_DIRECTORY(player/data FFMPEGPlayerSrc)
 
-#audio
+#audio c
 aux_source_directory(player/audio FFMPEGPlayerSrc)
 aux_source_directory(player/decodec FFMPEGPlayerSrc)
 
@@ -91,9 +91,11 @@ target_include_directories(${LIBNAME} PUBLIC
         player
         player/data
         ../base/const
-        ../base/util/statemachine
-        ../base/util/thread
+        ../base/statemachine
+        ../base/thread
         ../base/util
+        ../base/log
+        ../base/protocol
         player/audio
         player/decodec)
 
@@ -104,7 +106,11 @@ target_include_directories(${LIBNAME} PRIVATE
         ${AVFORMAT}
         ${AVUTIL}
         ${SWRESAMPLE}
-        ${SWSCALE})
+        ${SWSCALE}
+        player
+        player/data
+        player/audio
+        player/decodec)
 
 
 

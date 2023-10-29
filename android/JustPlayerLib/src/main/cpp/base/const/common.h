@@ -1,10 +1,9 @@
 //
-// Created by Peter Xi on 2022/5/21.
+// Created by PeterX on 2023/10/27 0027.
 //
 
-#ifndef ANDROIDTEST_COMMON_H
-#define ANDROIDTEST_COMMON_H
-
+#ifndef JUSTPLAYER_COMMON_H
+#define JUSTPLAYER_COMMON_H
 
 #ifdef _WIN32
 #include <Windows.h>
@@ -63,6 +62,6 @@ inline void SafeDeleteArray(T* & pVal)
 static const int TCP_IP_HEADER_LENGTH = 20+20;
 static const int UDP_IP_HEADER_LENGTH = 8+20;
 
-#include "../base/data/package.h"
 
-#endif //ANDROIDTEST_COMMON_H
+
+#endif //JUSTPLAYER_COMMON_H

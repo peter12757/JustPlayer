@@ -1,9 +1,9 @@
 //
-// Created by Peter Xi on 2022/5/13.
+// Created by PeterX on 2023/10/27 0027.
 //
 
-#ifndef ANDROIDTEST_CONSTANT_H
-#define ANDROIDTEST_CONSTANT_H
+#ifndef JUSTPLAYER_CONSTANTS_H
+#define JUSTPLAYER_CONSTANTS_H
 
 #include <string>
 #include <iostream>
@@ -28,21 +28,8 @@ enum RET{
 #define SAMPLE_QUEUE_SIZE 9
 #define FRAME_QUEUE_SIZE FFMAX(SAMPLE_QUEUE_SIZE, FFMAX(VIDEO_PICTURE_QUEUE_SIZE, SUBPICTURE_QUEUE_SIZE))
 
-template< class T >
-inline void SafeDelete(T* & pVal)
-{
-    delete pVal;
-    pVal = 0;
-}
-
-template< class T >
-inline void SafeDeleteArray(T* & pVal)
-{
-    delete[] pVal;
-    pVal = 0;
-}
-
 //for XThread.h
 #define PAL_EVENT_10_SEC   10000
 #define PAL_EVENT_INFINITE 0xffffffff
-#endif //ANDROIDTEST_CONSTANT_H
+
+#endif //JUSTPLAYER_CONSTANTS_H
