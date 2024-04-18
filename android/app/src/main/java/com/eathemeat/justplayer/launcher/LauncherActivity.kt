@@ -81,7 +81,7 @@ fun Greeting(modifier: Modifier = Modifier) {
     ConstraintLayout {
         Box {
             Image(painterResource(id = R.drawable.img_def_launcher)
-                ,modifier = modifier
+                ,modifier = modifier.fillMaxSize()
                 , contentDescription = "default launcher image"
             , contentScale = ContentScale.FillBounds)
             Text(text = "${clickTimes}S",
@@ -93,7 +93,7 @@ fun Greeting(modifier: Modifier = Modifier) {
         }
     }
     val lifecycle = LocalLifecycleOwner.current.lifecycle
-    DisposableEffect(key1 = lifecycle) {
+    DisposableEffect(key1 = lifecycle, key2 = clickTimes) {
         Log.d(TAG, "DisposableEffect:  step1")
         val lifeObserver = createLifeObserver()
         lifecycle.addObserver(lifeObserver)
@@ -107,8 +107,8 @@ fun Greeting(modifier: Modifier = Modifier) {
 
 }
 
-fun createLifeObserver(): LifecycleEventObserver =
-    LifecycleEventObserver{ source,event ->
+fun createLifeObserver( ): LifecycleEventObserver =
+    LifecycleEventObserver{ _,event ->
         when(event) {
             Lifecycle.Event.ON_CREATE ->{
                 Log.d(TAG, "LifecycleEventObserver:  ON_CREATE")
@@ -133,6 +133,8 @@ fun createLifeObserver(): LifecycleEventObserver =
             }
         }
     }
+
+
 
 @Preview(showBackground = true)
 @Composable
