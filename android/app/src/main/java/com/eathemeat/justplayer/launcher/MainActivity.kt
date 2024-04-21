@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import com.eathemeat.justplayer.launcher.screen.LauncherScreen
+import com.eathemeat.justplayer.launcher.screen.MainContainScreen
 import com.eathemeat.justplayer.ui.theme.JustPlayerTheme
 
 class LauncherActivity : ComponentActivity() {
@@ -30,9 +31,7 @@ class LauncherActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    LauncherScreen {
-                        setContent {  }
-                    }
+                    MainContainScreen ()
                 }
             }
         }

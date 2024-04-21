@@ -31,7 +31,12 @@ import com.eathemeat.justplayer.launcher.MainViewModule
 import com.eathemeat.justplayer.launcher.TAG
 import com.eathemeat.justplayer.ui.theme.JustPlayerTheme
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
+
 
 /**
  * author:PeterX
@@ -39,25 +44,27 @@ import kotlinx.coroutines.launch
  */
 @Composable
 fun LauncherScreen(modifier: Modifier = Modifier,viewModule: MainViewModule = viewModel()
-,end:()-> Unit) {
-    var clickTimes by remember {
-        mutableIntStateOf(5)
-    }
-    Log.d(TAG, "Greeting: step1 clickTimes:${clickTimes}")
-
-    SideEffect {
-        Log.d(TAG, "Greeting: SideEffect here!!!")
-        clickTimes--
-    }
+,time:Int =5,end:()-> Unit) {
     val scope = rememberCoroutineScope()
+    var clickTimes = remember{
+        mutableIntStateOf(time)
+    }
     scope.launch {
 
-        clickTimes--
-        if (clickTimes <0 ) {
+        flow {
+            (clickTimes.value downTo 0).forEach {
+                delay(1000L)
+                emit(it)
+            }
+        }.onStart {
+
+        }.onCompletion {
             end()
-            return@launch
+        }.catch {
+            Log.e(TAG, "LauncherScreen: error", it)
+        }.collect {
+            clickTimes.value = it
         }
-        delay(1000L)
 
     }
 
@@ -69,7 +76,7 @@ fun LauncherScreen(modifier: Modifier = Modifier,viewModule: MainViewModule = vi
                 ,modifier = modifier.fillMaxSize()
                 , contentDescription = "default launcher image"
                 , contentScale = ContentScale.FillBounds)
-            Text(text = "${clickTimes}S",
+            Text(text = "${clickTimes.value} S",
                 Modifier
                     .padding(all = 10.dp)
                     .align(Alignment.TopEnd)
@@ -77,44 +84,9 @@ fun LauncherScreen(modifier: Modifier = Modifier,viewModule: MainViewModule = vi
             )
         }
     }
-    val lifecycle = LocalLifecycleOwner.current.lifecycle
-    DisposableEffect(key1 = lifecycle, key2 = clickTimes) {
-        Log.d(TAG, "DisposableEffect:  step1")
-        val lifeObserver = createLifeObserver()
-        lifecycle.addObserver(lifeObserver)
-        onDispose {
-            Log.d(TAG, "DisposableEffect:  step1")
-            lifecycle.removeObserver(lifeObserver)
-        }
-    }
+
 }
 
-fun createLifeObserver( ): LifecycleEventObserver =
-    LifecycleEventObserver{ _,event ->
-        when(event) {
-            Lifecycle.Event.ON_CREATE ->{
-                Log.d(TAG, "LifecycleEventObserver:  ON_CREATE")
-            }
-            Lifecycle.Event.ON_DESTROY ->{
-                Log.d(TAG, "LifecycleEventObserver:  ON_DESTROY")
-            }
-            Lifecycle.Event.ON_RESUME ->{
-                Log.d(TAG, "LifecycleEventObserver:  ON_RESUME")
-            }
-            Lifecycle.Event.ON_PAUSE ->{
-                Log.d(TAG, "LifecycleEventObserver:  ON_PAUSE")
-            }
-            Lifecycle.Event.ON_START ->{
-                Log.d(TAG, "LifecycleEventObserver:  ON_START")
-            }
-            Lifecycle.Event.ON_STOP ->{
-                Log.d(TAG, "LifecycleEventObserver:  ON_STOP")
-            }
-            else -> {
-                Log.d(TAG, "LifecycleEventObserver:  $event")
-            }
-        }
-    }
 
 @Preview(showBackground = true)
 @Composable
