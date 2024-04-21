@@ -1,19 +1,10 @@
-@file:OptIn(ExperimentalMaterial3Api::class)
+package com.eathemeat.justplayer.launcher.screen
 
-package com.eathemeat.justplayer.launcher
-
-import android.os.Bundle
 import android.util.Log
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -21,8 +12,9 @@ import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment.Companion.TopEnd
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -33,41 +25,21 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.eathemeat.justplayer.R
+import com.eathemeat.justplayer.launcher.MainViewModule
+import com.eathemeat.justplayer.launcher.TAG
 import com.eathemeat.justplayer.ui.theme.JustPlayerTheme
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
-class LauncherActivity : ComponentActivity() {
-    
-    private var wait_time = mutableIntStateOf(5)
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContent {
-            JustPlayerTheme {
-                // A surface container using the 'background' color from the them e
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    Greeting()
-                }
-            }
-        }
-    }
-
-    override fun onResume() {
-        super.onResume()
-
-    }
-}
-
-private val timeColorArr = arrayOf(Color.Red,Color.Black,Color.Blue, Color.Gray,Color.Yellow,Color.White)
-const val TAG = "LauncherActivity"
-
-private val image_url = "https://gitee.com/xipeitao/Note/blob/master/%E6%8A%80%E6%9C%AF/android/compose/res/demo.png"
-
+/**
+ * author:PeterX
+ * time:2024/4/19 0019
+ */
 @Composable
-fun Greeting(modifier: Modifier = Modifier) {
+fun LauncherScreen(modifier: Modifier = Modifier,viewModule: MainViewModule = viewModel()
+,end:()-> Unit) {
     var clickTimes by remember {
         mutableIntStateOf(5)
     }
@@ -75,19 +47,32 @@ fun Greeting(modifier: Modifier = Modifier) {
 
     SideEffect {
         Log.d(TAG, "Greeting: SideEffect here!!!")
+        clickTimes--
+    }
+    val scope = rememberCoroutineScope()
+    scope.launch {
+
+        clickTimes--
+        if (clickTimes <0 ) {
+            end()
+            return@launch
+        }
+        delay(1000L)
+
     }
 
     //sedounds
     ConstraintLayout {
         Box {
-            Image(painterResource(id = R.drawable.img_def_launcher)
+            Image(
+                painterResource(id = R.drawable.img_def_launcher)
                 ,modifier = modifier.fillMaxSize()
                 , contentDescription = "default launcher image"
-            , contentScale = ContentScale.FillBounds)
+                , contentScale = ContentScale.FillBounds)
             Text(text = "${clickTimes}S",
                 Modifier
                     .padding(all = 10.dp)
-                    .align(TopEnd)
+                    .align(Alignment.TopEnd)
                 ,color = Color.White
             )
         }
@@ -102,9 +87,6 @@ fun Greeting(modifier: Modifier = Modifier) {
             lifecycle.removeObserver(lifeObserver)
         }
     }
-
-
-
 }
 
 fun createLifeObserver( ): LifecycleEventObserver =
@@ -134,12 +116,14 @@ fun createLifeObserver( ): LifecycleEventObserver =
         }
     }
 
-
-
 @Preview(showBackground = true)
 @Composable
-fun GreetingPreview() {
+fun LauncherScreenPreview() {
     JustPlayerTheme {
-        Greeting()
+        LauncherScreen(end = { Log.d(TAG, "preview: end")})
     }
 }
+
+
+
+
