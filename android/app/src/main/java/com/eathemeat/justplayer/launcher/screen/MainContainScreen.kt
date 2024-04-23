@@ -6,6 +6,7 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
@@ -21,14 +22,20 @@ import com.eathemeat.justplayer.ui.theme.JustPlayerTheme
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
+
+enum class SubScreen {
+    Screen_Launcher,
+    Screen_Play,
+    Screen_Config
+}
 /**
  * author:PeterX
  * time:2024/4/21 0021
  */
 @Composable
 fun MainContainScreen(modifier: Modifier = Modifier, viewModule: MainViewModule = viewModel()) {
-    LauncherScreen {
-        Log.d(TAG, "MainContainScreen: end")
+    var state = remember {
+        mutableStateOf(SubScreen.Screen_Launcher)
     }
 
 
@@ -40,6 +47,24 @@ fun MainContainScreen(modifier: Modifier = Modifier, viewModule: MainViewModule 
         onDispose {
             Log.d(TAG, "DisposableEffect:  step1")
             lifecycle.removeObserver(lifeObserver)
+        }
+    }
+
+    //state change？
+    when(state.value){
+        SubScreen.Screen_Launcher -> {
+            LauncherScreen {
+                state.value = SubScreen.Screen_Play
+            }
+        }
+        SubScreen.Screen_Play ->{
+            PlayScreen()
+        }
+        SubScreen.Screen_Config ->{
+
+        }
+        else ->{
+            ErrorScreen(errMsg = "ErrorMsg")
         }
     }
 }
