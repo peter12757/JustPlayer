@@ -61,7 +61,7 @@ fun MainContainScreen(modifier: Modifier = Modifier, viewModule: MainViewModule 
             PlayScreen()
         }
         SubScreen.Screen_Config ->{
-
+            ConfigScreen()
         }
         else ->{
             ErrorScreen(errMsg = "ErrorMsg")
