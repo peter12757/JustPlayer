@@ -15,4 +15,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "JustPlayer"
 include(":app")
- 
+include(":ffplayer")
