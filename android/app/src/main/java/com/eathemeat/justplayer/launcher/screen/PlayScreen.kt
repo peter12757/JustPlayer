@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.eathemeat.justplayer.launcher.MainViewModule
 import com.eathemeat.justplayer.ui.theme.JustPlayerTheme
@@ -20,6 +21,13 @@ import com.eathemeat.justplayer.ui.theme.JustPlayerTheme
 fun PlayScreen(modifier: Modifier = Modifier, viewModule: MainViewModule = viewModel()) {
     Box(modifier = modifier.fillMaxSize()) {
         val context = LocalContext.current
+        //surface
+        AndroidView(modifier = modifier.fillMaxSize()
+            ,factory = {
+            SurfaceView(context).apply {
+                // TODO:  
+            }
+        })
 
     }
 }

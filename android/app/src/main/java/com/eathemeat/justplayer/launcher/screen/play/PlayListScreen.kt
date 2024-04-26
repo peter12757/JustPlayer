@@ -1,0 +1,25 @@
+package com.eathemeat.justplayer.launcher.screen.play
+
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.eathemeat.justplayer.launcher.MainViewModule
+import com.eathemeat.justplayer.ui.theme.JustPlayerTheme
+
+/**
+ * author:PeterX
+ * time:2024/4/22 0022
+ */
+@Composable
+fun PlayListScreen(modifier: Modifier = Modifier, viewModule: MainViewModule = viewModel()) {
+
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PlaylistScreenPreview() {
+    JustPlayerTheme {
+        PlayListScreen()
+    }
+}
