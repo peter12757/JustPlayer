@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">JustPlayer</string>
     <string name="title_activity_home">HomeActivity</string>
+    <string name="show_more">Show more</string>
+    <string name="show_less">Show less</string>
+
+    <string name="play">play</string>
 </resources>

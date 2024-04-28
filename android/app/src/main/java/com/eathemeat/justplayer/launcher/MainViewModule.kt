@@ -3,6 +3,7 @@ package com.eathemeat.justplayer.launcher
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.lifecycle.ViewModel
 import com.eathemeat.justplayer.data.PlayItem
+import com.eathemeat.justplayer.launcher.screen.play.previewPlayList
 
 /**
  * author:PeterX
@@ -15,5 +16,13 @@ class MainViewModule : ViewModel() {
     var launcherTime = 5000L
 
     val playItems = mutableListOf<PlayItem>()
+
+    companion object {
+        fun test(): MainViewModule {
+            return MainViewModule().apply {
+                playItems.addAll(previewPlayList)
+            }
+        }
+    }
 
 }
