@@ -1,4 +1,4 @@
-package com.eathemeat.justplayer.launcher.widget
+package com.eathemeat.justplayer.launcher.widget.icons
 
 /**
  * author:PeterX

@@ -15,6 +15,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.eathemeat.justplayer.R
 import com.eathemeat.justplayer.launcher.MainViewModule
 import com.eathemeat.justplayer.launcher.screen.PlayScreen
+import com.eathemeat.justplayer.launcher.widget.icons.PIcons
+import com.eathemeat.justplayer.launcher.widget.icons.PlayArrowLeft
 import com.eathemeat.justplayer.ui.theme.JustPlayerTheme
 
 /**
@@ -24,6 +26,12 @@ import com.eathemeat.justplayer.ui.theme.JustPlayerTheme
 @Composable
 fun PlayControlScreen(modifier: Modifier = Modifier, viewModule: MainViewModule = viewModel()) {
     Row {
+        IconButton(onClick = { /*TODO*/ }) {
+            Icon(
+                imageVector = PIcons.Play.PlayArrowLeft,
+                contentDescription =
+                stringResource(R.string.show_more))
+        }
         IconButton(onClick = { /*TODO*/ }) {
             Icon(
                 imageVector = Icons.TwoTone.PlayArrow,
