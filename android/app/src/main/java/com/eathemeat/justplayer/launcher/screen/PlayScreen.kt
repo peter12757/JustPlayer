@@ -17,6 +17,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -25,6 +26,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.eathemeat.justplayer.R
 import com.eathemeat.justplayer.launcher.MainViewModule
+import com.eathemeat.justplayer.launcher.screen.play.PlayControlScreen
 import com.eathemeat.justplayer.launcher.screen.play.PlayListScreen
 import com.eathemeat.justplayer.ui.theme.JustPlayerTheme
 
@@ -37,6 +39,9 @@ const val TAG = "PlayScreen"
 @Composable
 fun PlayScreen(modifier: Modifier = Modifier, viewModule: MainViewModule = viewModel()) {
     val showPlayList = remember {
+        mutableStateOf(false)
+    }
+    val showPlayControl = remember {
         mutableStateOf(true)
     }
     Box(modifier = modifier.fillMaxSize()) {
@@ -71,6 +76,9 @@ fun PlayScreen(modifier: Modifier = Modifier, viewModule: MainViewModule = viewM
                 )
             }
             
+        }
+        if (showPlayControl.value) {
+            PlayControlScreen(modifier = Modifier.align(Alignment.BottomStart))
         }
 
 
