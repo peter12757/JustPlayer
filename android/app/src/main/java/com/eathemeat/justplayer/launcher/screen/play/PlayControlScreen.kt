@@ -17,6 +17,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.compose.Dimension.Companion.fillToConstraints
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.eathemeat.justplayer.R
 import com.eathemeat.justplayer.launcher.MainViewModule
@@ -31,35 +33,53 @@ import com.eathemeat.justplayer.ui.theme.JustPlayerTheme
  */
 @Composable
 fun PlayControlScreen(modifier: Modifier = Modifier, viewModule: MainViewModule = viewModel()) {
-    Row {
-        IconButton(modifier = modifier.align(Alignment.CenterVertically).padding(0.dp)
+    ConstraintLayout {
+        val (preBtn,pauseBtn,nextBtn,progressBar,timeTxt) = createRefs()
+        IconButton(modifier = Modifier.constrainAs(preBtn) {
+            start.linkTo(parent.start, margin = 2.dp)
+            centerVerticallyTo(parent)
+        }
             ,onClick = { /*TODO*/ }) {
             Icon(
                 imageVector = PIcons.Play.PlayArrowLeft,
                 contentDescription =
                 stringResource(R.string.show_more))
         }
-        IconButton(modifier = modifier.align(Alignment.CenterVertically)
+        IconButton(modifier = Modifier.constrainAs(pauseBtn) {
+            start.linkTo(preBtn.end)
+            centerVerticallyTo(parent)
+        }
             ,onClick = { /*TODO*/ }) {
             Icon(
                 imageVector = Icons.TwoTone.PlayArrow,
                 contentDescription =
                     stringResource(R.string.show_more))
         }
-        IconButton(modifier = modifier.align(Alignment.CenterVertically)
+        IconButton(modifier = Modifier.constrainAs(nextBtn) {
+            start.linkTo(pauseBtn.end)
+            centerVerticallyTo(parent)
+        }
             ,onClick = { /*TODO*/ }) {
             Icon(
                 imageVector = PIcons.Play.PlayArrowRight,
                 contentDescription =
                 stringResource(R.string.show_more))
         }
-        LinearProgressIndicator(progress = 0.5f,modifier = modifier.align(Alignment.CenterVertically))
-        Text(modifier = modifier.align(Alignment.CenterVertically), maxLines = 1,text = "00:00:00/")
-        Text(modifier = modifier.align(Alignment.CenterVertically), maxLines = 1,text = "00:00:00")
+        LinearProgressIndicator(progress = 0.5f,modifier = Modifier.constrainAs(progressBar) {
+            start.linkTo(nextBtn.end)
+            end.linkTo(timeTxt.start)
+            width =fillToConstraints
+            centerVerticallyTo(parent)
+        })
+        Text(modifier = Modifier.constrainAs(timeTxt) {
+            start.linkTo(progressBar.end)
+            end.linkTo(parent.end, margin = 2.dp)
+            centerVerticallyTo(parent)
+        }, maxLines = 1,text = "00:00:00/00:00:00")
     }
 }
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, widthDp = 1080, heightDp = 720)
 @Composable
 fun PlayControlScreenPreview() {
     JustPlayerTheme {
