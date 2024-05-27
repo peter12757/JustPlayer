@@ -9,7 +9,7 @@ import java.nio.ByteOrder
 
 
 /**
- * 此协议不适用于大量数据
+ * 此协议不适用于大对象
  */
 class MarshallHelper {
 

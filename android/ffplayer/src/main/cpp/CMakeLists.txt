@@ -7,7 +7,7 @@ cmake_minimum_required(VERSION 3.18.1)
 
 # Declares and names the project.
 
-project("JustMediaPlayer")
+project("JustPlayer")
 SET(LIBNAME JustPlayer)
 
 set (CMAKE_CXX_STANDARD 11)
