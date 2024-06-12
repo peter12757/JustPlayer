@@ -9,8 +9,8 @@
 #pragma once
 #include <set>
 #include <stddef.h>
-#include "../Util.h"
-#include "../../const/just_base_constants1.h"
+#include "../util/Util.h"
+#include "../const/common.h"
 
 namespace XUtil
 {

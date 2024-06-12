@@ -5,10 +5,8 @@
 #ifndef ANDROIDTEST_JUSTDATA_H
 #define ANDROIDTEST_JUSTDATA_H
 
-#include "util/protocol/package.h"
-#include "base/const/just_base_constants1.h"
-#include "util/protocol/package.h"
-#include "log/LogUtil.h"
+#include "../protocol/package.h"
+#include "../log/LogUtil.h"
 
 
 //#define JUST_UNMARSHAL(data, up)                                                        \

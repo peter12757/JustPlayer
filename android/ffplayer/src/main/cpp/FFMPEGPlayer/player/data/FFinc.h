@@ -24,9 +24,8 @@ extern "C"{
 #include "../ffmpeginc/libavutil/mem.h"
 #include "../ffmpeginc/libavutil/avstring.h"
 }
-#include "../../../base/const/just_base_constants1.h"
 #include <sstream>
-#include <fifo.h>
+#include "../ffmpeginc/libavutil/fifo.h"
 #include "FFConfig.h"
 
 

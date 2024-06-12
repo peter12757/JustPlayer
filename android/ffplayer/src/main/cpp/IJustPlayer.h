@@ -4,7 +4,7 @@
 
 #ifndef JUSTPLAYER_IJUSTPLAYER_H
 #define JUSTPLAYER_IJUSTPLAYER_H
-#include "const/constants.h"
+#include "../const/constants.h"
 #include "JustData.h"
 
 class IJustPlayer {

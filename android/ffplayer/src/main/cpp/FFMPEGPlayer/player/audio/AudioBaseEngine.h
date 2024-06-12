@@ -7,12 +7,12 @@
 
 #include "../../../base/thread/XThread.h"
 #include "../../../base/util/Util.h"
-#include "../../../base/config/constants.h"
+#include "../../../base/const/constants.h"
 #include "AudioConst.h"
 #include "../FFMPEGPlayer.h"
 #include <sstream>
-#include "../../util/JniHelper.h"
-#include "../../util/Lock.h"
+#include "../../../base/util/JniHelper.h"
+#include "../../../base/util/Lock.h"
 
 class FFMPEGPlayer;
 

@@ -7,7 +7,7 @@
 
 #include "../util/Util.h"
 #include <iostream>
-#include "log/LogUtil.h"
+#include "../log/LogUtil.h"
 #include <sstream>
 
 using namespace std;

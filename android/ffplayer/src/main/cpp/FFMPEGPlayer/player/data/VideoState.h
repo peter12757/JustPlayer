@@ -10,11 +10,11 @@
 #include "VideoObj.h"
 #include "AudioObj.h"
 #include "SubtitleObj.h"
-#include "../../../base/config/constants.h"
+#include "../../../base/const/constants.h"
 #include "audio/AudioBaseEngine.h"
 #include <sstream>
 #include "VideoState.h"
-#include "../../util/Util.h"
+#include "../../../base/util/Util.h"
 #include "audio/AndroidAudioTrackEngine.h"
 
 class AudioBaseEngine;

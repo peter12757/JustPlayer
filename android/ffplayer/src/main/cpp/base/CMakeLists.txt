@@ -10,7 +10,6 @@ add_definitions(-DHAVE_CONFIG_H)
 #src
 aux_source_directory(. JustBase_SRC)
 aux_source_directory(const JustBase_SRC)
-#aux_source_directory(cpptest JustBase_SRC)
 aux_source_directory(net JustBase_SRC)
 aux_source_directory(log JustBase_SRC)
 aux_source_directory(util JustBase_SRC)
@@ -27,3 +26,5 @@ add_library(${LIBNAME}  SHARED
 target_include_directories(${LIBNAME} PUBLIC
         ${JustBase_SRC}
         )
+
+target_link_libraries(${LIBNAME} PRIVATE log)

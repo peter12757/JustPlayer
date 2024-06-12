@@ -8,7 +8,7 @@
 #include <string>
 #include <map>
 #include <deque>
-#include "../Lock.h"
+#include "../util/Lock.h"
 #include "../log/LogUtil.h"
 using namespace Lock;
 

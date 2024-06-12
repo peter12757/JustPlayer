@@ -5,7 +5,8 @@
 #ifndef ANDROIDTEST_UTIL_H
 #define ANDROIDTEST_UTIL_H
 #include "../log/LogUtil.h"
-#include "../const/just_base_constants1.h"
+//#include "../const/just_base_constants1.h"
+#include <time.h>
 
 
 #ifndef MAX

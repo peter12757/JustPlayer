@@ -79,7 +79,7 @@ AUX_SOURCE_DIRECTORY(player FFMPEGPlayerSrc)
 AUX_SOURCE_DIRECTORY(player/data FFMPEGPlayerSrc)
 
 #audio c
-aux_source_directory(player/audio FFMPEGPlayerSrc)
+#aux_source_directory(player/audio FFMPEGPlayerSrc)
 aux_source_directory(player/decodec FFMPEGPlayerSrc)
 
 

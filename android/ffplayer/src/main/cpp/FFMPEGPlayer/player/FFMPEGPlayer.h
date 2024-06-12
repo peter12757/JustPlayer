@@ -5,15 +5,15 @@
 #ifndef ANDROIDTEST_JUSTPLAYER_H
 #define ANDROIDTEST_JUSTPLAYER_H
 
-#include "base/log/LogUtil.h"
-#include "base/const/constants.h"
-#include "base/protocol/package.h"
-#include "JustData.h"
+#include "../../base/log/LogUtil.h"
+#include "../../base/const/constants.h"
+#include "../../base/protocol/package.h"
+#include "../../JustData.h"
 #include <sstream>
 #include <jni.h>
-#include "base/statemachine/StateMachine.h"
+#include "../../base/statemachine/StateMachine.h"
 
-#include "base/util/Util.h"
+#include "../../base/util/Util.h"
 #include "data/VideoState.h"
 #include "LocalDataReader.h"
 #include "PlayerEventHandler.h"
