@@ -1,5 +1,6 @@
 package com.eathemeat.justplayer.launcher.screen
 
+import android.content.res.Configuration
 import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -11,6 +12,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.Lifecycle
@@ -53,14 +55,20 @@ fun MainContainScreen(modifier: Modifier = Modifier, viewModule: MainViewModule 
     //state change？
     when(state.value){
         SubScreen.Screen_Launcher -> {
+            val configuration = LocalConfiguration.current
+            configuration.orientation = Configuration.ORIENTATION_PORTRAIT
             LauncherScreen {
                 state.value = SubScreen.Screen_Play
             }
         }
         SubScreen.Screen_Play ->{
+            val configuration = LocalConfiguration.current
+            configuration.orientation = Configuration.ORIENTATION_LANDSCAPE
             PlayScreen()
         }
         SubScreen.Screen_Config ->{
+            val configuration = LocalConfiguration.current
+            configuration.orientation = Configuration.ORIENTATION_PORTRAIT
             ConfigScreen()
         }
         else ->{

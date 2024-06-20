@@ -14,7 +14,6 @@
 #include "../../../base/util/JniHelper.h"
 #include "../../../base/util/Lock.h"
 
-class FFMPEGPlayer;
 
 #define SDL_AUDIO_MASK_BITSIZE       (0xFF)
 #define SDL_AUDIO_MASK_DATATYPE      (1<<8)
@@ -75,7 +74,7 @@ public:
     volatile float right_volume;
 
     JustAudioSpec *audio_spec;
-    FFMPEGPlayer* player;
+    class FFMPEGPlayer* player;
 };
 
 

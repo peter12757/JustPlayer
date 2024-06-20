@@ -2,14 +2,11 @@ package com.eathemeat.justplayer.launcher.screen
 
 import android.content.res.Configuration
 import android.util.Log
+import android.view.SurfaceHolder
+import android.view.SurfaceHolder.Callback
 import android.view.SurfaceView
-import androidx.compose.animation.animateContentSize
-import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.spring
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.KeyboardArrowRight
@@ -18,8 +15,8 @@ import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -47,7 +44,7 @@ fun PlayScreen(modifier: Modifier = Modifier, viewModule: MainViewModule = viewM
     val config = LocalConfiguration.current
     if (config.orientation != Configuration.ORIENTATION_LANDSCAPE)
     {
-        return
+        config.orientation = Configuration.ORIENTATION_LANDSCAPE
     }
 
     val showPlayList = remember {
@@ -60,16 +57,35 @@ fun PlayScreen(modifier: Modifier = Modifier, viewModule: MainViewModule = viewM
     ConstraintLayout {
         val context = LocalContext.current
         val (list, listBtn, control,surface) = createRefs()
-        //surface
-        AndroidView(modifier = Modifier.constrainAs(surface) {
-            start.linkTo(parent.start)
-            top.linkTo(parent.top)
-            end.linkTo(parent.end)
-            bottom.linkTo(parent.bottom)
-            width = Dimension.fillToConstraints
-        }.fillMaxSize(), factory = {
+//surface
+        AndroidView(modifier = Modifier
+            .constrainAs(surface) {
+                start.linkTo(parent.start)
+                top.linkTo(parent.top)
+                end.linkTo(parent.end)
+                bottom.linkTo(parent.bottom)
+                width = Dimension.fillToConstraints
+            }
+            .fillMaxSize(), factory = {
             SurfaceView(context).apply {
-                // TODO:
+                holder.addCallback(object : Callback {
+                    override fun surfaceCreated(holder: SurfaceHolder) {
+                        Log.d(TAG, "surfaceCreated: ")
+                    }
+
+                    override fun surfaceChanged(
+                        holder: SurfaceHolder,
+                        format: Int,
+                        width: Int,
+                        height: Int
+                    ) {
+                        Log.d(TAG, "surfaceChanged: ")
+                    }
+
+                    override fun surfaceDestroyed(holder: SurfaceHolder) {
+                        Log.d(TAG, "surfaceDestroyed: ")
+                    }
+                })
             }
         })
 
@@ -88,8 +104,11 @@ fun PlayScreen(modifier: Modifier = Modifier, viewModule: MainViewModule = viewM
         IconButton(onClick = {
             if (showPlayList.value == Visibility.Visible) showPlayList.value = Visibility.Gone
             else  showPlayList.value = Visibility.Visible },
-            modifier = Modifier.constrainAs(listBtn) {
-                start.linkTo(list.end)
+            modifier = Modifier.background(color = Color.White).constrainAs(listBtn) {
+                start.linkTo(when (showPlayList.value) {
+                    Visibility.Visible -> list.end
+                    else -> parent.end
+                })
                 top.linkTo(parent.top, margin = 20.dp)
             }) {
             Icon(
@@ -105,10 +124,10 @@ fun PlayScreen(modifier: Modifier = Modifier, viewModule: MainViewModule = viewM
             start.linkTo(surface.start)
             end.linkTo(surface.end)
             bottom.linkTo(surface.bottom)
-            width = Dimension.fillToConstraints
-            height = Dimension.wrapContent
+            top.linkTo(surface.bottom)
             visibility = showPlayControl.value
         })
+
     }
 }
 
