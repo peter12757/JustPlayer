@@ -1,5 +1,6 @@
 package com.eathemeat.justplayer.launcher.screen
 
+import android.content.Intent
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
@@ -9,6 +10,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.currentCompositionLocalContext
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
@@ -18,6 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -27,8 +30,10 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.eathemeat.justplayer.R
+import com.eathemeat.justplayer.launcher.LauncherActivity
 import com.eathemeat.justplayer.launcher.MainViewModule
 import com.eathemeat.justplayer.launcher.TAG
+import com.eathemeat.justplayer.play.PlayActivity
 import com.eathemeat.justplayer.ui.theme.JustPlayerTheme
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.catch
@@ -49,23 +54,24 @@ fun LauncherScreen(modifier: Modifier = Modifier,viewModule: MainViewModule = vi
     var clickTimes = remember{
         mutableIntStateOf(time)
     }
+    val ctx = LocalContext.current
     scope.launch {
-
         flow {
-            (clickTimes.value downTo 0).forEach {
+            (clickTimes.intValue downTo 0).forEach {
                 delay(1000L)
                 emit(it)
             }
         }.onStart {
-
+            Log.d(TAG, "LauncherScreen: onStart${clickTimes.intValue}")
         }.onCompletion {
             end()
+            val intent = Intent(ctx,PlayActivity::class.java)
+            ctx.startActivity(intent)
         }.catch {
             Log.e(TAG, "LauncherScreen: error", it)
         }.collect {
             clickTimes.value = it
         }
-
     }
 
     //sedounds
