@@ -4,13 +4,8 @@ import android.content.res.Configuration
 import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.SideEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalLifecycleOwner
@@ -18,11 +13,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.eathemeat.justplayer.launcher.MainViewModule
+import com.eathemeat.justplayer.launcher.MainViewModel
 import com.eathemeat.justplayer.launcher.TAG
 import com.eathemeat.justplayer.ui.theme.JustPlayerTheme
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 
 enum class SubScreen {
@@ -35,7 +28,7 @@ enum class SubScreen {
  * time:2024/4/21 0021
  */
 @Composable
-fun MainContainScreen(modifier: Modifier = Modifier, viewModule: MainViewModule = viewModel()) {
+fun MainContainScreen(modifier: Modifier = Modifier, viewModule: MainViewModel = viewModel()) {
     var state = remember {
         mutableStateOf(SubScreen.Screen_Launcher)
     }

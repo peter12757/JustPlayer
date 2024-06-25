@@ -28,7 +28,7 @@ import androidx.constraintlayout.compose.Dimension
 import androidx.constraintlayout.compose.Visibility
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.eathemeat.justplayer.R
-import com.eathemeat.justplayer.launcher.MainViewModule
+import com.eathemeat.justplayer.launcher.MainViewModel
 import com.eathemeat.justplayer.launcher.screen.play.PlayControlScreen
 import com.eathemeat.justplayer.launcher.screen.play.PlayListScreen
 import com.eathemeat.justplayer.ui.theme.JustPlayerTheme
@@ -40,7 +40,7 @@ const val TAG = "PlayScreen"
  * time:2024/4/21 0021
  */
 @Composable
-fun PlayScreen(modifier: Modifier = Modifier, viewModule: MainViewModule = viewModel()) {
+fun PlayScreen(modifier: Modifier = Modifier, viewModule: MainViewModel = viewModel()) {
     val config = LocalConfiguration.current
     if (config.orientation != Configuration.ORIENTATION_LANDSCAPE)
     {
@@ -135,6 +135,6 @@ fun PlayScreen(modifier: Modifier = Modifier, viewModule: MainViewModule = viewM
 @Composable
 fun PlayScreenPreview() {
     JustPlayerTheme {
-        PlayScreen(viewModule = MainViewModule.test())
+        PlayScreen(viewModule = MainViewModel.test())
     }
 }

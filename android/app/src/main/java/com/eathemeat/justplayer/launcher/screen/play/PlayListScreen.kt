@@ -11,7 +11,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.Card
@@ -29,10 +28,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.eathemeat.justplayer.R
 import com.eathemeat.justplayer.data.PlayItem
-import com.eathemeat.justplayer.launcher.MainViewModule
 import com.eathemeat.justplayer.ui.theme.JustPlayerTheme
 
 const val TAG = "PlayListScreen"
@@ -59,7 +56,7 @@ fun PlayItemScreen(modifier: Modifier = Modifier,playItem:PlayItem,play:(item:Pl
     , modifier = modifier.padding(vertical = Dp(4f), horizontal = Dp(8f))
     ) {
         //card content
-        var expanded = remember { mutableStateOf(false) }
+        var expanded = remember { mutableStateOf(true) }
         Row(
             modifier = Modifier
                 .padding(12.dp)

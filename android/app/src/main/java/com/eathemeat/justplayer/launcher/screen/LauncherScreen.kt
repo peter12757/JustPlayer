@@ -8,30 +8,21 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.SideEffect
-import androidx.compose.runtime.currentCompositionLocalContext
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.eathemeat.justplayer.R
-import com.eathemeat.justplayer.launcher.LauncherActivity
-import com.eathemeat.justplayer.launcher.MainViewModule
+import com.eathemeat.justplayer.launcher.MainViewModel
 import com.eathemeat.justplayer.launcher.TAG
 import com.eathemeat.justplayer.play.PlayActivity
 import com.eathemeat.justplayer.ui.theme.JustPlayerTheme
@@ -48,7 +39,7 @@ import kotlinx.coroutines.launch
  * time:2024/4/19 0019
  */
 @Composable
-fun LauncherScreen(modifier: Modifier = Modifier,viewModule: MainViewModule = viewModel()
+fun LauncherScreen(modifier: Modifier = Modifier,viewModule: MainViewModel = viewModel()
 ,time:Int =5,end:()-> Unit) {
     val scope = rememberCoroutineScope()
     var clickTimes = remember{
