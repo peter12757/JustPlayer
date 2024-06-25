@@ -1,24 +1,33 @@
 package com.eathemeat.justplayer.play
 
 import android.os.Bundle
+import android.util.Log
+import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.compose.Visibility
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.eathemeat.justplayer.databinding.ActivityPlayBinding
+import com.google.android.material.slider.Slider
 
 class PlayActivity : AppCompatActivity() {
 
     lateinit var binding:ActivityPlayBinding
+    lateinit var model:PlayViewModel
+    val TAG = "PlayActivity"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        model = ViewModelProvider(this).get(PlayViewModel::class.java)
         binding = ActivityPlayBinding.inflate(layoutInflater)
         setContentView(binding.root)
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
@@ -27,21 +36,44 @@ class PlayActivity : AppCompatActivity() {
             insets
         }
 
-        //playlist
-        binding.rvPlaylist.apply {
-            layoutManager = LinearLayoutManager(context).apply { orientation = RecyclerView.VERTICAL }
-            adapter = PlayListAdapter()
-            addItemDecoration(DividerItemDecoration(context,RecyclerView.VERTICAL))
-            setItemAnimator(DefaultItemAnimator())
-        }
-        binding.ibPlaylistControl.setOnClickListener(){ view ->
-            view.isSelected = !view.isSelected
-            binding.rvPlaylist.visibility.let {
-                if(view.isSelected) Visibility.Visible else Visibility.Gone
+        //view
+        binding.apply {
+            //playlist
+            rvPlaylist.apply {
+                layoutManager = LinearLayoutManager(context).apply { orientation = RecyclerView.VERTICAL }
+                adapter = PlayListAdapter()
+                addItemDecoration(DividerItemDecoration(context,RecyclerView.VERTICAL))
+                setItemAnimator(DefaultItemAnimator())
             }
-        }
+            ibPlaylistControl.setOnClickListener(){ view ->
+                view.isSelected = !view.isSelected
+                rvPlaylist.visibility.let {
+                    if(view.isSelected) Visibility.Visible else Visibility.Gone
+                }
+            }
 
-        //playcontrol
+            //playcontrol
+            surface.setOnClickListener() {
+                if (clPlaycontrol.visibility == View.VISIBLE) {
+                    clPlaycontrol.visibility = View.GONE
+                }else {
+                    clPlaycontrol.visibility = View.VISIBLE
+                }
+            }
+            btnPlay.setOnClickListener() {
+                Log.d(TAG, "btnPlay:setOnClickListener ")
+            }
+            btnNext.setOnClickListener() {
+                Log.d(TAG, "btnNext: setOnClickListener")
+            }
+            btnPre.setOnClickListener() {
+                Log.d(TAG, "btnPre: setOnClickListener")
+            }
+            proPro.addOnChangeListener() { slider: Slider, fl: Float, b: Boolean ->
+                Log.d(TAG, "proPro: addOnChangeListener ${fl} - ${b} ")
+            }
+
+        }
 
 
 

@@ -36,7 +36,7 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/container_control"
+        android:id="@+id/cl_playcontrol"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:background="@color/black"
@@ -69,11 +69,13 @@
             android:padding="5dp"
             />
 
-        <com.google.android.material.progressindicator.LinearProgressIndicator
+        <com.google.android.material.slider.Slider
             android:id="@+id/pro_pro"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layout_constraintStart_toEndOf="@+id/btn_next"
+            android:valueFrom="0.0"
+            android:valueTo="10.0"
             app:layout_constraintEnd_toEndOf="@+id/txt_time"/>
 
         <TextView
