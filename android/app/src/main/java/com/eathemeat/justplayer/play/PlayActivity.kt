@@ -2,6 +2,7 @@ package com.eathemeat.justplayer.play
 
 import android.os.Bundle
 import android.util.Log
+import android.view.SurfaceHolder
 import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -51,7 +52,36 @@ class PlayActivity : AppCompatActivity() {
                     if(view.isSelected) Visibility.Visible else Visibility.Gone
                 }
             }
+            //surface
+            surface.holder.apply {
+                addCallback(object: SurfaceHolder.Callback2{
+                    override fun surfaceCreated(holder: SurfaceHolder) {
+                        Log.d(TAG, "surfaceCreated() called with: holder = $holder")
+                        model.setSurface(holder.surface)
+                    }
 
+                    override fun surfaceChanged(
+                        holder: SurfaceHolder,
+                        format: Int,
+                        width: Int,
+                        height: Int
+                    ) {
+                        Log.d(
+                            TAG,
+                            "surfaceChanged() called with: holder = $holder, format = $format, width = $width, height = $height"
+                        )
+                    }
+
+                    override fun surfaceDestroyed(holder: SurfaceHolder) {
+                        Log.d(TAG, "surfaceDestroyed() called with: holder = $holder")
+                        model.setSurface(null)
+                    }
+
+                    override fun surfaceRedrawNeeded(holder: SurfaceHolder) {
+                        Log.d(TAG, "surfaceRedrawNeeded() called with: holder = $holder")
+                    }
+                })
+            }
             //playcontrol
             surface.setOnClickListener() {
                 if (clPlaycontrol.visibility == View.VISIBLE) {
@@ -62,6 +92,8 @@ class PlayActivity : AppCompatActivity() {
             }
             btnPlay.setOnClickListener() {
                 Log.d(TAG, "btnPlay:setOnClickListener ")
+                model.prepare()
+                model.start()
             }
             btnNext.setOnClickListener() {
                 Log.d(TAG, "btnNext: setOnClickListener")
@@ -71,6 +103,7 @@ class PlayActivity : AppCompatActivity() {
             }
             proPro.addOnChangeListener() { slider: Slider, fl: Float, b: Boolean ->
                 Log.d(TAG, "proPro: addOnChangeListener ${fl} - ${b} ")
+                model.seekTo(fl.toLong())
             }
 
         }

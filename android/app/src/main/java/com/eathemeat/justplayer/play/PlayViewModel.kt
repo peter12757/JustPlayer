@@ -2,10 +2,13 @@ package com.eathemeat.justplayer.play
 
 import android.media.TimedText
 import android.util.Log
+import android.view.Surface
+import android.view.SurfaceHolder
 import androidx.lifecycle.ViewModel
 import com.eathemeat.base.IMediaPlayer
 import com.eathemeat.base.MediaPlayerCallBack
 import com.eathemeat.player.player.sys.AndroidMediaPlayer
+import java.net.URI
 
 class PlayViewModel: ViewModel(), MediaPlayerCallBack {
 
@@ -15,6 +18,44 @@ class PlayViewModel: ViewModel(), MediaPlayerCallBack {
 //    private var mPlayer: IMediaPlayer = JustPlayer(JustData.JustContext(JustPlayerType.FFMPEGPlayer),this)
     private var mPlayer: IMediaPlayer = AndroidMediaPlayer()
     private val TAG = "PlayViewModel"
+
+    private var url:String? = null
+
+
+    fun setSurface(surface: Surface?) {
+        mPlayer.setSurface(surface)
+    }
+
+    fun setDataSource(url: String): Unit {
+        mPlayer.setDataSource(URI(url))
+    }
+
+    /**
+     * always aysc
+     */
+    fun prepare() {
+        mPlayer.prepareAsyc()
+    }
+
+    fun start() {
+        mPlayer.start()
+    }
+
+    fun pause() {
+        mPlayer.pause()
+    }
+
+    fun stop(): Unit {
+        mPlayer.stop()
+    }
+
+    fun seekTo(time:Long) {
+        mPlayer.seekTo(time)
+    }
+
+    fun release() {
+        mPlayer.release()
+    }
 
 
 
