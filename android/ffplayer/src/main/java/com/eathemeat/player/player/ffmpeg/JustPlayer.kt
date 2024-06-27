@@ -1,4 +1,4 @@
-package com.eathemeat.player
+package com.eathemeat.player.player.ffmpeg
 
 import android.util.Log
 import android.view.Surface
@@ -9,7 +9,7 @@ import java.net.URI
 
 class JustPlayer(context: JustData.JustContext, override var callback: MediaPlayerCallBack?) : IMediaPlayer {
     val TAG = JustPlayer::class.simpleName
-    var api:JustApi = JustApi()
+    var api: JustApi = JustApi()
     var nativeHandler = -1L
 
 

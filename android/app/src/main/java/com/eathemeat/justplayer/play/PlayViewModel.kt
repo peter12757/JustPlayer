@@ -1,61 +1,72 @@
 package com.eathemeat.justplayer.play
 
 import android.media.TimedText
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.eathemeat.base.IMediaPlayer
 import com.eathemeat.base.MediaPlayerCallBack
-import com.eathemeat.player.JustData
-import com.eathemeat.player.JustData.JustPlayerType
-import com.eathemeat.player.JustPlayer
+import com.eathemeat.player.player.ffmpeg.JustData
+import com.eathemeat.player.player.ffmpeg.JustData.JustPlayerType
+import com.eathemeat.player.player.ffmpeg.JustPlayer
+import com.eathemeat.player.player.sys.AndroidMediaPlayer
 
 class PlayViewModel: ViewModel(), MediaPlayerCallBack {
 
 //livedata or stateflow
 //    var
 
-    private var mPlayer:JustPlayer = JustPlayer(JustData.JustContext(JustPlayerType.FFMPEGPlayer),this)
+//    private var mPlayer: IMediaPlayer = JustPlayer(JustData.JustContext(JustPlayerType.FFMPEGPlayer),this)
+    private var mPlayer: IMediaPlayer = AndroidMediaPlayer()
+    private val TAG = "PlayViewModel"
 
 
 
 
     override fun onPrepared() {
-        TODO("Not yet implemented")
+        Log.d(TAG, "onPrepared() called")
     }
 
     override fun onBufferring() {
-        TODO("Not yet implemented")
+        Log.d(TAG, "onBufferring() called")
+
     }
 
     override fun onSeekCompleted() {
-        TODO("Not yet implemented")
+        Log.d(TAG, "onSeekCompleted() called")
     }
 
     override fun onPlayComplted() {
-        TODO("Not yet implemented")
+        Log.d(TAG, "onPlayComplted() called")
     }
 
     override fun onInfo(what: Int, extra: Int) {
-        TODO("Not yet implemented")
+        Log.d(TAG, "onInfo() called with: what = $what, extra = $extra")
     }
 
     override fun onBufferingUpdate(mp: IMediaPlayer, percent: Int) {
-        TODO("Not yet implemented")
+        Log.d(TAG, "onBufferingUpdate() called with: mp = $mp, percent = $percent")
     }
 
     override fun onError(mp: IMediaPlayer, what: Int, extra: Int) {
-        TODO("Not yet implemented")
+        Log.d(TAG, "onError() called with: mp = $mp, what = $what, extra = $extra")
     }
 
     override fun onTimedText(mp: IMediaPlayer, text: TimedText?) {
-        TODO("Not yet implemented")
+        Log.d(TAG, "onTimedText() called with: mp = $mp, text = $text")
     }
 
     override fun onVideoSizeChanged(iMediaPlayer: IMediaPlayer, width: Int, height: Int) {
-        TODO("Not yet implemented")
+        Log.d(
+            TAG,
+            "onVideoSizeChanged() called with: iMediaPlayer = $iMediaPlayer, width = $width, height = $height"
+        )
     }
 
     override fun onProgressUpdate(mediaPlayer: IMediaPlayer, progress: Long) {
-        TODO("Not yet implemented")
+        Log.d(
+            TAG,
+            "onProgressUpdate() called with: mediaPlayer = $mediaPlayer, progress = $progress"
+        )
     }
 
 }

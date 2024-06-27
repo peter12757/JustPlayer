@@ -6,8 +6,8 @@ import android.media.AudioFormat
 import android.media.AudioFormat.*
 import android.media.AudioManager.AUDIO_SESSION_ID_GENERATE
 import android.media.AudioTrack
-import com.eathemeat.player.IHandle
-import com.eathemeat.player.JustCallBack
+import com.eathemeat.player.player.ffmpeg.IHandle
+import com.eathemeat.player.player.ffmpeg.JustCallBack
 import com.eathemeat.base.util.protocol.IMarshallable
 import com.eathemeat.base.util.protocol.MarshallHelper
 import java.nio.ByteBuffer

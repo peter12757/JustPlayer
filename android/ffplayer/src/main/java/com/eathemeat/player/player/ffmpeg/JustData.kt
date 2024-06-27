@@ -1,4 +1,4 @@
-package com.eathemeat.player
+package com.eathemeat.player.player.ffmpeg
 
 import com.eathemeat.base.util.protocol.IMarshallable
 import com.eathemeat.base.util.protocol.IPackage
@@ -14,7 +14,7 @@ open class JustData {
         FFMPEGPlayer(1u),
     }
 
-    open class JustContext(var playerType:JustPlayerType = JustPlayerType.MediaCodec) : IPackage {
+    open class JustContext(var playerType: JustPlayerType = JustPlayerType.MediaCodec) : IPackage {
         override fun size(): Int {
             return UShort.SIZE_BYTES
         }
@@ -51,7 +51,7 @@ open class JustData {
     }
 
 
-    open class MethodBase(var method:Int = JUST_Method.JUSTMETHOD_UNKNOW.value,var justUri:Int = JUST_URI.URI_METHOD.value) :
+    open class MethodBase(var method:Int = JUST_Method.JUSTMETHOD_UNKNOW.value, var justUri:Int = JUST_URI.URI_METHOD.value) :
         IMarshallable {
 
         override fun size(): Int {
@@ -71,13 +71,13 @@ open class JustData {
 
     class PrepareAsycMethod: MethodBase(JUST_Method.JUSTMETHOD_PREPARE.value)
 
-    class StartMethod:MethodBase(JUST_Method.JUSTMETHOD_START.value)
+    class StartMethod: MethodBase(JUST_Method.JUSTMETHOD_START.value)
 
-    class StopMethod:MethodBase(JUST_Method.JUSTMETHOD_STOP.value)
+    class StopMethod: MethodBase(JUST_Method.JUSTMETHOD_STOP.value)
 
-    class ResetMethod:MethodBase(JUST_Method.JUSTMETHOD_RESET.value)
+    class ResetMethod: MethodBase(JUST_Method.JUSTMETHOD_RESET.value)
 
-    class SeekMethod(var prograss:Long):MethodBase(JUST_Method.JUSTMETHOD_SEEK.value){
+    class SeekMethod(var prograss:Long): MethodBase(JUST_Method.JUSTMETHOD_SEEK.value){
         override fun size(): Int {
             return super.size()+Long.SIZE_BYTES
         }
@@ -88,11 +88,11 @@ open class JustData {
 
     }
 
-    class GetDurationMethod():MethodBase(JUST_Method.JUSTMETHOD_GET_DURATION.value)
+    class GetDurationMethod(): MethodBase(JUST_Method.JUSTMETHOD_GET_DURATION.value)
 
-    class GetPositionMethod():MethodBase(JUST_Method.JUSTMETHOD_GET_POSITION.value)
+    class GetPositionMethod(): MethodBase(JUST_Method.JUSTMETHOD_GET_POSITION.value)
 
-    class SetDataSourceMethod(var source:String):MethodBase(JUST_Method.JUSTMETHOD_SET_DATA_SOURCE.value){
+    class SetDataSourceMethod(var source:String): MethodBase(JUST_Method.JUSTMETHOD_SET_DATA_SOURCE.value){
         override fun size(): Int {
             return super.size()+ MarshallHelper.calcMarshallSize(source)
         }

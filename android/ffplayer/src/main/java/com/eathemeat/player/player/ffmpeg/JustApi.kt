@@ -1,4 +1,4 @@
-package com.eathemeat.player
+package com.eathemeat.player.player.ffmpeg
 
 import android.view.Surface
 
@@ -32,7 +32,7 @@ class JustApi {
 
     }
     //    external fun setCallBack(handle:Long,callback:JustCallBack): Unit
-    fun setCallBack(handle:Long,callback:JustCallBack): Unit {
+    fun setCallBack(handle:Long,callback: JustCallBack): Unit {
 
     }
 

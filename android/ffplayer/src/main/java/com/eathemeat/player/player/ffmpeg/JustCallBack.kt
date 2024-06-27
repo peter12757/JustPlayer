@@ -1,7 +1,5 @@
-package com.eathemeat.player
+package com.eathemeat.player.player.ffmpeg
 
-import android.media.AudioTrack
-import android.media.TimedText
 import java.nio.ByteBuffer
 
 class JustCallBack{
@@ -12,10 +10,10 @@ class JustCallBack{
         }
 
         @JvmStatic
-        val handleMap = mutableMapOf<Int,IHandle>()
+        val handleMap = mutableMapOf<Int, IHandle>()
 
         @JvmStatic
-        fun regist(handle: IHandle,replace:Boolean = false): Int {
+        fun regist(handle: IHandle, replace:Boolean = false): Int {
             var key = handle.handleUri()
             handleMap[key]?.also {
                 return -1
@@ -39,7 +37,7 @@ class JustCallBack{
     fun onCallBack(inData: ByteArray): Any? {
         var data = ByteBuffer.wrap(inData)
         var handleUri = data.int
-        var handle =handleMap[handleUri]
+        var handle = handleMap[handleUri]
         var result:ByteArray? = null
         handle?.also {
             return it.handle(data)

@@ -1,9 +1,11 @@
-package com.eathemeat.base
+package com.eathemeat.player.player.sys
 
 import android.media.MediaPlayer
 import android.os.Build
 import android.util.Log
 import android.view.Surface
+import com.eathemeat.base.IMediaPlayer
+import com.eathemeat.base.MediaPlayerCallBack
 import java.net.URI
 
 class AndroidMediaPlayer : IMediaPlayer {
