@@ -5,9 +5,6 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.eathemeat.base.IMediaPlayer
 import com.eathemeat.base.MediaPlayerCallBack
-import com.eathemeat.player.player.ffmpeg.JustData
-import com.eathemeat.player.player.ffmpeg.JustData.JustPlayerType
-import com.eathemeat.player.player.ffmpeg.JustPlayer
 import com.eathemeat.player.player.sys.AndroidMediaPlayer
 
 class PlayViewModel: ViewModel(), MediaPlayerCallBack {

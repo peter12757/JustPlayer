@@ -1,34 +1,12 @@
 package com.eathemeat.player.player.ffmpeg
 
 import com.eathemeat.base.util.protocol.IMarshallable
-import com.eathemeat.base.util.protocol.IPackage
 import java.nio.ByteBuffer
 import com.eathemeat.base.util.protocol.MarshallHelper
 
 
-open class JustData {
+open class FFData {
     val  TAG = "JustData"
-
-    enum class JustPlayerType(val value:UInt) {
-        MediaCodec(0u),
-        FFMPEGPlayer(1u),
-    }
-
-    open class JustContext(var playerType: JustPlayerType = JustPlayerType.MediaCodec) : IPackage {
-        override fun size(): Int {
-            return UShort.SIZE_BYTES
-        }
-
-        override fun marshal(out: ByteBuffer): ByteBuffer {
-            out.putInt(playerType.value.toInt())
-            return out
-        }
-
-        override fun unmarshal(inBuf: ByteBuffer) {
-            playerType = JustPlayerType.values()[inBuf.int]
-        }
-
-    }
 
 
     enum class JUST_URI(val value:Int) {

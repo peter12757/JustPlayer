@@ -7,7 +7,7 @@ import android.media.AudioFormat.*
 import android.media.AudioManager.AUDIO_SESSION_ID_GENERATE
 import android.media.AudioTrack
 import com.eathemeat.player.player.ffmpeg.IHandle
-import com.eathemeat.player.player.ffmpeg.JustCallBack
+import com.eathemeat.player.player.ffmpeg.FFMsgHandler
 import com.eathemeat.base.util.protocol.IMarshallable
 import com.eathemeat.base.util.protocol.MarshallHelper
 import java.nio.ByteBuffer
@@ -20,7 +20,7 @@ class AudioHelper: IHandle() {
     }
 
     override fun handleUri(): Int {
-        return JustCallBack.Companion.HANDLE_URI.AUDIO.ordinal
+        return FFMsgHandler.Companion.HANDLE_URI.AUDIO.ordinal
     }
 
     override fun handle(data: ByteBuffer):Any? {

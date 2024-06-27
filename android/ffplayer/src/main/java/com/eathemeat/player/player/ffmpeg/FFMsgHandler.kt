@@ -2,7 +2,7 @@ package com.eathemeat.player.player.ffmpeg
 
 import java.nio.ByteBuffer
 
-class JustCallBack{
+class FFMsgHandler{
 
     companion object {
         enum class HANDLE_URI{
