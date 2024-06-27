@@ -51,7 +51,8 @@ class JustPlayer(context: JustData.JustContext, override var callback: MediaPlay
     }
 
     override fun release() {
-        if(nativeHandler >0)
+        Log.d(TAG, "release() called")
+        checkNativeAvalible()
         api.destory(nativeHandler)
         nativeHandler = -1;
     }

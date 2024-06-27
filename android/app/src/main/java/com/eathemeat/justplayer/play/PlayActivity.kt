@@ -75,10 +75,5 @@ class PlayActivity : AppCompatActivity() {
 
         }
 
-
-
     }
-
-
-
 }
