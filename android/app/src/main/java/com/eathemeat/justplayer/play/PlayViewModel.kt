@@ -4,9 +4,12 @@ import android.media.TimedText
 import android.util.Log
 import android.view.Surface
 import android.view.SurfaceHolder
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.eathemeat.base.IMediaPlayer
 import com.eathemeat.base.MediaPlayerCallBack
+import com.eathemeat.justplayer.data.PlayItem
 import com.eathemeat.player.player.sys.AndroidMediaPlayer
 import java.net.URI
 
@@ -20,6 +23,8 @@ class PlayViewModel: ViewModel(), MediaPlayerCallBack {
     private val TAG = "PlayViewModel"
 
     private var url:String? = null
+
+    var mPlayList = MutableLiveData<PlayItem>()
 
 
     fun setSurface(surface: Surface?) {
