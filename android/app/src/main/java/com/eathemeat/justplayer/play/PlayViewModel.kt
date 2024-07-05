@@ -4,6 +4,7 @@ import android.media.TimedText
 import android.util.Log
 import android.view.Surface
 import android.view.SurfaceHolder
+import androidx.annotation.Nullable
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -18,55 +19,61 @@ class PlayViewModel: ViewModel(), MediaPlayerCallBack {
 //livedata or stateflow
 //    var
 
-//    private var mPlayer: IMediaPlayer = JustPlayer(JustData.JustContext(JustPlayerType.FFMPEGPlayer),this)
-    private var mPlayer: IMediaPlayer = AndroidMediaPlayer()
+
+
     private val TAG = "PlayViewModel"
 
-    private var url:String? = null
 
     var mPlayList = MutableLiveData<PlayItem>()
+    private var mPlayer: IMediaPlayer? = null
+    //    private var mPlayer: IMediaPlayer = JustPlayer(JustData.JustContext(JustPlayerType.FFMPEGPlayer),this)
+    private var surface:Surface? = null
+    var mCurPlayItem:PlayItem? = null
 
 
     fun setSurface(surface: Surface?) {
-        mPlayer.setSurface(surface)
+        this.surface = surface
     }
 
-    fun setDataSource(url: String): Unit {
-        mPlayer.setDataSource(URI(url))
+    fun play(item:PlayItem?) {
+        item?:let {
+            stop()
+            return@let
+        }
+        item?.let { item ->
+            mCurPlayItem = item
+            mPlayer?: let {
+                createPlayer()
+            }?.apply {
+                setSurface(surface)
+                setDataSource(URI.create(item.url))
+                prepareAsyc()
+            }
+        }
+
+
+
     }
 
-    /**
-     * always aysc
-     */
-    fun prepare() {
-        mPlayer.prepareAsyc()
+    fun stop() {
+        mPlayer = mPlayer?.let { player->
+            player.stop()
+            player.release()
+            null
+        }
     }
 
-    fun start() {
-        mPlayer.start()
+    private fun createPlayer(): IMediaPlayer? {
+        return mPlayer?.let {player->
+            player.stop()
+            player.release()
+            AndroidMediaPlayer(this@PlayViewModel)
+        }
     }
-
-    fun pause() {
-        mPlayer.pause()
-    }
-
-    fun stop(): Unit {
-        mPlayer.stop()
-    }
-
-    fun seekTo(time:Long) {
-        mPlayer.seekTo(time)
-    }
-
-    fun release() {
-        mPlayer.release()
-    }
-
-
-
 
     override fun onPrepared() {
         Log.d(TAG, "onPrepared() called")
+        mPlayer?.start()
     }
 
     override fun onBufferring() {
@@ -111,5 +118,4 @@ class PlayViewModel: ViewModel(), MediaPlayerCallBack {
             "onProgressUpdate() called with: mediaPlayer = $mediaPlayer, progress = $progress"
         )
     }
-
 }

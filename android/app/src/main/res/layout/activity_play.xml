@@ -69,14 +69,32 @@
             android:padding="5dp"
             />
 
-        <com.google.android.material.slider.Slider
+        <com.eathemeat.widget.slide.NiftySlider
             android:id="@+id/pro_pro"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
+            android:value="0"
+            android:valueFrom="0"
+            android:valueTo="100"
+            app:enableDrawHalo="false"
+            app:enableAutoHPadding="false"
+            app:isConsecutiveProgress="true"
+            app:isTipViewClippingEnabled="true"
+            app:layout_constraintVertical_chainStyle="packed"
+            app:thumbColor="@color/teal_200"
+            app:thumbElevation="8dp"
+            app:thumbRadius="6dp"
+            app:thumbShadowColor="@android:color/transparent"
+            app:thumbWithinTrackBounds="true"
+            app:tipViewVisible="false"
+            app:trackColor="@color/teal_200"
+            app:trackColorInactive="@color/teal_700"
+            app:trackCornersRadius="0dp"
+            app:trackHeight="3dp"
             app:layout_constraintStart_toEndOf="@+id/btn_next"
-            android:valueFrom="0.0"
-            android:valueTo="10.0"
-            app:layout_constraintEnd_toEndOf="@+id/txt_time"/>
+            app:layout_constraintEnd_toStartOf="@+id/txt_time"/>
 
         <TextView
             android:id="@+id/txt_time"
@@ -85,7 +103,10 @@
             android:maxLines="1"
             android:text="@string/def_time"
             android:textSize="15sp"
+            android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/pro_pro"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -8,7 +8,7 @@ import com.eathemeat.base.IMediaPlayer
 import com.eathemeat.base.MediaPlayerCallBack
 import java.net.URI
 
-class AndroidMediaPlayer : IMediaPlayer {
+class AndroidMediaPlayer(override var callback: MediaPlayerCallBack?) : IMediaPlayer {
     val TAG = AndroidMediaPlayer::class.simpleName
 
     var mediaPlayer = MediaPlayer().apply {
@@ -64,9 +64,6 @@ class AndroidMediaPlayer : IMediaPlayer {
             }
         }
     }
-
-    override var callback: MediaPlayerCallBack? = null
-
 
     override fun prepareAsyc() {
         mediaPlayer.prepareAsync()

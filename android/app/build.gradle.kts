@@ -1,3 +1,4 @@
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -33,14 +34,12 @@ android {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
-    viewBinding{
-        enable = true
-    }
     kotlinOptions {
         jvmTarget = "1.8"
     }
     buildFeatures {
         compose = true
+        viewBinding = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.4.3"
@@ -50,27 +49,30 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+
     buildToolsVersion = "34.0.0"
 }
 
-dependencies {
 
-    implementation("androidx.core:core-ktx:1.9.0")
+dependencies {
+    implementation("androidx.core:core-ktx:1.13.1")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
-    implementation("androidx.activity:activity-compose:1.8.1")
+    implementation("androidx.activity:activity-compose:1.9.0")
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")
-    implementation(platform("androidx.compose:compose-bom:2023.03.00"))
+    implementation(platform("androidx.compose:compose-bom:2024.05.00"))
     implementation("androidx.constraintlayout:constraintlayout-compose:1.1.0-alpha13")
     implementation("com.github.bumptech.glide:glide:5.0.0-rc01")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.0-alpha04")
     implementation(project(":ffplayer"))
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.10.0")
-    implementation("androidx.activity:activity:1.8.0")
+    implementation("androidx.activity:activity:1.9.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+    implementation("io.github.peter12757:androidWidget:1.0.3")
+    implementation("io.github.peter12757:StateMachine:1.0.0")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
