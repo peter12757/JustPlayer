@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.SurfaceHolder
 import android.view.View
+import android.widget.AutoCompleteTextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.compose.Visibility
@@ -17,6 +18,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.eathemeat.justplayer.databinding.ActivityPlayBinding
+import com.eathemeat.justplayer.databinding.IncludePlayListBinding
 import com.google.android.material.slider.Slider
 
 class PlayActivity : AppCompatActivity() {
@@ -39,19 +41,36 @@ class PlayActivity : AppCompatActivity() {
 
         //view
         binding.apply {
+
             //playlist
-            rvPlaylist.apply {
-                layoutManager = LinearLayoutManager(context).apply { orientation = RecyclerView.VERTICAL }
-                adapter = PlayListAdapter()
-                addItemDecoration(DividerItemDecoration(context,RecyclerView.VERTICAL))
-                setItemAnimator(DefaultItemAnimator())
-            }
-            ibPlaylistControl.setOnClickListener(){ view ->
-                view.isSelected = !view.isSelected
-                rvPlaylist.visibility.let {
-                    if(view.isSelected) Visibility.Visible else Visibility.Gone
+            IncludePlayListBinding.bind(binding.incPlaylist.root).apply {
+                mactPlaypath.apply {
+                    threshold = 0
+                    onFocusChangeListener = View.OnFocusChangeListener { v, hasFocus ->
+                        if (v is AutoCompleteTextView) {
+                            if (hasFocus) {
+                                v.showDropDown()
+                            } else {
+                                v.dismissDropDown()
+                            }
+                        }
+                    }
+//                    setAdapter()
+                }
+                rvPlaylist.apply {
+                    layoutManager = LinearLayoutManager(context).apply { orientation = RecyclerView.VERTICAL }
+                    adapter = PlayListAdapter()
+                    addItemDecoration(DividerItemDecoration(context,RecyclerView.VERTICAL))
+                    setItemAnimator(DefaultItemAnimator())
+                }
+                ibPlaylistControl.setOnClickListener(){ view ->
+                    view.isSelected = !view.isSelected
+                    rvPlaylist.visibility.let {
+                        if(view.isSelected) Visibility.Visible else Visibility.Gone
+                    }
                 }
             }
+
             //surface
             surface.holder.apply {
                 addCallback(object: SurfaceHolder.Callback2{

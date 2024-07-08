@@ -14,27 +14,12 @@
         tools:layout_editor_absoluteX="130dp"
         tools:layout_editor_absoluteY="102dp" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        app:layout_constraintStart_toStartOf="parent">
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_playlist"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            app:layout_constraintStart_toStartOf="parent"/>
-        <ImageButton
-            android:id="@+id/ib_playlist_control"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/rv_playlist"
-            android:layout_margin="5dp"
-            android:padding="5dp"
-            android:src="@drawable/arrow_forward_ios_24px"
-            android:background="@color/black_half"/>
+    <include
+        android:id="@+id/inc_playlist"
+        layout="@layout/include_play_list"
+        app:layout_constraintStart_toStartOf="parent"/>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_playcontrol"
         android:layout_width="match_parent"
