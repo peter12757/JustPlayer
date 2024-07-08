@@ -1,5 +1,6 @@
 package com.eathemeat.justplayer.play
 
+import android.icu.text.Transliterator.Position
 import android.media.TimedText
 import android.util.Log
 import android.view.Surface
@@ -11,6 +12,7 @@ import androidx.lifecycle.ViewModel
 import com.eathemeat.base.IMediaPlayer
 import com.eathemeat.base.MediaPlayerCallBack
 import com.eathemeat.justplayer.data.PlayItem
+import com.eathemeat.justplayer.data.SDcardFileGetter
 import com.eathemeat.player.player.sys.AndroidMediaPlayer
 import java.net.URI
 
@@ -21,11 +23,12 @@ class PlayViewModel: ViewModel(), MediaPlayerCallBack {
     private val TAG = "PlayViewModel"
 
 
-    var mPlayList = MutableLiveData<PlayItem>()
+    var mPlayList = MutableLiveData<List<PlayItem>>()
     private var mPlayer: IMediaPlayer? = null
     //    private var mPlayer: IMediaPlayer = JustPlayer(JustData.JustContext(JustPlayerType.FFMPEGPlayer),this)
     private var surface:Surface? = null
     var mCurPlayItem:PlayItem? = null
+    val fileGetter = SDcardFileGetter()
 
 
     fun setSurface(surface: Surface?) {
@@ -47,9 +50,10 @@ class PlayViewModel: ViewModel(), MediaPlayerCallBack {
                 prepareAsyc()
             }
         }
+    }
 
-
-
+    fun seekTo(position: Long): Unit {
+        mPlayer?.seekTo(position)
     }
 
     fun stop() {
@@ -114,5 +118,14 @@ class PlayViewModel: ViewModel(), MediaPlayerCallBack {
             TAG,
             "onProgressUpdate() called with: mediaPlayer = $mediaPlayer, progress = $progress"
         )
+    }
+
+    fun scanfile() {
+        var fileArr = fileGetter.scanFile(fileGetter.mPath)
+        var list = mutableListOf<PlayItem>()
+        fileArr.forEach { file->
+            list.add(PlayItem(file.name,file.path,"${file.path}"))
+        }
+        mPlayList.value = list
     }
 }
