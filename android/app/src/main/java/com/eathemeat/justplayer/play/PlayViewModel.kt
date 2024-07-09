@@ -19,7 +19,6 @@ import java.net.URI
 class PlayViewModel: ViewModel(), MediaPlayerCallBack {
 
 //livedata or stateflow
-//    var
     private val TAG = "PlayViewModel"
 
 
@@ -29,34 +28,37 @@ class PlayViewModel: ViewModel(), MediaPlayerCallBack {
     private var surface:Surface? = null
     var mCurPlayItem:PlayItem? = null
     val fileGetter = SDcardFileGetter()
+    val videoSize = MutableLiveData<Pair<Int,Int>>()
 
 
     fun setSurface(surface: Surface?) {
+        Log.d(TAG, "setSurface() called with: surface = $surface")
         this.surface = surface
     }
 
     fun play(item:PlayItem?) {
-        item?:let {
-            stop()
-            return@let
-        }
-        item?.let { item ->
-            mCurPlayItem = item
+        Log.d(TAG, "play() called with: item = $item")
+        stop()
+        item?.let { it ->
+            mCurPlayItem = it
             mPlayer?: let {
-                createPlayer()
-            }?.apply {
+                mPlayer = createPlayer()
+            }
+            mPlayer?.apply {
                 setSurface(surface)
-                setDataSource(URI.create(item.url))
+                setDataSource(URI.create(it.url))
                 prepareAsyc()
             }
         }
     }
 
     fun seekTo(position: Long): Unit {
+        Log.d(TAG, "seekTo() called with: position = $position")
         mPlayer?.seekTo(position)
     }
 
     fun stop() {
+        Log.d(TAG, "stop() called")
         mPlayer = mPlayer?.let { player->
             player.stop()
             player.release()
@@ -65,11 +67,12 @@ class PlayViewModel: ViewModel(), MediaPlayerCallBack {
     }
 
     private fun createPlayer(): IMediaPlayer? {
-        return mPlayer?.let {player->
+        Log.d(TAG, "createPlayer() called")
+        mPlayer?.let {player->
             player.stop()
             player.release()
-            AndroidMediaPlayer(this@PlayViewModel)
         }
+        return AndroidMediaPlayer(this@PlayViewModel)
     }
 
     override fun onPrepared() {
@@ -111,6 +114,7 @@ class PlayViewModel: ViewModel(), MediaPlayerCallBack {
             TAG,
             "onVideoSizeChanged() called with: iMediaPlayer = $iMediaPlayer, width = $width, height = $height"
         )
+        videoSize.value = Pair(width,height)
     }
 
     override fun onProgressUpdate(mediaPlayer: IMediaPlayer, progress: Long) {

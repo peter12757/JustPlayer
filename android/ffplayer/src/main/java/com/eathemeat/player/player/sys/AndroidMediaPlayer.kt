@@ -11,7 +11,8 @@ import java.net.URI
 class AndroidMediaPlayer(override var callback: MediaPlayerCallBack?) : IMediaPlayer {
     val TAG = AndroidMediaPlayer::class.simpleName
 
-    var mediaPlayer = MediaPlayer().apply {
+    val mediaPlayer = MediaPlayer().apply {
+        Log.d(TAG, "MediaPlayer create() called")
         setOnBufferingUpdateListener { mp, percent ->
             callback?.onBufferingUpdate(this as IMediaPlayer, percent)
 
@@ -53,7 +54,7 @@ class AndroidMediaPlayer(override var callback: MediaPlayerCallBack?) : IMediaPl
             }
         }
         setOnVideoSizeChangedListener { mp, width, height ->
-            callback?.onVideoSizeChanged(this as IMediaPlayer,width,height)
+            callback?.onVideoSizeChanged(this@AndroidMediaPlayer,width,height)
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             setOnMediaTimeDiscontinuityListener { mp, mts ->
@@ -66,39 +67,48 @@ class AndroidMediaPlayer(override var callback: MediaPlayerCallBack?) : IMediaPl
     }
 
     override fun prepareAsyc() {
+        Log.d(TAG, "prepareAsyc() called")
         mediaPlayer.prepareAsync()
     }
 
     override fun start() {
+        Log.d(TAG, "start() called")
         mediaPlayer.start()
     }
 
     override fun pause() {
+        Log.d(TAG, "pause() called")
         mediaPlayer.pause()
     }
 
     override fun stop() {
+        Log.d(TAG, "stop() called")
         mediaPlayer.stop()
     }
 
     override fun release() {
+        Log.d(TAG, "release() called")
         mediaPlayer.release()
         callback = null;
     }
 
     override fun reset() {
+        Log.d(TAG, "reset() called")
         mediaPlayer.reset()
     }
 
     override fun setDataSource(uri: URI) {
+        Log.d(TAG, "setDataSource() called with: uri = $uri")
         mediaPlayer.setDataSource(uri.toString())
     }
 
     override fun setSurface(surface: Surface?) {
+        Log.d(TAG, "setSurface() called with: surface = $surface")
         mediaPlayer.setSurface(surface)
     }
 
     override fun seekTo(progress: Long, mode: Int) {
+        Log.d(TAG, "seekTo() called with: progress = $progress, mode = $mode")
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             mediaPlayer.seekTo(progress,mode)
         }else {
@@ -107,10 +117,12 @@ class AndroidMediaPlayer(override var callback: MediaPlayerCallBack?) : IMediaPl
     }
 
     override fun getDuration(): Long {
+        Log.d(TAG, "getDuration() called")
         return mediaPlayer.duration.toLong()
     }
 
     override fun getPosition(): Long {
+        Log.d(TAG, "getPosition() called")
         return mediaPlayer.currentPosition.toLong()
     }
 

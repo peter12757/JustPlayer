@@ -1,22 +1,26 @@
 package com.eathemeat.justplayer.data
 
 import android.os.Environment
+import android.util.Log
 import androidx.compose.ui.graphics.Path
 import java.io.File
 
 class SDcardFileGetter {
 
 
-    val defPath = Environment.getExternalStorageDirectory().path+"Download/testvideo"
+    val defPath = Environment.getExternalStorageDirectory().path + "/Download/testvideo"
 
-
+    val TAG = "SDcardFileGetter"
     var mPath = defPath
 
     fun scanFile(path: String): List<File> {
+        Log.d(TAG, "scanFile() called with: path = $path")
         var file = File(path)
-        if (file.exists() || file.isFile) {
+        if (!file.exists()) {
             return listOf()
-        }else {
+        } else if (file.isFile) {
+            return listOf()
+        } else {
             var files = file.listFiles()
             return files.asList()
         }
@@ -27,12 +31,9 @@ class SDcardFileGetter {
 //    }
 
 
-
-
-
-    fun isSDcardValid() :Boolean {
+    fun isSDcardValid(): Boolean {
         return Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)
     }
 
-    
+
 }

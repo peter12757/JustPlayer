@@ -1,29 +1,30 @@
 package com.eathemeat.justplayer.play
 
 import android.Manifest
+import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import android.view.SurfaceHolder
 import android.view.View
 import android.widget.AutoCompleteTextView
+import android.widget.FrameLayout
+import android.widget.LinearLayout
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.compose.Visibility
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.eathemeat.justplayer.databinding.ActivityPlayBinding
 import com.eathemeat.justplayer.databinding.IncludePlayListBinding
-import com.google.android.material.slider.Slider
 
 class PlayActivity : AppCompatActivity() {
 
@@ -39,6 +40,7 @@ class PlayActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
         model = ViewModelProvider(this).get(PlayViewModel::class.java)
         binding = ActivityPlayBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -52,6 +54,29 @@ class PlayActivity : AppCompatActivity() {
         initViews()
 
         initpermissions()
+
+        observer()
+    }
+
+    private fun observer() {
+        model.apply {
+            videoSize.observe(this@PlayActivity) { size->
+                var parentWidth = binding.llSurface.width
+                var parentHeight = binding.llSurface.height
+                Log.d(TAG, "observer() called with: size = $size parWidth:$parentWidth   parHeight:$parentHeight")
+                var lp = LinearLayout.LayoutParams(binding.surface.layoutParams).apply {
+                    if (size.first*parentHeight > parentWidth*size.second) {
+                        width = parentWidth
+                        height = size.first*size.second/parentWidth
+                    }else {
+                        width = size.first*size.second/parentHeight
+                        height = parentHeight
+
+                    }
+                }
+                binding.surface.layoutParams = lp
+            }
+        }
     }
 
     private fun initpermissions() {
@@ -85,7 +110,7 @@ class PlayActivity : AppCompatActivity() {
                 rvPlaylist.apply {
                     layoutManager =
                         LinearLayoutManager(context).apply { orientation = RecyclerView.VERTICAL }
-                    adapter = PlayListAdapter().apply {
+                    adapter = PlayListAdapter(model).apply {
                         model.mPlayList.observe(this@PlayActivity){ playList ->
                             data.clear()
                             data.addAll(playList)

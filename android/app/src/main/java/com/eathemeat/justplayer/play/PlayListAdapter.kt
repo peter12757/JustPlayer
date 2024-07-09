@@ -2,11 +2,11 @@ package com.eathemeat.justplayer.play
 
 import android.content.Intent
 import android.util.Log
-import android.util.Range
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.eathemeat.justplayer.R
@@ -15,7 +15,7 @@ import com.eathemeat.justplayer.databinding.ItemPlayfileBinding
 import com.eathemeat.justplayer.databinding.ItemPlaylistBinding
 import com.eathemeat.justplayer.databinding.ItemPlaynetBinding
 
-class PlayListAdapter() : RecyclerView.Adapter<PlayListAdapter.PlayListViewHolder>() {
+class PlayListAdapter(val model: PlayViewModel) : RecyclerView.Adapter<PlayListAdapter.PlayListViewHolder>() {
 
     var data:MutableList<PlayItem> = mutableListOf()
     val TAG = "PlayListAdapter"
@@ -25,15 +25,17 @@ class PlayListAdapter() : RecyclerView.Adapter<PlayListAdapter.PlayListViewHolde
     val TYPE_SOURCE_NET = TYPE_SOURCE_FILE+1
 
     inner class PlayListViewHolder(var itemView: View) : ViewHolder(itemView){
-        fun onBindViewHolder(position: Int, playItem: PlayItem) {
-            when(itemViewType) {
+        fun onBindViewHolder(position: Int) {
+            Log.d(TAG, "onBindViewHolder() called with: position = $position  data:${data}")
+            when(getItemViewType(position)) {
                 TYPE_PLAYITEM->{
+                    var playItem: PlayItem = data[position]
                     ItemPlaylistBinding.bind(itemView).apply {
                         txtName.text = playItem.name
                         txtDesc.text = playItem.desc
                         txtDesc.visibility = View.GONE
                         ibPlay.setOnClickListener() {
-
+                            this@PlayListAdapter.model.play(playItem)
                         }
                         ibMore.setOnClickListener() {
                             if (it.isSelected) {
@@ -70,10 +72,10 @@ class PlayListAdapter() : RecyclerView.Adapter<PlayListAdapter.PlayListViewHolde
 
     override fun getItemViewType(position: Int): Int {
         return when(position) {
-            itemCount ->{
+            data.size ->{
                 TYPE_SOURCE_FILE
             }
-            itemCount+1 ->{
+            data.size+1 ->{
                 TYPE_SOURCE_NET
             }
             else -> TYPE_PLAYITEM
@@ -87,7 +89,7 @@ class PlayListAdapter() : RecyclerView.Adapter<PlayListAdapter.PlayListViewHolde
         viewType: Int
     ): PlayListViewHolder {
         var inflater = LayoutInflater.from(parent.context)
-        var view = ItemPlaylistBinding.inflate(inflater).root
+        var view = ItemPlaylistBinding.inflate(inflater,parent,false).root
         when(viewType){
             TYPE_PLAYITEM ->{
             }
@@ -103,20 +105,19 @@ class PlayListAdapter() : RecyclerView.Adapter<PlayListAdapter.PlayListViewHolde
                     "onCreateViewHolder() called with: parent = $parent, viewType = $viewType"
                 )
             }
-
         }
         return PlayListViewHolder(view)
     }
 
     override fun getItemCount(): Int {
-        return data.size+2
+        return data.size
     }
 
     override fun onBindViewHolder(
         holder: PlayListViewHolder,
         position: Int
     ) {
-        holder.onBindViewHolder(position,data[position])
+        holder.onBindViewHolder(position)
     }
 
 }
