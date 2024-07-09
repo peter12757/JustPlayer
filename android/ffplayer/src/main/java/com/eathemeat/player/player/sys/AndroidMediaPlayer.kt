@@ -117,7 +117,7 @@ class AndroidMediaPlayer(override var callback: MediaPlayerCallBack?) : IMediaPl
     }
 
     override fun getDuration(): Long {
-        Log.d(TAG, "getDuration() called")
+        Log.d(TAG, "getDuration() called ${mediaPlayer.duration}")
         return mediaPlayer.duration.toLong()
     }
 

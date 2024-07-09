@@ -15,9 +15,10 @@ import com.eathemeat.base.MediaPlayerCallBack
 import com.eathemeat.justplayer.data.PlayItem
 import com.eathemeat.justplayer.data.SDcardFileGetter
 import com.eathemeat.player.player.sys.AndroidMediaPlayer
+import com.eathemeat.player.util.media.PositionGetter
 import java.net.URI
 
-class PlayViewModel: ViewModel(), MediaPlayerCallBack {
+class PlayViewModel: ViewModel(), MediaPlayerCallBack, PositionGetter.OnPositionChangedListener {
 
 //livedata or stateflow
     private val TAG = "PlayViewModel"
@@ -30,6 +31,9 @@ class PlayViewModel: ViewModel(), MediaPlayerCallBack {
     var mCurPlayItem:PlayItem? = null
     val fileGetter = SDcardFileGetter()
     val videoSize = MutableLiveData<Pair<Int,Int>>()
+    var posGetter:PositionGetter? = null
+    val mPos = MutableLiveData<Long>()
+    val mDuration = MutableLiveData<Long>()
 
 
     fun setSurface(surface: Surface?) {
@@ -72,13 +76,22 @@ class PlayViewModel: ViewModel(), MediaPlayerCallBack {
         mPlayer?.let {player->
             player.stop()
             player.release()
+            posGetter?.recycle()
         }
-        return AndroidMediaPlayer(this@PlayViewModel)
+        var player = AndroidMediaPlayer(this@PlayViewModel)
+        posGetter = PositionGetter(player = player, listener = this@PlayViewModel)
+        return player
     }
 
     override fun onPrepared() {
         Log.d(TAG, "onPrepared() called")
-        mPlayer?.start()
+        mPlayer?.let{ player ->
+            mDuration.value = player.getDuration()
+            player.start()
+            posGetter?.start()
+
+        }
+
     }
 
     override fun onBufferring() {
@@ -92,6 +105,7 @@ class PlayViewModel: ViewModel(), MediaPlayerCallBack {
 
     override fun onPlayComplted() {
         Log.d(TAG, "onPlayComplted() called")
+        posGetter?.stop()
     }
 
     override fun onInfo(what: Int, extra: Int) {
@@ -104,6 +118,8 @@ class PlayViewModel: ViewModel(), MediaPlayerCallBack {
 
     override fun onError(mp: IMediaPlayer, what: Int, extra: Int) {
         Log.d(TAG, "onError() called with: mp = $mp, what = $what, extra = $extra")
+        posGetter?.stop()
+        mPlayer?.stop()
     }
 
     override fun onTimedText(mp: IMediaPlayer, text: TimedText?) {
@@ -116,6 +132,9 @@ class PlayViewModel: ViewModel(), MediaPlayerCallBack {
             "onVideoSizeChanged() called with: iMediaPlayer = $iMediaPlayer, width = $width, height = $height"
         )
         videoSize.value = Pair(width,height)
+        if (mDuration.value == 0L) {
+            mDuration.value = mPlayer?.getDuration()
+        }
     }
 
     override fun onProgressUpdate(mediaPlayer: IMediaPlayer, progress: Long) {
@@ -132,5 +151,10 @@ class PlayViewModel: ViewModel(), MediaPlayerCallBack {
             list.add(PlayItem(file.name,file.path,"${file.path}"))
         }
         mPlayList.value = list
+    }
+
+    override fun OnPositionChanged(mp: IMediaPlayer, pos: Long) {
+        Log.d(TAG, "OnPositionChanged() called with: mp = $mp, pos = $pos")
+        mPos.postValue(pos)
     }
 }

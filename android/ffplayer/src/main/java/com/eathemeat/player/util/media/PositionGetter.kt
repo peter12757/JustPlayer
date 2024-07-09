@@ -20,25 +20,21 @@ class PositionGetter(
                 listener?.let {
                     it.OnPositionChanged(player,player.getPosition())
                 }
+                start(1000)
             }
-
-            2 -> {
-
-            }
-
             else -> {
                 throw UnsupportedOperationException("msg what is not support")
             }
         }
     }
 
-    fun start(): Unit {
-        sendEmptyMessage(1)
+    fun start(delay:Long = 0): Unit {
+        sendEmptyMessageDelayed(1,delay)
 
     }
 
     fun stop(): Unit {
-        sendEmptyMessage(2)
+        removeCallbacksAndMessages(null)
     }
 
     fun recycle() {

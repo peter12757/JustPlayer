@@ -8,12 +8,10 @@ import android.util.Log
 import android.view.SurfaceHolder
 import android.view.View
 import android.widget.AutoCompleteTextView
-import android.widget.FrameLayout
 import android.widget.LinearLayout
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.compose.Visibility
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
@@ -75,6 +73,53 @@ class PlayActivity : AppCompatActivity() {
                     }
                 }
                 binding.surface.layoutParams = lp
+            }
+            mDuration.observe(this@PlayActivity) { duration->
+                Log.d(TAG, "observer() called with: duration = $duration",Throwable())
+                if (duration > 0) {
+                    binding.proPro.valueTo = duration.toFloat()
+                    binding.txtTime.text = "00:00/${calculateTime(duration/1000)}"
+                }
+                binding.proPro.valueFrom = 0F
+
+            }
+            mPos.observe(this@PlayActivity) { pos ->
+                Log.d(TAG, "observer() called with: pos = $pos")
+                binding.proPro.setValue(pos.toFloat())
+                binding.txtTime.text = "${calculateTime(pos/1000)}/${calculateTime(model.mDuration.value!!/1000)}"
+            }
+        }
+    }
+
+    //计算播放时间
+    fun calculateTime(time: Long): String {
+        val minute: Long
+        val second: Long
+        if (time >= 60) {
+            minute = time / 60
+            second = time % 60
+            //分钟在0~9
+            return if (minute < 10) {
+                //判断秒
+                if (second < 10) {
+                    "0$minute:0$second"
+                } else {
+                    "0$minute:$second"
+                }
+            } else {
+                //分钟大于10再判断秒
+                if (second < 10) {
+                    "$minute:0$second"
+                } else {
+                    "$minute:$second"
+                }
+            }
+        } else {
+            second = time
+            return if (second >= 0 && second < 10) {
+                "00:0$second"
+            } else {
+                "00:$second"
             }
         }
     }
