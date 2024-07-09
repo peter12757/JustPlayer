@@ -1,0 +1,14 @@
+prefix=/Users/peterxi/work/study/ffbuild/android/arm64-v8a
+exec_prefix=${prefix}
+libdir=/Users/peterxi/work/study/ffbuild/android/arm64-v8a/libs
+includedir=/Users/peterxi/work/study/ffbuild/android/arm64-v8a/include
+
+Name: libavdevice
+Description: FFmpeg device handling library
+Version: 59.4.100
+Requires: 
+Requires.private: libavfilter >= 8.24.100, libavformat >= 59.16.100, libavcodec >= 59.18.100, libavutil >= 57.17.100
+Conflicts:
+Libs: -L${libdir}  -lavdevice 
+Libs.private: -lm -latomic
+Cflags: -I${includedir}

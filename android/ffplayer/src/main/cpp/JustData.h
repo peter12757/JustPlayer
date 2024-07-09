@@ -48,7 +48,7 @@ enum JUST_URI {
 
 enum JustPlayerType {
     MediaCodec = 0,
-    FFMPEGPlayer = MediaCodec+1,
+    FFMPEG = MediaCodec+1,
 };
 
 struct JustContext : public IPackage{
@@ -73,7 +73,7 @@ struct JustContext : public IPackage{
     {
         switch (playerType) {
             case MediaCodec: return "MediaCodec";
-            case FFMPEGPlayer: return "FFMPEGPlayer";
+            case FFMPEG: return "FFMPEG";
             default: return "Unknown";
         }
     }

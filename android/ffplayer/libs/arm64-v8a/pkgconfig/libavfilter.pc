@@ -1,0 +1,14 @@
+prefix=/Users/peterxi/work/study/ffbuild/android/arm64-v8a
+exec_prefix=${prefix}
+libdir=/Users/peterxi/work/study/ffbuild/android/arm64-v8a/libs
+includedir=/Users/peterxi/work/study/ffbuild/android/arm64-v8a/include
+
+Name: libavfilter
+Description: FFmpeg audio/video filtering library
+Version: 8.24.100
+Requires: 
+Requires.private: libavutil >= 57.17.100
+Conflicts:
+Libs: -L${libdir}  -lavfilter 
+Libs.private: -pthread -lm -latomic
+Cflags: -I${includedir}

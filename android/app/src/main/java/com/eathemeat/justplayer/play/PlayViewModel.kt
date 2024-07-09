@@ -14,8 +14,8 @@ import com.eathemeat.base.IMediaPlayer
 import com.eathemeat.base.MediaPlayerCallBack
 import com.eathemeat.justplayer.data.PlayItem
 import com.eathemeat.justplayer.data.SDcardFileGetter
-import com.eathemeat.player.player.sys.AndroidMediaPlayer
-import com.eathemeat.player.util.media.PositionGetter
+import com.eathemeat.player.sys.AndroidMediaPlayer
+import com.eathemeat.util.media.PositionGetter
 import java.net.URI
 
 class PlayViewModel: ViewModel(), MediaPlayerCallBack, PositionGetter.OnPositionChangedListener {
@@ -26,12 +26,12 @@ class PlayViewModel: ViewModel(), MediaPlayerCallBack, PositionGetter.OnPosition
 
     var mPlayList = MutableLiveData<List<PlayItem>>()
     private var mPlayer: IMediaPlayer? = null
-    //    private var mPlayer: IMediaPlayer = JustPlayer(JustData.JustContext(JustPlayerType.FFMPEGPlayer),this)
+    //    private var mPlayer: IMediaPlayer = JustPlayer(JustData.JustContext(JustPlayerType.FFPlayer),this)
     private var surface:Surface? = null
     var mCurPlayItem:PlayItem? = null
     val fileGetter = SDcardFileGetter()
     val videoSize = MutableLiveData<Pair<Int,Int>>()
-    var posGetter:PositionGetter? = null
+    var posGetter: PositionGetter? = null
     val mPos = MutableLiveData<Long>()
     val mDuration = MutableLiveData<Long>()
 

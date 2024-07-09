@@ -12,6 +12,16 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
+
+        externalNativeBuild {
+            cmake {
+                cppFlags += "-std=c++11"
+                arguments +="-DANDROID_STL=c++_shared"
+            }
+        }
+        ndk {
+            abiFilters +="arm64-v8a"
+        }
     }
 
     buildTypes {
@@ -23,19 +33,23 @@ android {
             )
         }
     }
-//    externalNativeBuild {
-//        cmake {
-//            path("src/main/cpp/CMakeLists.txt")
-//            version = "3.22.1"
-//    cppFlags("")
-//        }
-//    }
+    externalNativeBuild {
+        cmake {
+            path("src/main/cpp/CMakeLists.txt")
+            version = "3.22.1"
+        }
+    }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
     kotlinOptions {
         jvmTarget = "1.8"
+    }
+    packaging {
+        jniLibs {
+            keepDebugSymbols += arrayOf("*/armeabi-v7a/*.so", "*/arm64-v8a/*.so", "*/x86/*.so", "**.so")
+        }
     }
     ndkVersion = "27.0.11718014 rc1"
 }

@@ -26,11 +26,11 @@ set(CMAKE_C_FLAGS_RELEASE       "${CMAKE_C_FLAGS_RELEASE}   -ffunction-sections 
 set(CMAKE_CXX_FLAGS_RELEASE     "${CMAKE_CXX_FLAGS_RELEASE} -ffunction-sections -fdata-sections")
 set(CMAKE_ASM_FLAGS_RELEASE     "${CMAKE_ASM_FLAGS_RELEASE} -ffunction-sections -fdata-sections")
 
-set(CMAKE_MODULE_LINKER_FLAGS   "${CMAKE_MODULE_LINKER_FLAGS} -Wl,--gc-sections")
-set(CMAKE_SHARED_LINKER_FLAGS   "${CMAKE_SHARED_LINKER_FLAGS} -Wl,--gc-sections")
+set(CMAKE_MODULE_LINKER_FLAGS   "${CMAKE_MODULE_LINKER_FLAGS} -Wl,--gc-sections,--unresolved-symbols=ignore-all")
+set(CMAKE_SHARED_LINKER_FLAGS   "${CMAKE_SHARED_LINKER_FLAGS} -Wl,--gc-sections,--unresolved-symbols=ignore-all")
 
 add_subdirectory(base)
-#add_subdirectory(FFMPEGPlayer)
+add_subdirectory(ffmpeg)
 #add_subdirectory(cpptest)
 
 
@@ -47,12 +47,13 @@ target_include_directories(${LIBNAME} PRIVATE
         base/util
         base/log
         base/protocol
+        base/thread
         )
 
 
 
 target_include_directories(${LIBNAME} PRIVATE
-        FFMPEGPlayer/player
+        ffmpeg/player
         )
 
 find_library( # 定位 Android 特定的日志支持库并将其路径存储在 log-lib 中
@@ -63,7 +64,7 @@ find_library( # 定位 Android 特定的日志支持库并将其路径存储在 
 
 target_link_libraries(${LIBNAME}
         JustBase
-        FFMPEGPlayer
+        FFPlayer
         ${log-lib}
 )
 
