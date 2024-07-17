@@ -20,9 +20,20 @@ FFPlayer::~FFPlayer() {
     SafeDelete(m_pHandler);
 }
 
-RET FFPlayer::setSurface() {
+RET FFPlayer::setSurface(JNIEnv *env,jobject android_surface) {
     std::ostringstream logOs;
     logOs<<" FFPlayer::setSurface ";
+    ANativeWindow *native_window = NULL;
+    if (android_surface) {
+        native_window = ANativeWindow_fromSurface(env,android_surface);
+        if (!native_window) {
+            logOs<<" ANativeWindow_fromSurface: failed";
+        }
+    }
+    //todo
+    if (native_window){
+        ANativeWindow_release(native_window);
+    }
     LOGD("%s",logOs.str().c_str());
     return RET_OK;
 }

@@ -117,11 +117,8 @@ class FFPlayer(override var callback: MediaPlayerCallBack?) : IMediaPlayer {
 
     external fun invoke(handle:Long,data: ByteArray): Int
 
-//    external fun setSurface(handle:Long,it: Surface?)
+    external fun setSurface(handle:Long,it: Surface?)
 
-    fun setSurface(handle:Long,it: Surface?) {
-
-    }
     external fun setCallBack(handle:Long,callback:FFMsgHandler): Unit
 
 //    external fun testmain(name:ByteArray,desc:ByteArray):Unit

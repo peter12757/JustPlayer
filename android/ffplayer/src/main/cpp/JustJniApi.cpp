@@ -1,6 +1,6 @@
 #include <jni.h>
 
-#include <jni.h>
+#include <android/native_window_jni.h>
 #include <string>
 #include "LogUtil.h"
 #include "JniHelper.h"
@@ -63,11 +63,11 @@ Java_com_eathemeat_player_ffmpeg_FFPlayer_destory(JNIEnv *env, jobject thiz,jlon
 
 extern "C"
 JNIEXPORT void JNICALL
-Java_com_eathemeat_player_ffmpeg_FFPlayer_setSurface(JNIEnv *env, jobject thiz,jlong handle, jobject it) {
+Java_com_eathemeat_player_ffmpeg_FFPlayer_setSurface(JNIEnv *env, jobject thiz,jlong handle, jobject android_surface) {
     LOGD("setSurface:method");
     if(handle <0) return;
     auto* player = reinterpret_cast<FFPlayer*>(handle);
-    player->setSurface();
+    player->setSurface(env,android_surface);
 }
 
 extern "C"

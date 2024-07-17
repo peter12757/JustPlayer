@@ -32,121 +32,135 @@ public:
 
 public:
 
-    void init();
+//    SDL_Thread *read_tid;
+//    SDL_Thread _read_tid;
+    AVInputFormat *iformat;
+    int abort_request;
+    int force_refresh;
+    int paused;
+    int last_paused;
+    int queue_attachments_req;
+    int seek_req;
+    int seek_flags;
+    int64_t seek_pos;
+    int64_t seek_rel;
+#ifdef FFP_MERGE
+    int read_pause_return;
+#endif
+    AVFormatContext *ic;
+    int realtime;
 
-    int stream_component_open(int stream_index,
-                              AVDictionary *codec_opts);
+    Clock audclk;
+    Clock vidclk;
+    Clock extclk;
 
-    AVDictionary *filter_codec_opts(AVDictionary *opts, enum AVCodecID codec_id,
-                                    AVFormatContext *s, AVStream *st, const AVCodec *codec);
+    FrameQueue pictq;
+    FrameQueue subpq;
+    FrameQueue sampq;
 
-    //打开音频暑促设备
-    int audio_open(void *opaque, int64_t wanted_channel_layout, int wanted_nb_channels,
-                   int wanted_sample_rate, struct AudioParams *audio_hw_params);
+    Decoder auddec;
+    Decoder viddec;
+    Decoder subdec;
 
-    int decoder_init(Decoder *d, AVCodecContext *avctx, PacketQueue *queue);
+    int audio_stream;
 
-    int configure_audio_filters(const char *afilters, int force_output_format);
+    int av_sync_type;
 
-    int configure_filtergraph(AVFilterGraph *graph, const char *filtergraph,
-                              AVFilterContext *source_ctx, AVFilterContext *sink_ctx);
+    double audio_clock;
+    int audio_clock_serial;
+    double audio_diff_cum; /* used for AV difference average computation */
+    double audio_diff_avg_coef;
+    double audio_diff_threshold;
+    int audio_diff_avg_count;
+    AVStream *audio_st;
+    PacketQueue audioq;
+    int audio_hw_buf_size;
+    uint8_t *audio_buf;
+    uint8_t *audio_buf1;
+    unsigned int audio_buf_size; /* in bytes */
+    unsigned int audio_buf1_size;
+    int audio_buf_index; /* in bytes */
+    int audio_write_buf_size;
+    int audio_volume;
+    int muted;
+    struct AudioParams audio_src;
+#if CONFIG_AVFILTER
+    struct AudioParams audio_filter_src;
+#endif
+    struct AudioParams audio_tgt;
+    struct SwrContext *swr_ctx;
+    int frame_drops_early;
+    int frame_drops_late;
+    int continuous_frame_drops_early;
 
-    int64_t get_valid_channel_layout(int64_t channel_layout, int channels);
+    enum ShowMode {
+        SHOW_MODE_NONE = -1, SHOW_MODE_VIDEO = 0, SHOW_MODE_WAVES, SHOW_MODE_RDFT, SHOW_MODE_NB
+    } show_mode;
+    int16_t sample_array[SAMPLE_ARRAY_SIZE];
+    int sample_array_index;
+    int last_i_start;
+#ifdef FFP_MERGE
+    RDFTContext *rdft;
+    int rdft_bits;
+    FFTSample *rdft_data;
+    int xpos;
+#endif
+    double last_vis_time;
+#ifdef FFP_MERGE
+    SDL_Texture *vis_texture;
+    SDL_Texture *sub_texture;
+#endif
 
-    void step_to_next_frame();
+    int subtitle_stream;
+    AVStream *subtitle_st;
+    PacketQueue subtitleq;
 
-    static void ffLog_callback(void* avcl, int level, const char* fmt, va_list vl);
+    double frame_timer;
+    double frame_last_returned_time;
+    double frame_last_filter_delay;
+    int video_stream;
+    AVStream *video_st;
+    PacketQueue videoq;
+    double max_frame_duration;      // maximum duration of a frame - above this, we consider the jump a timestamp discontinuity
+    struct SwsContext *img_convert_ctx;
+#ifdef FFP_SUB
+    struct SwsContext *sub_convert_ctx;
+#endif
+    int eof;
 
+    char *filename;
+    int width, height, xleft, ytop;
+    int step;
 
-    void stream_toggle_pause() {
-        if (paused) {
-            m_videoObj->frame_timer +=
-                    av_gettime_relative() / 1000000.0 - m_videoObj->vidclk->last_updated;
-            if (read_pause_return != AVERROR(ENOSYS)) {
-                m_videoObj->vidclk->paused = 0;
-            }
-            m_videoObj->vidclk->set_clock(
-                    m_videoObj->vidclk->get_clock(), m_videoObj->vidclk->serial);
-        }
-        m_subtitleObj->extclk->set_clock(m_subtitleObj
-                                                 ->extclk->get_clock(),
-                                         m_subtitleObj->extclk->serial);
-        paused = m_audioObj->audclk->paused = m_videoObj->vidclk->paused = m_subtitleObj->extclk->paused = !paused;
-    }
+#if CONFIG_AVFILTER
+    int vfilter_idx;
+    AVFilterContext *in_video_filter;   // the first filter in the video chain
+    AVFilterContext *out_video_filter;  // the last filter in the video chain
+    AVFilterContext *in_audio_filter;   // the first filter in the audio chain
+    AVFilterContext *out_audio_filter;  // the last filter in the audio chain
+    AVFilterGraph *agraph;              // audio filter graph
+#endif
 
-    void stream_seek(int64_t pos, int64_t rel, int seek_by_bytes)
-    {
-        if (!seek_req) {
-            seek_pos = pos;
-            seek_rel = rel;
-            seek_flags &= ~AVSEEK_FLAG_BYTE;
-            if (seek_by_bytes)
-                seek_flags |= AVSEEK_FLAG_BYTE;
-            seek_req = 1;
-//            SDL_CondSignal(continue_read_thread);
-        }
-    }
-
-
-public:
-    const AVInputFormat *iformat;             // 输入格式
-    int abort_request;                          // 请求取消
-    int force_refresh;                          // 强制刷新
-    int paused;                                 // 停止
-    int last_paused;                                // 最后停止
-    int queue_attachments_req;          // 队列附件请求
-    int seek_req;                                   // 查找请求
-    int seek_flags;                             // 查找标志
-    int64_t seek_pos;                           // 查找位置
-    int64_t seek_rel;                           //
-    int read_pause_return;                  // 读停止返回
-    AVFormatContext *ic;                    // 解码格式上下文
-    int realtime;                                   // 是否实时码流
-
-    VideoObj *m_videoObj;   //视频相关
-    AudioObj *m_audioObj;   //音频相关
-    SubtitleObj *m_subtitleObj; //字幕相关
-
-    Decoder *auddec;                         // 音频解码器
-    Decoder *viddec;                         // 视频解码器
-    Decoder *subdec;                         // 字幕解码器
-
-
-    AVSyncType av_sync_type;                           // 同步类型
-
-    int16_t sample_array[SAMPLE_ARRAY_SIZE]; // 采样数组
-    int sample_array_index;                 // 采样索引
-    int last_i_start;                               // 上一开始
-    RDFTContext *rdft;                      // 自适应滤波器上下文
-    int rdft_bits;                                  // 自使用比特率
-    FFTSample *rdft_data;                   // 快速傅里叶采样
-    int xpos;                                       //
-    double last_vis_time;                       //
-    //TODO 显示的控件
-//    SDL_Texture *vis_texture;               // 音频Texture
-//    SDL_Texture *sub_texture;               // 字幕Texture
-//    SDL_Texture *vid_texture;               // 视频Texture
-
-
-
-    int vfilter_idx;                                // 过滤器索引
-    AVFilterGraph *agraph;                  // 音频过滤器 // audio filter graph
-
-    // 上一个视频码流Id、上一个音频码流Id、上一个字幕码流Id
     int last_video_stream, last_audio_stream, last_subtitle_stream;
 
-//    SDL_cond *continue_read_thread; // 连续读线程
+    pthread_cond_t *continue_read_thread;
 
-    int eof;                                            // 结束标志
+    /* extra fields */
+//    SDL_mutex  *play_mutex; // only guard state, do not block any long operation
+//    SDL_Thread *video_refresh_tid;
+//    SDL_Thread _video_refresh_tid;
 
-    char *afilters = NULL;
-    int filter_nbthreads = 0;
-    AVDictionary *sws_dict;
-    AVDictionary *swr_opts;
+    int buffering_on;
+    int pause_req;
 
-    std::string *filename;  // 文件名
-    std::string *m_media_title;
+    int dropping_frame;
+    int is_video_high_fps; // above 30fps
+    int is_video_high_res; // above 1080p
 
+    PacketQueue *buffer_indicator_queue;
+
+    volatile int latest_seek_load_serial;
+    volatile int64_t latest_seek_load_start_at;
 };
 
 
