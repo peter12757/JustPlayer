@@ -7,7 +7,7 @@
 
 SubtitleObj::SubtitleObj() {
     std::ostringstream logOs;
-    logOs<<"AudioObj::AudioObj";
+    logOs<<"Aout::Aout";
     subpq = new FrameQueue();
     subtitleq = new PacketQueue();
     subpq->pktq = subtitleq;

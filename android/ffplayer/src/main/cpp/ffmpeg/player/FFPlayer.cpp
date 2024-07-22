@@ -31,6 +31,8 @@ RET FFPlayer::setSurface(JNIEnv *env,jobject android_surface) {
         }
     }
     //todo
+
+
     if (native_window){
         ANativeWindow_release(native_window);
     }
@@ -51,7 +53,7 @@ RET FFPlayer::setDataSource(const std::string& uri) {
         logOs<<m_play_uri.c_str();
         ret = RET_OK;
     }
-    mJustPlayerCtx = new VideoState(m_play_uri);
+    mJustPlayerCtx = new MediaState(m_play_uri);
     reader = new LocalDataReader(mJustPlayerCtx);
     LOGD("%s", logOs.str().c_str());
     return ret;

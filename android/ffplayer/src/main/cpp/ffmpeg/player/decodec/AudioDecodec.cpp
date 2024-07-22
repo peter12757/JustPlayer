@@ -5,7 +5,7 @@
 #include "AudioDecodec.h"
 
 
-AudioDecodec::AudioDecodec(VideoState *vs)
+AudioDecodec::AudioDecodec(MediaState *vs)
         : XThread("AudioDecodec",100,URGENT)
         ,is(vs) {
     frame = av_frame_alloc();
@@ -193,7 +193,7 @@ int AudioDecodec::configure_filtergraph(AVFilterGraph *graph, const char *filter
     return ret;
 }
 
-int AudioDecodec::configure_audio_filters(VideoState *is, const char *afilters,
+int AudioDecodec::configure_audio_filters(MediaState *is, const char *afilters,
                                           int force_output_format) {
     static const enum AVSampleFormat sample_fmts[] = {AV_SAMPLE_FMT_S16, AV_SAMPLE_FMT_NONE};
     int sample_rates[2] = {0, -1};

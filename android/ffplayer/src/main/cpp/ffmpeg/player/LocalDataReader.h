@@ -8,16 +8,16 @@
 #include "../../base/thread/XThread.h"
 #include "data/FFinc.h"
 #include <stdio.h>
-#include "data/VideoState.h"
+#include "data/MediaState.h"
 
 
 
-class VideoState;
+class MediaState;
 
 class LocalDataReader : public XThread {
 
 public:
-    LocalDataReader(VideoState *is);
+    LocalDataReader(MediaState *is);
     virtual ~LocalDataReader();
 
     void start();
@@ -38,11 +38,11 @@ public:
 
     void packet_queue_flush(PacketQueue *q);
 public:
-    VideoState *is;
+    MediaState *is;
     AVFormatContext *ic;
     AVPacket *pkt;
     const AVDictionaryEntry *t{};
-    VideoState *ctx{};
+    MediaState *ctx{};
 
     AVDictionary *format_opts{}, *codec_opts{};
     int64_t start_time = AV_NOPTS_VALUE;

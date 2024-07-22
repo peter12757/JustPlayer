@@ -15,10 +15,14 @@
 #include "../../base/statemachine/StateMachine.h"
 
 #include "../../base/util/Util.h"
-#include "data/VideoState.h"
+#include "data/MediaState.h"
 #include "LocalDataReader.h"
 #include "PlayerEventHandler.h"
 #include "package.h"
+#include "data/MessageQueue.h"
+#include "data/SpeedSampler.h"
+#include "data/statistic/FFStatistic.h"
+#include "data/FFDemuxCacheControl.h"
 
 
 using namespace std;
@@ -26,7 +30,7 @@ using namespace JustPackage;
 
 class AudioBaseEngine;
 
-class VideoState;
+class MediaState;
 
 class LocalDataReader;
 
@@ -45,7 +49,7 @@ enum PlayerState {
 class FFPlayer : public XThread {
     //data
 protected:
-    VideoState *mJustPlayerCtx{};
+    MediaState *mJustPlayerCtx{};
 
 
     //thread
@@ -98,7 +102,7 @@ protected:
     const AVClass *av_class;
 
     /* ffplay context */
-    VideoState *is;
+    MediaState *is;
 
     /* format/codec options */
     AVDictionary *format_opts;
@@ -146,7 +150,7 @@ protected:
     int64_t seek_at_start;
     int subtitle;
     int infinite_buffer;
-    enum VideoState::ShowMode show_mode;
+    enum MediaState::ShowMode show_mode;
     char *audio_codec_name;
     char *subtitle_codec_name;
     char *video_codec_name;
@@ -175,8 +179,8 @@ protected:
 #endif
 
     /* extra fields */
-    SDL_Aout *aout;
-    SDL_Vout *vout;
+    Aout *aout;
+    Vout *vout;
     struct IJKFF_Pipeline *pipeline;
     struct IJKFF_Pipenode *node_vdec;
     int sar_num;
@@ -185,7 +189,7 @@ protected:
     char *video_codec_info;
     char *audio_codec_info;
     char *subtitle_codec_info;
-    Uint32 overlay_format;
+    uint32_t overlay_format;
 
     int last_error;
     int prepared;
@@ -197,7 +201,7 @@ protected:
     int first_audio_frame_rendered;
     int sync_av_start;
 
-    MessageQueue msg_queue;
+    class MessageQueue msg_queue;
 
     int64_t playable_duration_ms;
 
@@ -228,12 +232,12 @@ protected:
 
     struct IjkMediaMeta *meta;
 
-    SDL_SpeedSampler vfps_sampler;
-    SDL_SpeedSampler vdps_sampler;
+    SpeedSampler vfps_sampler;
+    SpeedSampler vdps_sampler;
 
     /* filters */
-    SDL_mutex  *vf_mutex;
-    SDL_mutex  *af_mutex;
+//    SDL_mutex  *vf_mutex;
+//    SDL_mutex  *af_mutex;
     int         vf_changed;
     int         af_changed;
     float       pf_playback_rate;
@@ -242,12 +246,98 @@ protected:
     int         pf_playback_volume_changed;
 
     void               *inject_opaque;
-    FFStatistic         stat;
-    FFDemuxCacheControl dcc;
+    class FFStatistic         stat;
+    class FFDemuxCacheControl dcc;
 
-    AVApplicationContext *app_ctx;
+//    AVApplicationContext *app_ctx;
 
 
+    void      ffp_global_init();
+    void      ffp_global_uninit();
+    void      ffp_global_set_log_report(int use_report);
+    void      ffp_global_set_log_level(int log_level);
+    void      ffp_global_set_inject_callback(ijk_inject_callback cb);
+    void      ffp_io_stat_register(void (*cb)(const char *url, int type, int bytes));
+    void      ffp_io_stat_complete_register(void (*cb)(const char *url,
+                                                       int64_t read_bytes, int64_t total_size,
+                                                       int64_t elpased_time, int64_t total_duration));
+
+    FFPlayer *ffp__create();
+    void      ffp_destroy();
+    void      ffp_destroy_p(FFPlayer **pffp);
+    void      ffp_reset();
+
+/* set options before ffp_prepare_async_l() */
+
+    void     *ffp_set_inject_opaque(void *opaque);
+    void      ffp_set_option(int opt_category, const char *name, const char *value);
+    void      ffp_set_option_int(int opt_category, const char *name, int64_t value);
+
+    int       ffp_get_video_codec_info(char **codec_info);
+    int       ffp_get_audio_codec_info(char **codec_info);
+
+/* playback controll */
+    int       ffp_prepare_async_l(const char *file_name);
+    int       ffp_start_from_l(long msec);
+    int       ffp_start_l();
+    int       ffp_pause_l();
+    int       ffp_is_paused_l();
+    int       ffp_stop_l();
+    int       ffp_wait_stop_l();
+
+/* all in milliseconds */
+    int       ffp_seek_to_l(long msec);
+    long      ffp_get_current_position_l();
+    long      ffp_get_duration_l();
+    long      ffp_get_playable_duration_l();
+    void      ffp_set_loop(int loop);
+    int       ffp_get_loop();
+
+/* for internal usage */
+    int       ffp_packet_queue_init(PacketQueue *q);
+    void      ffp_packet_queue_destroy(PacketQueue *q);
+    void      ffp_packet_queue_abort(PacketQueue *q);
+    void      ffp_packet_queue_start(PacketQueue *q);
+    void      ffp_packet_queue_flush(PacketQueue *q);
+    int       ffp_packet_queue_get(PacketQueue *q, AVPacket *pkt, int block, int *serial);
+    int       ffp_packet_queue_get_or_buffering(PacketQueue *q, AVPacket *pkt, int *serial, int *finished);
+    int       ffp_packet_queue_put(PacketQueue *q, AVPacket *pkt);
+    bool      ffp_is_flush_packet(AVPacket *pkt);
+
+    Frame    *ffp_frame_queue_peek_writable(FrameQueue *f);
+    void      ffp_frame_queue_push(FrameQueue *f);
+
+    int       ffp_queue_picture(AVFrame *src_frame, double pts, double duration, int64_t pos, int serial);
+
+    int       ffp_get_master_sync_type(VideoState *is);
+    double    ffp_get_master_clock(VideoState *is);
+
+    void      ffp_toggle_buffering_l(int start_buffering);
+    void      ffp_toggle_buffering(int start_buffering);
+    void      ffp_check_buffering_l();
+    void      ffp_track_statistic_l(AVStream *st, PacketQueue *q, FFTrackCacheStatistic *cache);
+    void      ffp_audio_statistic_l();
+    void      ffp_video_statistic_l();
+    void      ffp_statistic_l();
+
+    int       ffp_video_thread();
+
+    void      ffp_set_video_codec_info(const char *module, const char *codec);
+    void      ffp_set_audio_codec_info(const char *module, const char *codec);
+    void      ffp_set_subtitle_codec_info(const char *module, const char *codec);
+
+    void      ffp_set_playback_rate(float rate);
+    void      ffp_set_playback_volume(float volume);
+    int       ffp_get_video_rotate_degrees();
+    int       ffp_set_stream_selected(int stream, int selected);
+
+    float     ffp_get_property_float(int id, float default_value);
+    void      ffp_set_property_float(int id, float value);
+    int64_t   ffp_get_property_int64(int id, int64_t default_value);
+    void      ffp_set_property_int64(int id, int64_t value);
+
+// must be freed with free();
+    struct IjkMediaMeta *ffp_get_meta_l();
 
 };
 

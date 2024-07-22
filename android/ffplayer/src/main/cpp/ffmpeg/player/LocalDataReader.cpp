@@ -5,7 +5,7 @@
 #include "LocalDataReader.h"
 
 
-LocalDataReader::LocalDataReader(VideoState *vs)
+LocalDataReader::LocalDataReader(MediaState *vs)
         : XThread("LocalDataReader", 100, URGENT), is(vs) {
     std::ostringstream logOs;
     logOs << "LocalDataReader::LocalDataReader";

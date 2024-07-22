@@ -2,12 +2,12 @@
 // Created by Peter Xi on 2022/6/3.
 //
 
-#include "VideoObj.h"
+#include "Vout.h"
 
 
-VideoObj::VideoObj() {
+Vout::Vout() {
     std::ostringstream logOs;
-    logOs<<"VideoObj::VideoObj";
+    logOs<<"Vout::Vout";
     pictq = new FrameQueue();
     videoq = new PacketQueue();
     pictq->pktq = videoq;
@@ -39,7 +39,7 @@ VideoObj::VideoObj() {
 
 }
 
-VideoObj::~VideoObj() {
+Vout::~Vout() {
     SafeDelete(pictq);
     SafeDelete(videoq);
 }

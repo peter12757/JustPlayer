@@ -2,11 +2,11 @@
 // Created by Peter Xi on 2022/5/25.
 //
 
-#include "VideoState.h"
+#include "MediaState.h"
 
 
 
-VideoState::VideoState(std::string& uri,double lastTime)
+MediaState::MediaState(std::string& uri, double lastTime)
 :iformat(nullptr)
 ,abort_request(0)
 ,force_refresh(1)
@@ -36,28 +36,28 @@ VideoState::VideoState(std::string& uri,double lastTime)
 ,eof(0)
 ,filename(&uri)
 {
-    m_videoObj = new VideoObj();
-    m_audioObj = new AudioObj();
+    m_videoObj = new Vout();
+    m_audioObj = new Aout();
     m_subtitleObj = new SubtitleObj();
 
     av_sync_type = AV_SYNC_AUDIO_MASTER;
     //todo state->readThread = ...
 }
 
-VideoState::~VideoState() {
+MediaState::~MediaState() {
     SafeDelete(m_videoObj);
     SafeDelete(m_audioObj);
     SafeDelete(m_subtitleObj);
 }
 
-void VideoState::init() {
+void MediaState::init() {
     av_log_set_level(AV_LOG_DEBUG);
-    av_log_set_callback(&VideoState::ffLog_callback);
+    av_log_set_callback(&MediaState::ffLog_callback);
     avformat_network_init();
     avdevice_register_all();
 }
 
-void VideoState::ffLog_callback(void *avcl, int level, const char *fmt, va_list vl) {
+void MediaState::ffLog_callback(void *avcl, int level, const char *fmt, va_list vl) {
     va_list vl2;
     int buf_size = 512;
     std::ostringstream logOs;
@@ -73,7 +73,7 @@ void VideoState::ffLog_callback(void *avcl, int level, const char *fmt, va_list 
 }
 
 
-void VideoState::step_to_next_frame() {
+void MediaState::step_to_next_frame() {
     /* if the stream is paused unpause it, then step */
     if (paused)
         stream_toggle_pause();
@@ -81,14 +81,14 @@ void VideoState::step_to_next_frame() {
 }
 
 
-int64_t VideoState::get_valid_channel_layout(int64_t channel_layout, int channels) {
+int64_t MediaState::get_valid_channel_layout(int64_t channel_layout, int channels) {
     if (channel_layout && av_get_channel_layout_nb_channels(channel_layout) == channels)
         return channel_layout;
     else
         return 0;
 }
 
-int VideoState::configure_audio_filters(const char *afilters, int force_output_format) {
+int MediaState::configure_audio_filters(const char *afilters, int force_output_format) {
     static const enum AVSampleFormat sample_fmts[] = { AV_SAMPLE_FMT_S16, AV_SAMPLE_FMT_NONE };
     int sample_rates[2] = { 0, -1 };
     int64_t channel_layouts[2] = { 0, -1 };
@@ -164,10 +164,10 @@ int VideoState::configure_audio_filters(const char *afilters, int force_output_f
     return ret;
 }
 
-int VideoState::stream_component_open(int stream_index, AVDictionary *codec_opts) {
+int MediaState::stream_component_open(int stream_index, AVDictionary *codec_opts) {
 
     std::ostringstream logOs;
-    logOs<<"VideoState::stream_component_open";
+    logOs<<"MediaState::stream_component_open";
     AVFormatContext *ic = ic;
     AVCodecContext *avctx;
     const AVCodec *codec;
@@ -315,7 +315,7 @@ int VideoState::stream_component_open(int stream_index, AVDictionary *codec_opts
     return ret;
 }
 
-int VideoState::configure_filtergraph(AVFilterGraph *graph, const char *filtergraph,
+int MediaState::configure_filtergraph(AVFilterGraph *graph, const char *filtergraph,
                                       AVFilterContext *source_ctx, AVFilterContext *sink_ctx) {
     int ret, i;
     int nb_filters = graph->nb_filters;
@@ -357,7 +357,7 @@ int VideoState::configure_filtergraph(AVFilterGraph *graph, const char *filtergr
     return ret;
 }
 
-int VideoState::decoder_init(Decoder *d, AVCodecContext *avctx, PacketQueue *queue) {
+int MediaState::decoder_init(Decoder *d, AVCodecContext *avctx, PacketQueue *queue) {
     memset(d, 0, sizeof(Decoder));
     d->pkt = av_packet_alloc();
     if (!d->pkt)
@@ -371,7 +371,7 @@ int VideoState::decoder_init(Decoder *d, AVCodecContext *avctx, PacketQueue *que
 }
 
 AVDictionary *
-VideoState::filter_codec_opts(AVDictionary *opts, enum AVCodecID codec_id, AVFormatContext *s,
+MediaState::filter_codec_opts(AVDictionary *opts, enum AVCodecID codec_id, AVFormatContext *s,
                               AVStream *st, const AVCodec *codec) {
     AVDictionary    *ret = NULL;
     const AVDictionaryEntry *t = NULL;
@@ -428,7 +428,7 @@ VideoState::filter_codec_opts(AVDictionary *opts, enum AVCodecID codec_id, AVFor
 }
 
 
-int VideoState::audio_open(void *opaque, int64_t wanted_channel_layout, int wanted_nb_channels,
+int MediaState::audio_open(void *opaque, int64_t wanted_channel_layout, int wanted_nb_channels,
                            int wanted_sample_rate, struct AudioParams *audio_hw_params) {
 //    SDL_AudioSpec wanted_spec, spec;
 //    const char *env;

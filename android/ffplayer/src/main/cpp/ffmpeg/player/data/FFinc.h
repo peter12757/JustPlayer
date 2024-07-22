@@ -27,7 +27,7 @@ extern "C"{
 }
 #include <sstream>
 
-#include "FFConfig.h"
+#include "config/FFConfig.h"
 #include "../../base/const/constants.h"
 #include "../../base/const/common.h"
 

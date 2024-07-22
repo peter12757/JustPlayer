@@ -6,7 +6,7 @@
 #define ANDROIDTEST_AUDIODECODEC_H
 
 #include "../data/FFinc.h"
-#include "../data/VideoState.h"
+#include "../data/MediaState.h"
 
 class AudioDecodec : XThread {
 
@@ -34,7 +34,7 @@ class AudioDecodec : XThread {
     } BufferSinkContext;
 
 public:
-    AudioDecodec(VideoState *vs);
+    AudioDecodec(MediaState *vs);
 
     virtual ~AudioDecodec();
 
@@ -48,7 +48,7 @@ public:
     int cmp_audio_fmts(enum AVSampleFormat fmt1, int64_t channel_count1,
                        enum AVSampleFormat fmt2, int64_t channel_count2);
 
-    int configure_audio_filters(VideoState *is, const char *afilters, int force_output_format);
+    int configure_audio_filters(MediaState *is, const char *afilters, int force_output_format);
 
     int configure_filtergraph(AVFilterGraph *graph, const char *filtergraph,
                               AVFilterContext *source_ctx, AVFilterContext *sink_ctx);
@@ -61,7 +61,7 @@ public:
 
 
 public:
-    VideoState *is;
+    MediaState *is;
     AVFrame *frame;
     Frame *af;
 

@@ -9,10 +9,10 @@
 
 #define VIDEO_PICTURE_QUEUE_SIZE 3
 
-class VideoObj {
+class Vout {
 public:
-    VideoObj();
-    virtual ~VideoObj();
+    Vout();
+    virtual ~Vout();
 
 public:
     FrameQueue *pictq;   // 视频队列

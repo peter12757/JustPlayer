@@ -2,13 +2,13 @@
 // Created by Peter Xi on 2022/6/3.
 //
 
-#include "AudioObj.h"
+#include "Aout.h"
 
 
-AudioObj::AudioObj()
+Aout::Aout()
 {
     std::ostringstream logOs;
-    logOs<<"AudioObj::AudioObj";
+    logOs<<"Aout::Aout";
     sampq = new FrameQueue();
     audioq = new PacketQueue();
     sampq->pktq = audioq;
@@ -42,7 +42,7 @@ AudioObj::AudioObj()
 
 }
 
-AudioObj::~AudioObj() {
+Aout::~Aout() {
     SafeDelete(sampq);
     SafeDelete(audioq);
 }

@@ -77,6 +77,11 @@ target_include_directories(${SWSCALE} INTERFACE ffmpeginc/libswscale)
 
 AUX_SOURCE_DIRECTORY(player FFlayerSrc)
 AUX_SOURCE_DIRECTORY(player/data FFlayerSrc)
+AUX_SOURCE_DIRECTORY(player/data/audio FFlayerSrc)
+AUX_SOURCE_DIRECTORY(player/data/video FFlayerSrc)
+AUX_SOURCE_DIRECTORY(player/data/statistic FFlayerSrc)
+AUX_SOURCE_DIRECTORY(player/config FFlayerSrc)
+
 
 #audio c
 #aux_source_directory(player/audio FFlayerSrc)
@@ -96,6 +101,10 @@ target_include_directories(${LIBNAME} PUBLIC
         ../base/protocol
         player
         player/data
+        player/data/audio
+        player/data/video
+        player/data/statistic
+        player/config
         player/audio
         player/decodec)
 
@@ -109,6 +118,10 @@ target_include_directories(${LIBNAME} PRIVATE
         ${SWSCALE}
         player
         player/data
+        player/data/audio
+        player/data/video
+        player/data/statistic
+        player/config
         player/audio
         player/decodec)
 

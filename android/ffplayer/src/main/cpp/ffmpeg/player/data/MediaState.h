@@ -7,13 +7,13 @@
 
 #include <string>
 #include "FFinc.h"
-#include "VideoObj.h"
-#include "AudioObj.h"
+#include "Vout.h"
+#include "Aout.h"
 #include "SubtitleObj.h"
 #include "../../../base/const/constants.h"
 #include "audio/AudioBaseEngine.h"
 #include <sstream>
-#include "VideoState.h"
+#include "MediaState.h"
 #include "../../../base/util/Util.h"
 
 class AudioBaseEngine;
@@ -24,11 +24,11 @@ class AudioBaseEngine;
 /**
  * 一些ff相关的状态和数据。
  */
-class VideoState {
+class MediaState {
 public:
-    VideoState(std::string& uri,double lastTime = 0);
+    MediaState(std::string& uri, double lastTime = 0);
 
-    ~VideoState();
+    ~MediaState();
 
 public:
 
@@ -143,9 +143,9 @@ public:
 
     int last_video_stream, last_audio_stream, last_subtitle_stream;
 
-    pthread_cond_t *continue_read_thread;
-
-    /* extra fields */
+//    SDL_cond *continue_read_thread;
+//
+//    /* extra fields */
 //    SDL_mutex  *play_mutex; // only guard state, do not block any long operation
 //    SDL_Thread *video_refresh_tid;
 //    SDL_Thread _video_refresh_tid;
