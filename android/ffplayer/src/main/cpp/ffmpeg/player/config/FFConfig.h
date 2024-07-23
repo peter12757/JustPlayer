@@ -5,6 +5,8 @@
 #ifndef ANDROIDTEST_FFCONFIG_H
 #define ANDROIDTEST_FFCONFIG_H
 
+#include "FFdef.h"
+
 static void* s_instance;
 
 class FFConfig {

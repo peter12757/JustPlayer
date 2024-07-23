@@ -19,6 +19,7 @@ typedef struct FFTrackCacheStatistic
 } FFTrackCacheStatistic;
 
 class FFStatistic {
+public:
     int64_t vdec_type;
 
     float vfps;
@@ -36,7 +37,10 @@ class FFStatistic {
     SpeedSampler2 tcp_read_sampler;
     int64_t latest_seek_load_duration;
 
-    void resetStatistic(FFStatistic *dcc)
+    FFStatistic();
+    ~FFStatistic();
+
+    void resetStatistic()
 };
 
 

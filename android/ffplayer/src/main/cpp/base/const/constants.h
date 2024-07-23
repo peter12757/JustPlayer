@@ -9,13 +9,6 @@
 #include <iostream>
 using namespace std;
 
-
-enum RET{
-    RET_OK = 0,
-    RET_ERR = 1000,
-    RET_WARNING = 10000,
-};
-
 #define NOT_IMPL LOGE("NOT IMPL!!!")
 
 #ifndef NELEM

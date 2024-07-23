@@ -4,7 +4,17 @@
 
 #include "FFStatistic.h"
 
-void FFStatistic::resetStatistic(FFStatistic *dcc) {
+FFStatistic::FFStatistic() {
+    //todo
+
+}
+
+FFStatistic::~FFStatistic() {
+    //todo
+}
+
+void FFStatistic::resetStatistic() {
+
     memset(this, 0, sizeof(FFStatistic));
-    dcc->tcp_read_sampler.resetSpeedSampler(FFP_TCP_READ_SAMPLE_RANGE);
+    tcp_read_sampler.resetSpeedSampler(FFP_TCP_READ_SAMPLE_RANGE);
 }

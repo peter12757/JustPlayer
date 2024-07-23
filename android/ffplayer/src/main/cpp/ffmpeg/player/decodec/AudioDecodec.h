@@ -5,7 +5,7 @@
 #ifndef ANDROIDTEST_AUDIODECODEC_H
 #define ANDROIDTEST_AUDIODECODEC_H
 
-#include "../data/FFinc.h"
+#include "FFinc.h"
 #include "../data/MediaState.h"
 
 class AudioDecodec : XThread {

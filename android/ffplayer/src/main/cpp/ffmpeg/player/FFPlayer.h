@@ -23,6 +23,8 @@
 #include "data/SpeedSampler.h"
 #include "data/statistic/FFStatistic.h"
 #include "data/FFDemuxCacheControl.h"
+#include "FFinc.h"
+#include "config/FFConfig.h"
 
 
 using namespace std;
@@ -46,7 +48,16 @@ enum PlayerState {
 };
 
 
+static AVPacket *flush_pkt;
+static bool gInited = false;
+typedef int (*ff_inject_callback)(void *opaque, int type, void *data, size_t data_size);
+static ff_inject_callback gFFInjectCallback;
+
 class FFPlayer : public XThread {
+
+
+
+
     //data
 protected:
     MediaState *mJustPlayerCtx{};
@@ -59,40 +70,6 @@ public:
     FFPlayer();
 
     ~FFPlayer();
-
-
-    RET setDataSource(const string &uri);
-
-    RET prepareAsyc();
-
-    RET setSurface(JNIEnv *env,jobject android_surface);
-
-    RET start();
-
-    RET pause();
-
-    RET stop();
-
-    RET reset();
-
-
-    void changePlayerState(PlayerState state);
-
-    RET invoke(Unpack unpack);
-
-    void setCallBack(JNIEnv *pEnv, jobject jcallback);
-
-    jobject callJavaMethod(string data);
-
-
-
-
-    //ffmpeg api
-
-
-    //thread
-    virtual void onCreate();
-
 
 protected:
     PlayerEventHandler *m_pHandler;
@@ -201,7 +178,7 @@ protected:
     int first_audio_frame_rendered;
     int sync_av_start;
 
-    class MessageQueue msg_queue;
+    class MessageQueue *msg_queue;
 
     int64_t playable_duration_ms;
 
@@ -246,23 +223,30 @@ protected:
     int         pf_playback_volume_changed;
 
     void               *inject_opaque;
-    class FFStatistic         stat;
+    class FFStatistic         *stat;
     class FFDemuxCacheControl dcc;
 
 //    AVApplicationContext *app_ctx;
 
+public:
 
-    void      ffp_global_init();
-    void      ffp_global_uninit();
-    void      ffp_global_set_log_report(int use_report);
-    void      ffp_global_set_log_level(int log_level);
-    void      ffp_global_set_inject_callback(ijk_inject_callback cb);
-    void      ffp_io_stat_register(void (*cb)(const char *url, int type, int bytes));
-    void      ffp_io_stat_complete_register(void (*cb)(const char *url,
-                                                       int64_t read_bytes, int64_t total_size,
-                                                       int64_t elpased_time, int64_t total_duration));
+    //init
+    static void gInit();
+    static void      gUninit();
 
-    FFPlayer *ffp__create();
+    //log
+    static void      gSetFFLogReport(int use_report);
+    static void      gSetFFLogLevel(int log_level);
+    static void      gSetInjectCallback(ff_inject_callback cb);
+
+    static int gCallback(void *opaque, int type, void *data, size_t data_size) {
+        if (gFFInjectCallback)
+            return gFFInjectCallback(opaque, type, data, data_size);
+        return 0;
+    }
+
+    //api
+    void resetInternal();
     void      ffp_destroy();
     void      ffp_destroy_p(FFPlayer **pffp);
     void      ffp_reset();
@@ -340,6 +324,7 @@ protected:
     struct IjkMediaMeta *ffp_get_meta_l();
 
 };
+
 
 
 #endif //ANDROIDTEST_JUSTPLAYER_H

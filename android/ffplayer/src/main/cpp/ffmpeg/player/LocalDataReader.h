@@ -6,7 +6,7 @@
 #define ANDROIDTEST_LOCALDATAREADER_H
 
 #include "../../base/thread/XThread.h"
-#include "data/FFinc.h"
+#include "FFinc.h"
 #include <stdio.h>
 #include "data/MediaState.h"
 
