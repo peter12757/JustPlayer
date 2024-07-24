@@ -25,6 +25,8 @@
 #include "data/FFDemuxCacheControl.h"
 #include "FFinc.h"
 #include "config/FFConfig.h"
+#include "config/FFPlayerOptions.h"
+#include "data/meta/MediaMeta.h"
 
 
 using namespace std;
@@ -35,6 +37,15 @@ class AudioBaseEngine;
 class MediaState;
 
 class LocalDataReader;
+
+const AVClass FFPlayerContextClass = {
+        .class_name       = "FFPlayer",
+        .item_name        = "FFPlayer",
+        .option           = FFPlayerOptions,
+        .version          = LIBAVUTIL_VERSION_INT,
+        .child_next       = NULL,
+        .child_class_next = NULL,
+};
 
 enum PlayerState {
     IDLE,
@@ -55,9 +66,6 @@ static ff_inject_callback gFFInjectCallback;
 
 class FFPlayer : public XThread {
 
-
-
-
     //data
 protected:
     MediaState *mJustPlayerCtx{};
@@ -72,8 +80,6 @@ public:
     ~FFPlayer();
 
 protected:
-    PlayerEventHandler *m_pHandler;
-
 
     //参考ijk的一些东西
     const AVClass *av_class;
@@ -207,7 +213,7 @@ protected:
     int no_time_adjust;
     double preset_5_1_center_mix_level;
 
-    struct IjkMediaMeta *meta;
+    MediaMeta *meta;
 
     SpeedSampler vfps_sampler;
     SpeedSampler vdps_sampler;
@@ -228,6 +234,8 @@ protected:
 
 //    AVApplicationContext *app_ctx;
 
+    PlayerEventHandler *m_pHandler;
+
 public:
 
     //init
@@ -243,12 +251,15 @@ public:
         if (gFFInjectCallback)
             return gFFInjectCallback(opaque, type, data, data_size);
         return 0;
-    }
+    };
 
     //api
     void resetInternal();
-    void      ffp_destroy();
-    void      ffp_destroy_p(FFPlayer **pffp);
+
+    void stream_close();
+    void stream_component_close(int stream_index);
+    void decoder_abort(Decoder *d, FrameQueue *fq);
+    void decoder_destroy(Decoder *d);
     void      ffp_reset();
 
 /* set options before ffp_prepare_async_l() */

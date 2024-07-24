@@ -25,6 +25,8 @@ extern "C"{
 #include "mem.h"
 #include "fifo.h"
 #include "avstring.h"
+#include "pixdesc.h"
+#include "swresample.h"
 }
 #include <sstream>
 

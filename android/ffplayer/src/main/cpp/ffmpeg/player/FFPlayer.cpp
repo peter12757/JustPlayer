@@ -21,19 +21,39 @@ FFPlayer::FFPlayer()
 
 //    af_mutex = SDL_CreateMutex();
 //    vf_mutex = SDL_CreateMutex();
-    resetInternal()
+    resetInternal();
 
-    av_class = &ffp_context_class;
-    meta = ijkmeta_create();
-
-    av_opt_set_defaults(ffp);
-
+    av_class = &FFPlayerContextClass;
+    meta = new MediaMeta();
+    //todo 默认取对象的第一个变量地址，c++中是否可以使用？？
+    av_opt_set_defaults(&av_class);
 }
 
 FFPlayer::~FFPlayer() {
 //    ffmpeg_cleanup
     SafeDelete(mJustPlayerCtx);
     SafeDelete(m_pHandler);
+
+    if (is) {
+        av_log(NULL, AV_LOG_WARNING, "ffp_destroy_ffplayer: force stream_close()");
+        stream_close();
+        ffp->is = NULL;
+    }
+
+    SDL_VoutFreeP(&ffp->vout);
+    SDL_AoutFreeP(&ffp->aout);
+    ffpipenode_free_p(&ffp->node_vdec);
+    ffpipeline_free_p(&ffp->pipeline);
+    ijkmeta_destroy_p(&ffp->meta);
+    ffp_reset_internal(ffp);
+
+    SDL_DestroyMutexP(&ffp->af_mutex);
+    SDL_DestroyMutexP(&ffp->vf_mutex);
+
+    msg_queue_destroy(&ffp->msg_queue);
+
+
+    av_free(ffp);
 }
 
 void FFPlayer::gInit() {
@@ -253,6 +273,110 @@ void FFPlayer::resetInternal() {
     inject_opaque = NULL;
     stat->resetStatistic();
     dcc.resetDemuxCacheControl();
+}
+
+void FFPlayer::stream_close() {
+    /* XXX: use a special url_shutdown call to abort parse cleanly */
+    is->abort_request = 1;
+
+//    packet_queue_abort(&is->videoq);
+//    packet_queue_abort(&is->audioq);
+    is->videoq.abort_request = 1;
+    is->audioq.abort_request = 1;
+    av_log(NULL, AV_LOG_DEBUG, "wait for read_tid\n");
+//    SDL_WaitThread(is->read_tid, NULL);
+
+    /* close each stream */
+    if (is->audio_stream >= 0)
+        stream_component_close(is->audio_stream);
+    if (is->video_stream >= 0)
+        stream_component_close(is->video_stream);
+    if (is->subtitle_stream >= 0)
+        stream_component_close(is->subtitle_stream);
+
+    avformat_close_input(&is->ic);
+
+    av_log(NULL, AV_LOG_DEBUG, "wait for video_refresh_tid\n");
+//    SDL_WaitThread(is->video_refresh_tid, NULL);
+
+    packet_queue_destroy(&is->videoq);
+    packet_queue_destroy(&is->audioq);
+    packet_queue_destroy(&is->subtitleq);
+
+    /* free all pictures */
+    frame_queue_destory(&is->pictq);
+    frame_queue_destory(&is->sampq);
+    frame_queue_destory(&is->subpq);
+//    SDL_DestroyCond(is->continue_read_thread);
+//    SDL_DestroyMutex(is->play_mutex);
+#if !CONFIG_AVFILTER
+    sws_freeContext(is->img_convert_ctx);
+#endif
+#ifdef FFP_MERGE
+    sws_freeContext(is->sub_convert_ctx);
+#endif
+    av_free(is->filename);
+    av_free(is);
+}
+
+void FFPlayer::stream_component_close(int stream_index) {
+    AVFormatContext *ic = is->ic;
+    AVCodecParameters *codecpar;
+
+    if (stream_index < 0 || stream_index >= ic->nb_streams)
+        return;
+    codecpar = ic->streams[stream_index]->codecpar;
+
+    switch (codecpar->codec_type) {
+        case AVMEDIA_TYPE_AUDIO:
+            decoder_abort(&is->auddec, &is->sampq);
+            if (aout && aout->close_audio)
+                return aout->close_audio(aout);
+
+            decoder_destroy(&is->auddec);
+            swr_free(&is->swr_ctx);
+            av_freep(&is->audio_buf1);
+            is->audio_buf1_size = 0;
+            is->audio_buf = NULL;
+
+#ifdef FFP_MERGE
+            if (is->rdft) {
+            av_rdft_end(is->rdft);
+            av_freep(&is->rdft_data);
+            is->rdft = NULL;
+            is->rdft_bits = 0;
+        }
+#endif
+            break;
+        case AVMEDIA_TYPE_VIDEO:
+            decoder_abort(&is->viddec, &is->pictq);
+            decoder_destroy(&is->viddec);
+            break;
+        case AVMEDIA_TYPE_SUBTITLE:
+            decoder_abort(&is->subdec, &is->subpq);
+            decoder_destroy(&is->subdec);
+            break;
+        default:
+            break;
+    }
+
+    ic->streams[stream_index]->discard = AVDISCARD_ALL;
+    switch (codecpar->codec_type) {
+        case AVMEDIA_TYPE_AUDIO:
+            is->audio_st = NULL;
+            is->audio_stream = -1;
+            break;
+        case AVMEDIA_TYPE_VIDEO:
+            is->video_st = NULL;
+            is->video_stream = -1;
+            break;
+        case AVMEDIA_TYPE_SUBTITLE:
+            is->subtitle_st = NULL;
+            is->subtitle_stream = -1;
+            break;
+        default:
+            break;
+    }
 }
 
 
