@@ -5,7 +5,11 @@
 #ifndef JUSTPLAYER_PACKETQUEUE_H
 #define JUSTPLAYER_PACKETQUEUE_H
 
+
 #include "FFinc.h"
+
+
+static AVPacket flush_pkt;
 
 // 待解码包队列
 class PacketQueue {
@@ -15,17 +19,37 @@ public:
     ~PacketQueue();
 
 
-    AVFifoBuffer *pkt_list{};
-    int nb_packets{};
-    int size{};
-    int64_t duration{};
+    MyAVPacketList *first_pkt, *last_pkt;
+    int nb_packets;
+    int size;
+    int64_t duration;
     int abort_request;
-    int serial{};
+    int serial;
+//    SDL_mutex *mutex;
+//    SDL_cond *cond;
+    MyAVPacketList *recycle_pkt;
+    int recycle_count;
+    int alloc_count;
 
-    int packet_queue_put(AVPacket *pkt);
-    int packet_queue_put_private(AVPacket *pkt);
-    int packet_queue_put_nullpacket(AVPacket *pkt, int stream_index);
-    int stream_has_enough_packets(AVStream *st, int stream_id);
+    int is_buffer_indicator;
+
+    int put(AVPacket *pkt);
+    int put_private(AVPacket *pkt);
+    int put_nullpacket(AVPacket *pkt, int stream_index);
+    int hasEnoughPackets(AVStream *st, int stream_id,,int minFrames);
+
+
+
+    void flush();
+    void abort();
+    void start();
+    /* return null if aborted or no packet and > 0 if packet.  */
+    AVPacket* get(int block, int *serial);
+
+    bool isFlushPacket(AVPacket *pkt);
+
+
+
 
 
 

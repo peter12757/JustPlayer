@@ -40,7 +40,7 @@ public:
     FFStatistic();
     ~FFStatistic();
 
-    void resetStatistic()
+    void resetStatistic();
 };
 
 

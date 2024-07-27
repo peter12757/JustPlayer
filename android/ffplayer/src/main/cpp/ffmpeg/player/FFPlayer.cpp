@@ -298,10 +298,9 @@ void FFPlayer::stream_close() {
 
     av_log(NULL, AV_LOG_DEBUG, "wait for video_refresh_tid\n");
 //    SDL_WaitThread(is->video_refresh_tid, NULL);
-    ffp_packet_queue_destroy(&is->videoq)
-    packet_queue_destroy(&is->videoq);
-    packet_queue_destroy(&is->audioq);
-    packet_queue_destroy(&is->subtitleq);
+    SafeDelete(is->videoq);
+    SafeDelete(is->audioq);
+    SafeDelete(is->subtitleq);
 
     /* free all pictures */
     frame_queue_destory(&is->pictq);

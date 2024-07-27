@@ -290,14 +290,7 @@ public:
     int       ffp_get_loop();
 
 /* for internal usage */
-    int       ffp_packet_queue_init(PacketQueue *q);
-    void      ffp_packet_queue_abort(PacketQueue *q);
-    void      ffp_packet_queue_start(PacketQueue *q);
-    void      ffp_packet_queue_flush(PacketQueue *q);
-    int       ffp_packet_queue_get(PacketQueue *q, AVPacket *pkt, int block, int *serial);
-    int       ffp_packet_queue_get_or_buffering(PacketQueue *q, AVPacket *pkt, int *serial, int *finished);
-    int       ffp_packet_queue_put(PacketQueue *q, AVPacket *pkt);
-    bool      ffp_is_flush_packet(AVPacket *pkt);
+    AVPacket* get_or_buffering(int *serial, int *finished);
 
     Frame    *ffp_frame_queue_peek_writable(FrameQueue *f);
     void      ffp_frame_queue_push(FrameQueue *f);

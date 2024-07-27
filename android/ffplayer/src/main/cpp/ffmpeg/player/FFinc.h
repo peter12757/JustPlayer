@@ -54,9 +54,11 @@ struct Frame {
     int flip_v;
 };
 
-struct MyAVPacketList {
-    AVPacket *pkt;
+class MyAVPacketList {
+public:
+    AVPacket pkt;
     int serial;
+    MyAVPacketList *next;
 };
 
 enum AVSyncType{
@@ -95,38 +97,6 @@ struct Clock {
         }
     }
 };
-
-struct FrameQueue {
-    Frame queue[FRAME_QUEUE_SIZE];
-    int rindex;
-    int windex;
-    int size;
-    int max_size;
-    int keep_last;
-    int rindex_shown;
-    PacketQueue *pktq;
-
-    /* return the number of undisplayed frames in the queue */
-    int frame_queue_nb_remaining()
-    {
-        return size - rindex_shown;
-    }
-};
-
-typedef struct Decoder {
-    AVPacket *pkt;
-    PacketQueue *queue;
-    AVCodecContext *avctx;
-    int pkt_serial;
-    int finished;
-    int packet_pending;
-//    SDL_cond *empty_queue_cond;
-    int64_t start_pts;
-    AVRational start_pts_tb;
-    int64_t next_pts;
-    AVRational next_pts_tb;
-//    SDL_Thread *decoder_tid;
-} Decoder;
 
 
 

@@ -182,7 +182,7 @@ void XThread::onUrgentLoop()
     checkPerformance(now);
     onThreadRun(now);
 
-    m_lastTimeoutStamp = Util::getTickCount();/
+    m_lastTimeoutStamp = Util::getTickCount();
     monitorWakeupTimes(m_lastTimeoutStamp, m_lastTimeoutStamp - now);
 
     if (m_bQuit)

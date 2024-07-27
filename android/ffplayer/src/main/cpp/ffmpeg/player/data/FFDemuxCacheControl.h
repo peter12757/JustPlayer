@@ -18,7 +18,7 @@ public:
     int last_high_water_mark_in_ms;
     int current_high_water_mark_in_ms;
 
-    void resetDemuxCacheControl()
+    void resetDemuxCacheControl();
 };
 
 
