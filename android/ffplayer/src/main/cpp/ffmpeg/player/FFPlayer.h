@@ -27,6 +27,7 @@
 #include "config/FFConfig.h"
 #include "config/FFPlayerOptions.h"
 #include "data/meta/MediaMeta.h"
+#include "data/PacketQueue.h"
 
 
 using namespace std;
@@ -290,7 +291,6 @@ public:
 
 /* for internal usage */
     int       ffp_packet_queue_init(PacketQueue *q);
-    void      ffp_packet_queue_destroy(PacketQueue *q);
     void      ffp_packet_queue_abort(PacketQueue *q);
     void      ffp_packet_queue_start(PacketQueue *q);
     void      ffp_packet_queue_flush(PacketQueue *q);
