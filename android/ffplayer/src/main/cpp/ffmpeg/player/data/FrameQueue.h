@@ -7,6 +7,7 @@
 
 #include "FFinc.h"
 #include "PacketQueue.h"
+#include "Frame.h"
 
 class FrameQueue {
 public:
@@ -28,12 +29,22 @@ public:
         return size - rindex_shown;
     }
 
+    /* return last shown position */
+#ifdef FFP_MERGE
+    int64_t frame_queue_last_pos()
+{
+    Frame *fp = &queue[rindex];
+    if (rindex_shown && fp->serial == pktq->serial)
+        return fp->pos;
+    else
+        return -1;
+}
+#endif
+
     Frame    *peekWritable();
     void      push();
 
     void frame_queue_unref_item(Frame *vp);
-    int frame_queue_init(FrameQueue *f, PacketQueue *pktq, int max_size, int keep_last);
-    void frame_queue_destory(FrameQueue *f);
     void frame_queue_signal(FrameQueue *f);
     Frame *frame_queue_peek(FrameQueue *f);
     Frame *frame_queue_peek_next(FrameQueue *f);
@@ -42,7 +53,6 @@ public:
     Frame *frame_queue_peek_readable(FrameQueue *f);
     void frame_queue_push(FrameQueue *f);
     void frame_queue_next(FrameQueue *f);
-    int frame_queue_nb_remaining(FrameQueue *f);
     int64_t frame_queue_last_pos(FrameQueue *f);
 };
 
