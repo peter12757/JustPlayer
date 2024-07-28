@@ -8,6 +8,7 @@
 #include "FFinc.h"
 #include "PacketQueue.h"
 #include "Frame.h"
+#include "LogUtil.h"
 
 class FrameQueue {
 public:
@@ -41,19 +42,18 @@ public:
 }
 #endif
 
-    Frame    *peekWritable();
-    void      push();
-
     void frame_queue_unref_item(Frame *vp);
-    void frame_queue_signal(FrameQueue *f);
-    Frame *frame_queue_peek(FrameQueue *f);
-    Frame *frame_queue_peek_next(FrameQueue *f);
-    Frame *frame_queue_peek_last(FrameQueue *f);
-    Frame *frame_queue_peek_writable(FrameQueue *f);
-    Frame *frame_queue_peek_readable(FrameQueue *f);
-    void frame_queue_push(FrameQueue *f);
-    void frame_queue_next(FrameQueue *f);
-    int64_t frame_queue_last_pos(FrameQueue *f);
+    void frame_queue_signal();
+    Frame *frame_queue_peek();
+    Frame *frame_queue_peek_next();
+    Frame *frame_queue_peek_last();
+    Frame *frame_queue_peek_writable();
+    Frame *frame_queue_peek_readable();
+    void frame_queue_push();
+    void frame_queue_next();
+#ifdef FFP_MERGE
+    int64_t frame_queue_last_pos();
+#endif
 };
 
 

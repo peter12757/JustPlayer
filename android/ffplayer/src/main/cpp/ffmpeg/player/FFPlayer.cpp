@@ -37,20 +37,20 @@ FFPlayer::~FFPlayer() {
     if (is) {
         av_log(NULL, AV_LOG_WARNING, "ffp_destroy_ffplayer: force stream_close()");
         stream_close();
-        ffp->is = NULL;
+        is = NULL;
     }
+    SafeDelete(vout);
+    SafeDelete(aout);
 
-    SDL_VoutFreeP(&ffp->vout);
-    SDL_AoutFreeP(&ffp->aout);
-    ffpipenode_free_p(&ffp->node_vdec);
-    ffpipeline_free_p(&ffp->pipeline);
-    ijkmeta_destroy_p(&ffp->meta);
+    ffpipenode_free_p(&node_vdec);
+    ffpipeline_free_p(&pipeline);
+    ijkmeta_destroy_p(&meta);
     ffp_reset_internal(ffp);
 
-    SDL_DestroyMutexP(&ffp->af_mutex);
-    SDL_DestroyMutexP(&ffp->vf_mutex);
+    SDL_DestroyMutexP(&af_mutex);
+    SDL_DestroyMutexP(&vf_mutex);
 
-    msg_queue_destroy(&ffp->msg_queue);
+    msg_queue_destroy(&msg_queue);
 
 
     av_free(ffp);
@@ -65,7 +65,6 @@ void FFPlayer::gInit() {
 #endif
     avformat_network_init();
 
-    flush_pkt = av_packet_alloc();
     flush_pkt->data = (uint8_t *)&flush_pkt;
     gInited = true;
 }
@@ -253,10 +252,9 @@ void FFPlayer::resetInternal() {
 
     no_time_adjust                 = 0; // option
 
-    ijkmeta_reset(meta);
-
-    SDL_SpeedSamplerReset(&vfps_sampler);
-    SDL_SpeedSamplerReset(&vdps_sampler);
+    meta->reset();
+    vfps_sampler.resetSpeedSampler();
+    vdps_sampler.resetSpeedSampler();
 
     /* filters */
     vf_changed                     = 0;
@@ -281,8 +279,8 @@ void FFPlayer::stream_close() {
 
 //    packet_queue_abort(&is->videoq);
 //    packet_queue_abort(&is->audioq);
-    is->videoq.abort_request = 1;
-    is->audioq.abort_request = 1;
+    is->videoq->abort_request = 1;
+    is->audioq->abort_request = 1;
     av_log(NULL, AV_LOG_DEBUG, "wait for read_tid\n");
 //    SDL_WaitThread(is->read_tid, NULL);
 
@@ -303,9 +301,10 @@ void FFPlayer::stream_close() {
     SafeDelete(is->subtitleq);
 
     /* free all pictures */
-    frame_queue_destory(&is->pictq);
-    frame_queue_destory(&is->sampq);
-    frame_queue_destory(&is->subpq);
+
+    SafeDelete(is->pictq);
+    SafeDelete(is->sampq);
+    SafeDelete(is->subpq);
 //    SDL_DestroyCond(is->continue_read_thread);
 //    SDL_DestroyMutex(is->play_mutex);
 #if !CONFIG_AVFILTER
@@ -376,6 +375,123 @@ void FFPlayer::stream_component_close(int stream_index) {
         default:
             break;
     }
+}
+
+void FFPlayer::ffp_reset() {
+    /* is closed in stream_close() */
+    av_opt_free(this);
+
+    /* format/codec options */
+    av_dict_free(&format_opts);
+    av_dict_free(&codec_opts);
+    av_dict_free(&sws_dict);
+    av_dict_free(&player_opts);
+    av_dict_free(&swr_opts);
+    av_dict_free(&swr_preset_opts);
+
+    /* ffplay options specified by the user */
+    av_freep(&input_filename);
+    audio_disable          = 0;
+    video_disable          = 0;
+    memset(wanted_stream_spec, 0, sizeof(wanted_stream_spec));
+    seek_by_bytes          = -1;
+    display_disable        = 0;
+    show_status            = 0;
+    av_sync_type           = AV_SYNC_AUDIO_MASTER;
+    start_time             = AV_NOPTS_VALUE;
+    duration               = AV_NOPTS_VALUE;
+    fast                   = 1;
+    genpts                 = 0;
+    lowres                 = 0;
+    decoder_reorder_pts    = -1;
+    autoexit               = 0;
+    loop                   = 1;
+    framedrop              = 0; // option
+    seek_at_start          = 0;
+    infinite_buffer        = -1;
+    show_mode              = MediaState::SHOW_MODE_NONE;
+    av_freep(&audio_codec_name);
+    av_freep(&video_codec_name);
+    rdftspeed              = 0.02;
+#if CONFIG_AVFILTER
+    av_freep(&vfilters_list);
+    nb_vfilters            = 0;
+    afilters               = NULL;
+    vfilter0               = NULL;
+#endif
+    autorotate             = 1;
+
+    sws_flags              = SWS_FAST_BILINEAR;
+
+    /* current context */
+    audio_callback_time    = 0;
+
+    /* extra fields */
+    aout                   = NULL; /* reset outside */
+    vout                   = NULL; /* reset outside */
+    pipeline               = NULL;
+    node_vdec              = NULL;
+    sar_num                = 0;
+    sar_den                = 0;
+
+    av_freep(&video_codec_info);
+    av_freep(&audio_codec_info);
+    av_freep(&subtitle_codec_info);
+    overlay_format         = SDL_FCC_RV32;
+
+    last_error             = 0;
+    prepared               = 0;
+    auto_resume            = 0;
+    error                  = 0;
+    error_count            = 0;
+    start_on_prepared      = 1;
+    first_video_frame_rendered = 0;
+    sync_av_start          = 1;
+
+    playable_duration_ms           = 0;
+
+    packet_buffering               = 1;
+    pictq_size                     = VIDEO_PICTURE_QUEUE_SIZE_DEFAULT; // option
+    max_fps                        = 31; // option
+
+    videotoolbox                   = 0; // option
+    vtb_max_frame_width            = 0; // option
+    vtb_async                      = 0; // option
+    vtb_handle_resolution_change   = 0; // option
+    vtb_wait_async                 = 0; // option
+
+    mediacodec_all_videos          = 0; // option
+    mediacodec_avc                 = 0; // option
+    mediacodec_hevc                = 0; // option
+    mediacodec_mpeg2               = 0; // option
+    mediacodec_handle_resolution_change = 0; // option
+    mediacodec_auto_rotate         = 0; // option
+
+    opensles                       = 0; // option
+
+    iformat_name                   = NULL; // option
+
+    no_time_adjust                 = 0; // option
+
+    meta->reset();
+    vfps_sampler.resetSpeedSampler();
+    vdps_sampler.resetSpeedSampler();
+
+    /* filters */
+    vf_changed                     = 0;
+    af_changed                     = 0;
+    pf_playback_rate               = 1.0f;
+    pf_playback_rate_changed       = 0;
+    pf_playback_volume             = 1.0f;
+    pf_playback_volume_changed     = 0;
+
+//    av_application_closep(app_ctx);
+
+    msg_queue->flushMsgQueue();
+
+    inject_opaque = nullptr;
+    stat->resetStatistic();
+    dcc.resetDemuxCacheControl();
 }
 
 

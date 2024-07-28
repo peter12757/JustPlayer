@@ -54,9 +54,9 @@ public:
     Clock vidclk;
     Clock extclk;
 
-    FrameQueue pictq;
-    FrameQueue subpq;
-    FrameQueue sampq;
+    FrameQueue *pictq;
+    FrameQueue *subpq;
+    FrameQueue *sampq;
 
     Decoder auddec;
     Decoder viddec;
@@ -73,7 +73,7 @@ public:
     double audio_diff_threshold;
     int audio_diff_avg_count;
     AVStream *audio_st;
-    PacketQueue audioq;
+    PacketQueue *audioq;
     int audio_hw_buf_size;
     uint8_t *audio_buf;
     uint8_t *audio_buf1;
@@ -113,14 +113,14 @@ public:
 
     int subtitle_stream;
     AVStream *subtitle_st;
-    PacketQueue subtitleq;
+    PacketQueue *subtitleq;
 
     double frame_timer;
     double frame_last_returned_time;
     double frame_last_filter_delay;
     int video_stream;
     AVStream *video_st;
-    PacketQueue videoq;
+    PacketQueue *videoq;
     double max_frame_duration;      // maximum duration of a frame - above this, we consider the jump a timestamp discontinuity
     struct SwsContext *img_convert_ctx;
 #ifdef FFP_SUB

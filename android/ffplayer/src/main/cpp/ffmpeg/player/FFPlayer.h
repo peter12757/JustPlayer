@@ -28,6 +28,10 @@
 #include "config/FFPlayerOptions.h"
 #include "data/meta/MediaMeta.h"
 #include "data/PacketQueue.h"
+#include "data/Decoder.h"
+#include "common.h"
+#include "FFPipenode.h"
+#include "FFPipeline.h"
 
 
 using namespace std;
@@ -60,7 +64,7 @@ enum PlayerState {
 };
 
 
-static AVPacket *flush_pkt;
+static AVPacket *flush_pkt = av_packet_alloc();
 static bool gInited = false;
 typedef int (*ff_inject_callback)(void *opaque, int type, void *data, size_t data_size);
 static ff_inject_callback gFFInjectCallback;
@@ -165,8 +169,8 @@ protected:
     /* extra fields */
     Aout *aout;
     Vout *vout;
-    struct IJKFF_Pipeline *pipeline;
-    struct IJKFF_Pipenode *node_vdec;
+    struct FFPipeline *pipeline;
+    struct FFPipenode *node_vdec;
     int sar_num;
     int sar_den;
 
@@ -259,12 +263,9 @@ public:
 
     void stream_close();
     void stream_component_close(int stream_index);
-    void decoder_abort(Decoder *d, FrameQueue *fq);
-    void decoder_destroy(Decoder *d);
     void      ffp_reset();
 
 /* set options before ffp_prepare_async_l() */
-
     void     *ffp_set_inject_opaque(void *opaque);
     void      ffp_set_option(int opt_category, const char *name, const char *value);
     void      ffp_set_option_int(int opt_category, const char *name, int64_t value);

@@ -9,7 +9,6 @@
 #include "FFinc.h"
 
 
-static AVPacket flush_pkt;
 
 // 待解码包队列
 class PacketQueue {
@@ -36,7 +35,7 @@ public:
     int put(AVPacket *pkt);
     int put_private(AVPacket *pkt);
     int put_nullpacket(AVPacket *pkt, int stream_index);
-    int hasEnoughPackets(AVStream *st, int stream_id,,int minFrames);
+    int hasEnoughPackets(AVStream *st, int stream_id, int minFrames);
 
 
 
