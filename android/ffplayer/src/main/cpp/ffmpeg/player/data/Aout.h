@@ -87,78 +87,78 @@ typedef struct Android_AudioTrack_Spec {
     // extra field
     int sdl_samples;
 } Android_AudioTrack_Spec;
-
-class Android_AudioTrack {
-    jobject thiz;
-
-    Android_AudioTrack_Spec spec;
-
-    jbyteArray  byte_buffer;
-    int         byte_buffer_capacity;
-    int         min_buffer_size;
-    float       max_volume;
-    float       min_volume;
-} Android_AudioTrack;
-
-class Aout_Opaque {
-//    SDL_cond *wakeup_cond;
-//    SDL_mutex *wakeup_mutex;
-
-    class AudioSpec spec;
-    class Android_AudioTrack* atrack;
-    uint8_t *buffer;
-    int buffer_size;
-
-    volatile bool need_flush;
-    volatile bool pause_on;
-    volatile bool abort_request;
-
-    volatile bool need_set_volume;
-    volatile float left_volume;
-    volatile float right_volume;
-
-//    SDL_Thread *audio_tid;
-//    SDL_Thread _audio_tid;
-
-    int audio_session_id;
-
-    volatile float speed;
-    volatile bool speed_changed;
-} Aout_Opaque;
-
-
-class Aout {
-public:
-    Aout();
-    virtual ~Aout();
-
-
-public:
-//    SDL_mutex *mutex;
-    double     minimal_latency_seconds;
-
-    const char       *opaque_class;
-    class Aout_Opaque *opaque;
-    void (*free_l)(Aout *aout);
-    int (*open_audio)(Aout *aout, const class AudioSpec *desired, class AudioSpec *obtained);
-    void (*pause_audio)(Aout *aout, int pause_on);
-    void (*flush_audio)(Aout *aout);
-    void (*set_volume)(Aout *aout, float left, float right);
-    void (*close_audio)(Aout *aout);
-
-    double (*func_get_latency_seconds)(Aout *aout);
-    void   (*func_set_default_latency_seconds)(Aout *aout, double latency);
-
-    // optional
-    void   (*func_set_playback_rate)(Aout *aout, float playbackRate);
-    void   (*func_set_playback_volume)(Aout *aout, float playbackVolume);
-    int    (*func_get_audio_persecond_callbacks)(Aout *aout);
-
-    // Android only
-    int    (*func_get_audio_session_id)(Aout *aout);
-};
-
-
+//
+//class Android_AudioTrack {
+//    jobject thiz;
+//
+//    Android_AudioTrack_Spec spec;
+//
+//    jbyteArray  byte_buffer;
+//    int         byte_buffer_capacity;
+//    int         min_buffer_size;
+//    float       max_volume;
+//    float       min_volume;
+//} Android_AudioTrack;
+//
+//class Aout_Opaque {
+////    SDL_cond *wakeup_cond;
+////    SDL_mutex *wakeup_mutex;
+//
+//    class AudioSpec spec;
+//    class Android_AudioTrack* atrack;
+//    uint8_t *buffer;
+//    int buffer_size;
+//
+//    volatile bool need_flush;
+//    volatile bool pause_on;
+//    volatile bool abort_request;
+//
+//    volatile bool need_set_volume;
+//    volatile float left_volume;
+//    volatile float right_volume;
+//
+////    SDL_Thread *audio_tid;
+////    SDL_Thread _audio_tid;
+//
+//    int audio_session_id;
+//
+//    volatile float speed;
+//    volatile bool speed_changed;
+//} Aout_Opaque;
+//
+//
+//class Aout {
+//public:
+//    Aout();
+//    virtual ~Aout();
+//
+//
+//public:
+////    SDL_mutex *mutex;
+//    double     minimal_latency_seconds;
+//
+//    const char       *opaque_class;
+//    class Aout_Opaque *opaque;
+//    void (*free_l)(Aout *aout);
+//    int (*open_audio)(Aout *aout, const class AudioSpec *desired, class AudioSpec *obtained);
+//    void (*pause_audio)(Aout *aout, int pause_on);
+//    void (*flush_audio)(Aout *aout);
+//    void (*set_volume)(Aout *aout, float left, float right);
+//    void (*close_audio)(Aout *aout);
+//
+//    double (*func_get_latency_seconds)(Aout *aout);
+//    void   (*func_set_default_latency_seconds)(Aout *aout, double latency);
+//
+//    // optional
+//    void   (*func_set_playback_rate)(Aout *aout, float playbackRate);
+//    void   (*func_set_playback_volume)(Aout *aout, float playbackVolume);
+//    int    (*func_get_audio_persecond_callbacks)(Aout *aout);
+//
+//    // Android only
+//    int    (*func_get_audio_session_id)(Aout *aout);
+//};
+//
+//
 
 
 

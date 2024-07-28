@@ -13,7 +13,7 @@ queue(queue)
 //    empty_queue_cond = empty_queue_cond;
     start_pts = AV_NOPTS_VALUE;
 
-    first_frame_decoded_time = decode_profiler.getTickHR();
+    first_frame_decoded_time = decode_profiler->getTickHR();
     first_frame_decoded = 0;
 
     decode_profiler = new Profiler(-1);
@@ -36,11 +36,11 @@ int Decoder::decoder_decode_frame(AVFrame *frame, AVSubtitle *sub) {
         if (!packet_pending || queue->serial != pkt_serial) {
             AVPacket pkt;
             do {
-                if (queue->nb_packets == 0)
-                    SDL_CondSignal(empty_queue_cond);
-                if (packet_queue_get_or_buffering(ffp, queue, &pkt, &pkt_serial, &finished) < 0)
+//                if (queue->nb_packets == 0)
+//                    SDL_CondSignal(empty_queue_cond);
+                if (queue->packet_queue_get_or_buffering(&pkt, &pkt_serial, &finished) < 0)
                     return -1;
-                if (pkt.data == flush_pkt.data) {
+                if (pkt.data == flush_pkt->data) {
                     avcodec_flush_buffers(avctx);
                     finished = 0;
                     next_pts = start_pts;

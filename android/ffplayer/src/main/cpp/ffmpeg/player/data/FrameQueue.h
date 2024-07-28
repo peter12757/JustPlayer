@@ -19,7 +19,7 @@ public:
     int max_size;
     int keep_last;
     int rindex_shown;
-    PacketQueue *pktq;
+    PacketQueue* pktq;
 
     FrameQueue();
     ~FrameQueue();

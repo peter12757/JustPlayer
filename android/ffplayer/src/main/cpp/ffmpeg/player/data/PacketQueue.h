@@ -7,9 +7,12 @@
 
 
 #include "FFinc.h"
+#include "MyAVPacketList.h"
+#include "../FFPlayer.h"
 
 
 
+static AVPacket *flush_pkt = av_packet_alloc();
 // 待解码包队列
 class PacketQueue {
 
@@ -44,6 +47,9 @@ public:
     void start();
     /* return null if aborted or no packet and > 0 if packet.  */
     AVPacket* get(int block, int *serial);
+
+    AVPacket* packet_queue_get_or_buffering(FFPlayer *ffp, int *serial, int *finished);
+
 
     bool isFlushPacket(AVPacket *pkt);
 

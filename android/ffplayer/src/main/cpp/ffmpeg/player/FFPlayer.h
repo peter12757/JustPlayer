@@ -64,7 +64,7 @@ enum PlayerState {
 };
 
 
-static AVPacket *flush_pkt = av_packet_alloc();
+
 static bool gInited = false;
 typedef int (*ff_inject_callback)(void *opaque, int type, void *data, size_t data_size);
 static ff_inject_callback gFFInjectCallback;
@@ -84,7 +84,6 @@ public:
 
     ~FFPlayer();
 
-protected:
 
     //参考ijk的一些东西
     const AVClass *av_class;
@@ -169,8 +168,8 @@ protected:
     /* extra fields */
     Aout *aout;
     Vout *vout;
-    struct FFPipeline *pipeline;
-    struct FFPipenode *node_vdec;
+    FFPipeline *pipeline;
+    FFPipenode *node_vdec;
     int sar_num;
     int sar_den;
 
@@ -189,7 +188,7 @@ protected:
     int first_audio_frame_rendered;
     int sync_av_start;
 
-    class MessageQueue *msg_queue;
+    MessageQueue *msg_queue;
 
     int64_t playable_duration_ms;
 

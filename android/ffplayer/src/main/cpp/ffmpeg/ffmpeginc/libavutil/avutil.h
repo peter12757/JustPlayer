@@ -257,7 +257,12 @@ const char *av_get_media_type_string(enum AVMediaType media_type);
  * Internal time base represented as fractional value
  */
 
+#ifdef __cplusplus
+/* ISO C++ forbids compound-literals. */
+#define AV_TIME_BASE_Q          av_make_q(1, AV_TIME_BASE)
+#else
 #define AV_TIME_BASE_Q          (AVRational){1, AV_TIME_BASE}
+#endif
 
 /**
  * @}
@@ -277,15 +282,15 @@ enum AVPictureType {
     AV_PICTURE_TYPE_S,     ///< S(GMC)-VOP MPEG-4
     AV_PICTURE_TYPE_SI,    ///< Switching Intra
     AV_PICTURE_TYPE_SP,    ///< Switching Predicted
-    AV_PICTURE_TYPE_BI,    ///< BI playerType
+    AV_PICTURE_TYPE_BI,    ///< BI type
 };
 
 /**
- * Return a single letter to describe the given picture playerType
+ * Return a single letter to describe the given picture type
  * pict_type.
  *
- * @param[in] pict_type the picture playerType @return a single character
- * representing the picture playerType, '?' if pict_type is unknown
+ * @param[in] pict_type the picture type @return a single character
+ * representing the picture type, '?' if pict_type is unknown
  */
 char av_get_picture_type_char(enum AVPictureType pict_type);
 
@@ -294,7 +299,6 @@ char av_get_picture_type_char(enum AVPictureType pict_type);
  */
 
 #include "common.h"
-#include "error.h"
 #include "rational.h"
 #include "version.h"
 #include "macros.h"
@@ -330,13 +334,6 @@ unsigned av_int_list_length_for_size(unsigned elsize,
  */
 #define av_int_list_length(list, term) \
     av_int_list_length_for_size(sizeof(*(list)), list, term)
-
-/**
- * Open a file using a UTF-8 filename.
- * The API of this function matches POSIX fopen(), errors are returned through
- * errno.
- */
-FILE *av_fopen_utf8(const char *path, const char *mode);
 
 /**
  * Return the fractional representation of the internal time base.

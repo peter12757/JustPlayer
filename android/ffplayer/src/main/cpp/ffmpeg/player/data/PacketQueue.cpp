@@ -5,7 +5,7 @@
 #include "PacketQueue.h"
 
 PacketQueue::PacketQueue() {
-    memset(this, 0, sizeof(PacketQueue));
+//    memset(this, 0, sizeof(PacketQueue));
 //    mutex = SDL_CreateMutex();
 //    if (!mutex) {
 //        av_log(NULL, AV_LOG_FATAL, "SDL_CreateMutex(): %s\n", SDL_GetError());
@@ -165,7 +165,7 @@ int PacketQueue::put_private(AVPacket *pkt) {
         return -1;
     pkt1->pkt = *pkt;
     pkt1->next = NULL;
-    if (pkt == &flush_pkt)
+    if (pkt == flush_pkt)
         serial++;
     pkt1->serial = serial;
 
@@ -198,6 +198,33 @@ int PacketQueue::hasEnoughPackets(AVStream *st, int stream_id,int minFrames) {
            queue->nb_packets > MIN_FRAMES && (!queue->duration || av_q2d(st->time_base) * queue->duration > 1.0);
            #endif
            nb_packets > minFrames;
+}
+
+AVPacket* PacketQueue::packet_queue_get_or_buffering(FFPlayer *ffp,int *serial,
+                                               int *finished) {
+    assert(finished);
+    AVPacket* pkt;
+    if (!ffp->packet_buffering)
+        return get(1, serial);
+
+    while (1) {
+        pkt = get(0, serial);
+        if (pkt == nullptr) {
+            if (is_buffer_indicator && !*finished)
+                ffp->ffp_toggle_buffering(1);
+            pkt = get(1, serial);
+            if (pkt == nullptr)
+                return nullptr;
+        }
+
+        if (*finished == *serial) {
+            av_packet_unref(pkt);
+            continue;
+        }
+        else
+            break;
+    }
+    return nullptr;
 }
 
 
