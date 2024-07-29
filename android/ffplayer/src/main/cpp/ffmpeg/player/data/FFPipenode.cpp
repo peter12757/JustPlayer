@@ -8,7 +8,7 @@ FFPipenode::FFPipenode(int opaque_size) {
 
     opaque = calloc(1, opaque_size);
     if (!opaque) {
-        LOGE("opaque calloc ERR")
+        LOGE("opaque calloc ERR");
     }
 
 //    mutex = SDL_CreateMutex();

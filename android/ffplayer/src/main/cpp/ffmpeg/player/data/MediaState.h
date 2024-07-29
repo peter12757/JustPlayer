@@ -14,6 +14,7 @@
 #include <sstream>
 #include "MediaState.h"
 #include "../../../base/util/Util.h"
+#include "Decoder.h"
 
 class AudioBaseEngine;
 
