@@ -490,6 +490,33 @@ void FFPlayer::ffp_reset() {
     dcc.resetDemuxCacheControl();
 }
 
+AVPacket* FFPlayer::packet_queue_get_or_buffering(Decoder *d,int *serial,
+                                                     int *finished) {
+    assert(finished);
+    AVPacket* pkt;
+    if (!packet_buffering)
+        return d->queue->get(1, serial);
+
+    while (true) {
+        pkt = d->queue->get(0, serial);
+        if (pkt == nullptr) {
+            if (d->queue->is_buffer_indicator && !*finished)
+                ffp_toggle_buffering(1);
+            pkt = d->queue->get(1, serial);
+            if (pkt == nullptr)
+                return nullptr;
+        }
+
+        if (*finished == *serial) {
+            av_packet_unref(pkt);
+            continue;
+        }
+        else
+            break;
+    }
+    return nullptr;
+}
+
 
 
 

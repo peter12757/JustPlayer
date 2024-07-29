@@ -8,7 +8,6 @@
 
 #include "FFinc.h"
 #include "MyAVPacketList.h"
-#include "../FFPlayer.h"
 
 
 
@@ -48,7 +47,6 @@ public:
     /* return null if aborted or no packet and > 0 if packet.  */
     AVPacket* get(int block, int *serial);
 
-    AVPacket* packet_queue_get_or_buffering(FFPlayer *ffp, int *serial, int *finished);
 
     bool isFlushPacket(AVPacket *pkt);
 

@@ -280,6 +280,8 @@ public:
     void stream_component_close(int stream_index);
     void      ffp_reset();
 
+    AVPacket* packet_queue_get_or_buffering(Decoder *d,int *serial, int *finished);
+
 /* set options before ffp_prepare_async_l() */
     void     *ffp_set_inject_opaque(void *opaque);
     void      ffp_set_option(int opt_category, const char *name, const char *value);

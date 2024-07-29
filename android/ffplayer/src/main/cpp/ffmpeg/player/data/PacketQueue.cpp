@@ -200,32 +200,7 @@ int PacketQueue::hasEnoughPackets(AVStream *st, int stream_id,int minFrames) {
            nb_packets > minFrames;
 }
 
-AVPacket* PacketQueue::packet_queue_get_or_buffering(FFPlayer *ffp,int *serial,
-                                               int *finished) {
-    assert(finished);
-    AVPacket* pkt;
-    if (!ffp->packet_buffering)
-        return get(1, serial);
 
-    while (1) {
-        pkt = get(0, serial);
-        if (pkt == nullptr) {
-            if (is_buffer_indicator && !*finished)
-                ffp->ffp_toggle_buffering(1);
-            pkt = get(1, serial);
-            if (pkt == nullptr)
-                return nullptr;
-        }
-
-        if (*finished == *serial) {
-            av_packet_unref(pkt);
-            continue;
-        }
-        else
-            break;
-    }
-    return nullptr;
-}
 
 
 
