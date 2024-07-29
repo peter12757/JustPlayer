@@ -42,18 +42,14 @@ FFPlayer::~FFPlayer() {
     SafeDelete(vout);
     SafeDelete(aout);
 
-    ffpipenode_free_p(&node_vdec);
-    ffpipeline_free_p(&pipeline);
-    ijkmeta_destroy_p(&meta);
-    ffp_reset_internal(ffp);
+    SafeDelete(node_vdec);
+    SafeDelete(pipeline);
+    SafeDelete(meta);
+    resetInternal();
 
-    SDL_DestroyMutexP(&af_mutex);
-    SDL_DestroyMutexP(&vf_mutex);
-
-    msg_queue_destroy(&msg_queue);
-
-
-    av_free(ffp);
+//    SDL_DestroyMutexP(&af_mutex);
+//    SDL_DestroyMutexP(&vf_mutex);
+    SafeDelete(msg_queue);
 }
 
 void FFPlayer::gInit() {

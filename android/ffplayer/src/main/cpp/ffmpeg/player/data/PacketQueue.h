@@ -50,13 +50,7 @@ public:
 
     AVPacket* packet_queue_get_or_buffering(FFPlayer *ffp, int *serial, int *finished);
 
-
     bool isFlushPacket(AVPacket *pkt);
-
-
-
-
-
 
 };
 

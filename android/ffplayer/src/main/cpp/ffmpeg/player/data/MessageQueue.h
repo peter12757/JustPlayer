@@ -47,7 +47,7 @@ public:
     void startMsgQueue();
     int getMsgQueue(AVMessage *msg, int block);
     void removeMsgQueue(int what);
-} MessageQueue;
+};
 
 
 #endif //JUSTPLAYER_MESSAGEQUEUE_H

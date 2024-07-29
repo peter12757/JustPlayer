@@ -162,5 +162,9 @@ static const AVOption FFPlayerOptions[] = {
 
         { NULL }
 };
+#undef OPTION_STR
+#undef OPTION_CONST
+#undef OPTION_INT
+#undef OPTION_OFFSET
 
 #endif //JUSTPLAYER_FFPLAYEROPTIONS_H

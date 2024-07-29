@@ -25,13 +25,15 @@
 #include "data/FFDemuxCacheControl.h"
 #include "FFinc.h"
 #include "config/FFConfig.h"
-#include "config/FFPlayerOptions.h"
+#include "FFPlayerOptions.h"
 #include "data/meta/MediaMeta.h"
 #include "data/PacketQueue.h"
 #include "data/Decoder.h"
 #include "common.h"
 #include "FFPipenode.h"
 #include "FFPipeline.h"
+#include "data/Aout.h"
+#include "data/Vout.h"
 
 
 using namespace std;
@@ -43,14 +45,28 @@ class MediaState;
 
 class LocalDataReader;
 
+static const char *ffp_context_to_name(void *ptr)
+{
+    return "FFPlayer";
+}
+
+
+static const AVClass *ffp_context_child_iterate(void **iter)
+{
+    return NULL;
+}
+
 const AVClass FFPlayerContextClass = {
         .class_name       = "FFPlayer",
-        .item_name        = "FFPlayer",
+        .item_name        = ffp_context_to_name,
         .option           = FFPlayerOptions,
         .version          = LIBAVUTIL_VERSION_INT,
-        .child_next       = NULL,
-        .child_class_next = NULL,
+        .child_next       = nullptr,
+        .child_class_iterate = ffp_context_child_iterate,
 };
+
+
+
 
 enum PlayerState {
     IDLE,
@@ -89,21 +105,21 @@ public:
     const AVClass *av_class;
 
     /* ffplay context */
-    MediaState *is;
+    MediaState *is{};
 
     /* format/codec options */
-    AVDictionary *format_opts;
-    AVDictionary *codec_opts;
-    AVDictionary *sws_dict;
-    AVDictionary *player_opts;
-    AVDictionary *swr_opts;
-    AVDictionary *swr_preset_opts;
+    AVDictionary *format_opts{};
+    AVDictionary *codec_opts{};
+    AVDictionary *sws_dict{};
+    AVDictionary *player_opts{};
+    AVDictionary *swr_opts{};
+    AVDictionary *swr_preset_opts{};
 
     /* ffplay options specified by the user */
 #ifdef FFP_MERGE
     AVInputFormat *file_iformat;
 #endif
-    char *input_filename;
+    char *input_filename{};
 #ifdef FFP_MERGE
     const char *window_title;
     int fs_screen_width;
@@ -113,35 +129,35 @@ public:
     int screen_width;
     int screen_height;
 #endif
-    int audio_disable;
-    int video_disable;
-    int subtitle_disable;
-    const char* wanted_stream_spec[AVMEDIA_TYPE_NB];
-    int seek_by_bytes;
-    int display_disable;
-    int show_status;
-    int av_sync_type;
-    int64_t start_time;
-    int64_t duration;
-    int fast;
-    int genpts;
-    int lowres;
-    int decoder_reorder_pts;
-    int autoexit;
+    int audio_disable{};
+    int video_disable{};
+    int subtitle_disable{};
+    const char* wanted_stream_spec[AVMEDIA_TYPE_NB]{};
+    int seek_by_bytes{};
+    int display_disable{};
+    int show_status{};
+    int av_sync_type{};
+    int64_t start_time{};
+    int64_t duration{};
+    int fast{};
+    int genpts{};
+    int lowres{};
+    int decoder_reorder_pts{};
+    int autoexit{};
 #ifdef FFP_MERGE
     int exit_on_keydown;
     int exit_on_mousedown;
 #endif
-    int loop;
-    int framedrop;
-    int64_t seek_at_start;
-    int subtitle;
-    int infinite_buffer;
+    int loop{};
+    int framedrop{};
+    int64_t seek_at_start{};
+    int subtitle{};
+    int infinite_buffer{};
     enum MediaState::ShowMode show_mode;
-    char *audio_codec_name;
-    char *subtitle_codec_name;
-    char *video_codec_name;
-    double rdftspeed;
+    char *audio_codec_name{};
+    char *subtitle_codec_name{};
+    char *video_codec_name{};
+    double rdftspeed{};
 #ifdef FFP_MERGE
     int64_t cursor_last_shown;
     int cursor_hidden;
@@ -152,89 +168,89 @@ public:
     char *afilters;
     char *vfilter0;
 #endif
-    int autorotate;
+    int autorotate{};
 
-    unsigned sws_flags;
+    unsigned sws_flags{};
 
     /* current context */
 #ifdef FFP_MERGE
     int is_full_screen;
 #endif
-    int64_t audio_callback_time;
+    int64_t audio_callback_time{};
 #ifdef FFP_MERGE
     SDL_Surface *screen;
 #endif
 
     /* extra fields */
-    Aout *aout;
-    Vout *vout;
-    FFPipeline *pipeline;
-    FFPipenode *node_vdec;
-    int sar_num;
-    int sar_den;
+    Aout *aout{};
+    Vout *vout{};
+    FFPipeline *pipeline{};
+    FFPipenode *node_vdec{};
+    int sar_num{};
+    int sar_den{};
 
-    char *video_codec_info;
-    char *audio_codec_info;
-    char *subtitle_codec_info;
-    uint32_t overlay_format;
+    char *video_codec_info{};
+    char *audio_codec_info{};
+    char *subtitle_codec_info{};
+    uint32_t overlay_format{};
 
-    int last_error;
-    int prepared;
-    int auto_resume;
-    int error;
-    int error_count;
-    int start_on_prepared;
-    int first_video_frame_rendered;
-    int first_audio_frame_rendered;
-    int sync_av_start;
+    int last_error{};
+    int prepared{};
+    int auto_resume{};
+    int error{};
+    int error_count{};
+    int start_on_prepared{};
+    int first_video_frame_rendered{};
+    int first_audio_frame_rendered{};
+    int sync_av_start{};
 
-    MessageQueue *msg_queue;
+    MessageQueue *msg_queue{};
 
-    int64_t playable_duration_ms;
+    int64_t playable_duration_ms{};
 
-    int packet_buffering;
-    int pictq_size;
-    int max_fps;
+    int packet_buffering{};
+    int pictq_size{};
+    int max_fps{};
 
-    int videotoolbox;
-    int vtb_max_frame_width;
-    int vtb_async;
-    int vtb_wait_async;
-    int vtb_handle_resolution_change;
+    int videotoolbox{};
+    int vtb_max_frame_width{};
+    int vtb_async{};
+    int vtb_wait_async{};
+    int vtb_handle_resolution_change{};
 
-    int mediacodec_all_videos;
-    int mediacodec_avc;
-    int mediacodec_hevc;
-    int mediacodec_mpeg2;
-    int mediacodec_mpeg4;
-    int mediacodec_handle_resolution_change;
-    int mediacodec_auto_rotate;
+    int mediacodec_all_videos{};
+    int mediacodec_avc{};
+    int mediacodec_hevc{};
+    int mediacodec_mpeg2{};
+    int mediacodec_mpeg4{};
+    int mediacodec_handle_resolution_change{};
+    int mediacodec_auto_rotate{};
 
-    int opensles;
+    int opensles{};
 
-    char *iformat_name;
+    char *iformat_name{};
 
-    int no_time_adjust;
-    double preset_5_1_center_mix_level;
+    int no_time_adjust{};
+    double preset_5_1_center_mix_level{};
 
     MediaMeta *meta;
 
-    SpeedSampler vfps_sampler;
-    SpeedSampler vdps_sampler;
+    SpeedSampler vfps_sampler{};
+    SpeedSampler vdps_sampler{};
 
     /* filters */
 //    SDL_mutex  *vf_mutex;
 //    SDL_mutex  *af_mutex;
-    int         vf_changed;
-    int         af_changed;
-    float       pf_playback_rate;
-    int         pf_playback_rate_changed;
-    float       pf_playback_volume;
-    int         pf_playback_volume_changed;
+    int         vf_changed{};
+    int         af_changed{};
+    float       pf_playback_rate{};
+    int         pf_playback_rate_changed{};
+    float       pf_playback_volume{};
+    int         pf_playback_volume_changed{};
 
-    void               *inject_opaque;
-    class FFStatistic         *stat;
-    class FFDemuxCacheControl dcc;
+    void               *inject_opaque{};
+    class FFStatistic         *stat{};
+    class FFDemuxCacheControl dcc{};
 
 //    AVApplicationContext *app_ctx;
 
