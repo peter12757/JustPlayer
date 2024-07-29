@@ -42,7 +42,7 @@ void LocalDataReader::onCreate() {
             av_dict_set(&format_opts, "scan_all_pmts", "1", AV_DICT_DONT_OVERWRITE);
             scan_all_pmts_set = 1;
         }
-    err = avformat_open_input(&ic, is->filename->c_str(), is->iformat, &format_opts);
+    err = avformat_open_input(&ic, is->filename.c_str(), is->iformat, &format_opts);
     if (err < 0) {
         logOs << AVERROR(err);
     }

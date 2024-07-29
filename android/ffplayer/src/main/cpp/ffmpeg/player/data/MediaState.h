@@ -127,7 +127,7 @@ public:
 #endif
     int eof;
 
-    char *filename;
+    string filename;
     int width, height, xleft, ytop;
     int step;
 
