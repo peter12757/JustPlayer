@@ -39,7 +39,6 @@
 using namespace std;
 using namespace JustPackage;
 
-class AudioBaseEngine;
 
 class MediaState;
 

@@ -16,7 +16,6 @@
 #include "../../../base/util/Util.h"
 #include "Decoder.h"
 
-class AudioBaseEngine;
 
 /* NOTE: the size must be big enough to compensate the hardware audio buffersize size */
 /* TODO: We assume that a decoded and resampled frame fits into this buffer */
