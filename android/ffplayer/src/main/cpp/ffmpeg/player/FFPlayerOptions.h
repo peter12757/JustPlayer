@@ -5,6 +5,8 @@
 #ifndef JUSTPLAYER_FFPLAYEROPTIONS_H
 #define JUSTPLAYER_FFPLAYEROPTIONS_H
 
+#include "FFPlayer.h"
+
 #define OPTION_OFFSET(x) offsetof(FFPlayer, x)
 #define OPTION_INT(default__, min__, max__) \
     .type = AV_OPT_TYPE_INT, \

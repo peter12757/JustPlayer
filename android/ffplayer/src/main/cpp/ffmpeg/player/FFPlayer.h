@@ -16,7 +16,6 @@
 
 #include "../../base/util/Util.h"
 #include "data/MediaState.h"
-#include "LocalDataReader.h"
 #include "PlayerEventHandler.h"
 #include "package.h"
 #include "data/MessageQueue.h"
@@ -42,7 +41,6 @@ using namespace JustPackage;
 
 class MediaState;
 
-class LocalDataReader;
 
 static const char *ffp_context_to_name(void *ptr)
 {

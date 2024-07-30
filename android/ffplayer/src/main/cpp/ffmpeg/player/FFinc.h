@@ -19,7 +19,8 @@ extern "C"{
 #include "../ffmpeginc/libavfilter/buffersrc.h"
 #include "../ffmpeginc/libavfilter/buffersink.h"
 #include "../ffmpeginc/libavutil/fifo.h"
-#include "../ffmpeginc/libswscale//swscale.h"
+#include "../ffmpeginc/libswscale/swscale.h"
+#include "../ffmpeginc/libavutil/error.h"
 
 #include "../ffmpeginc/libavutil/file.h"
 #include "../ffmpeginc/libavutil/mem.h"

@@ -9,6 +9,16 @@
 #include "PacketQueue.h"
 #include "FrameQueue.h"
 #include "Profiler.h"
+#include "../FFPlayer.h"
+
+#define FFP_XPS_PERIOD (3)
+
+#define FFP_SHOW_VPS_DPS            (0)
+#define FFP_SHOW_VFPS_FFPLAY        (FFP_SHOW_VPS_DPS)
+#define FFP_SHOW_VDPS_AVCODEC       (FFP_SHOW_VPS_DPS)
+#define FFP_SHOW_VDPS_VIDEOTOOLBOX  (FFP_SHOW_VPS_DPS)
+#define FFP_SHOW_VDPS_MEDIACODEC    (FFP_SHOW_VPS_DPS)
+
 
 class Decoder {
 public:
@@ -39,7 +49,7 @@ public:
     Decoder(AVCodecContext *avctx,PacketQueue *queue);
     ~Decoder();
 
-    int decoder_decode_frame(AVFrame *frame, AVSubtitle *sub);
+    int decoder_decode_frame(FFPlayer *ffp,AVFrame *frame, AVSubtitle *sub);
 
     void decoder_abort(FrameQueue *fq);
 
