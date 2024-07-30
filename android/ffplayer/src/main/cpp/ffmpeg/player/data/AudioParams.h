@@ -7,7 +7,7 @@
 
 
 #include <cstdint>
-#include <samplefmt.h>
+#include "FFinc.h"
 
 class AudioParams {
     int freq;
