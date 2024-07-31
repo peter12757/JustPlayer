@@ -30,13 +30,13 @@ extern "C"{
 }
 #include <sstream>
 
-#include "config/FFConfig.h"
-#include "constants.h"
-#include "common.h"
-#include "PacketQueue.h"
-#include "FrameQueue.h"
-#include "MyAVPacketList.h"
-#include "AudioParams.h"
+//#include "config/FFConfig.h"
+//#include "constants.h"
+//#include "common.h"
+//#include "PacketQueue.h"
+//#include "FrameQueue.h"
+//#include "MyAVPacketList.h"
+//#include "AudioParams.h"
 
 
 #define MAX_QUEUE_SIZE (15 * 1024 * 1024)

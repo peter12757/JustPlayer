@@ -9,7 +9,16 @@
 #include "PacketQueue.h"
 #include "Frame.h"
 #include "LogUtil.h"
+#include "common.h"
 
+
+// #define VIDEO_PICTURE_QUEUE_SIZE 3
+#define VIDEO_PICTURE_QUEUE_SIZE_MIN        (3)
+#define VIDEO_PICTURE_QUEUE_SIZE_MAX        (16)
+#define VIDEO_PICTURE_QUEUE_SIZE_DEFAULT    (VIDEO_PICTURE_QUEUE_SIZE_MIN)
+#define SUBPICTURE_QUEUE_SIZE 16
+#define SAMPLE_QUEUE_SIZE 9
+#define FRAME_QUEUE_SIZE FFMAX(SAMPLE_QUEUE_SIZE, FFMAX(VIDEO_PICTURE_QUEUE_SIZE_MAX, SUBPICTURE_QUEUE_SIZE))
 
 class FrameQueue {
 public:

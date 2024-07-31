@@ -131,7 +131,7 @@ int PacketQueue::put(AVPacket *pkt) {
     ret = put_private(pkt);
 //    SDL_UnlockMutex(mutex);
 
-    if (pkt != &flush_pkt && ret < 0)
+    if (pkt != flush_pkt && ret < 0)
         av_packet_unref(pkt);
 
     return ret;

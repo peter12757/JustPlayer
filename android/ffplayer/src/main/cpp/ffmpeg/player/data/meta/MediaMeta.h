@@ -7,6 +7,7 @@
 
 
 #include "FFinc.h"
+#include "common.h"
 
 // media meta
 #define IJKM_KEY_FORMAT         "format"
