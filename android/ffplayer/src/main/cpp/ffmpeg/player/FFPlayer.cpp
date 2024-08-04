@@ -517,6 +517,10 @@ AVPacket* FFPlayer::packet_queue_get_or_buffering(Decoder *d,int *serial,
     return nullptr;
 }
 
+int FFPlayer::setDataSource(std::string &data) {
+
+}
+
 
 
 

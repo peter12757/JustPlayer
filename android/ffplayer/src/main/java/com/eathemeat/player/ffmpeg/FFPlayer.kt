@@ -70,7 +70,8 @@ class FFPlayer(override var callback: MediaPlayerCallBack?) : IMediaPlayer {
 
     override fun setSurface(it: Surface?) {
         Log.d(TAG, "setSurface() called with: it = $it")
-        setSurface(nativeHandler,it)
+        var ret = setSurface(nativeHandler,it)
+        Log.d(TAG, "setSurface() called with: it = $it ret = $ret")
     }
 
     override fun seekTo(progress: Long, mode: Int) {
@@ -117,7 +118,7 @@ class FFPlayer(override var callback: MediaPlayerCallBack?) : IMediaPlayer {
 
     external fun invoke(handle:Long,data: ByteArray): Int
 
-    external fun setSurface(handle:Long,it: Surface?)
+    external fun setSurface(handle:Long,it: Surface?):Int
 
     external fun setCallBack(handle:Long,callback:FFMsgHandler): Unit
 

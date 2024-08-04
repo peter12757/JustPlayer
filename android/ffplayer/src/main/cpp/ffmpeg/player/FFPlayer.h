@@ -33,6 +33,7 @@
 #include "FFPipeline.h"
 #include "data/Aout.h"
 #include "data/Vout.h"
+#include "XThread.h"
 
 
 using namespace std;
@@ -182,7 +183,7 @@ public:
     Aout *aout{};
     Vout *vout{};
     FFPipeline *pipeline{};
-    FFPipenode *node_vdec{};
+    FFPipenode *node_vdec{};                     
     int sar_num{};
     int sar_den{};
 
@@ -342,6 +343,9 @@ public:
 // must be freed with free();
     struct IjkMediaMeta *ffp_get_meta_l();
 
+
+    //just api
+    int setDataSource(std::string &data);
 };
 
 

@@ -20,6 +20,8 @@
 //    }                                                                                   \
 //  } while (0)
 
+
+
 #define JUST_UNMARSHAL(data, up)                                                        \
   do                                                                                    \
   {                                                                                     \
@@ -39,11 +41,6 @@ enum JUST_Method {
     METHOD_SEEK=METHOD_SET_DATA_SOURCE+1,
     METHOD_GET_DURATION=METHOD_SEEK+1,
     METHOD_GET_POSITION=METHOD_GET_DURATION+1,
-};
-
-enum JUST_URI {
-    URI_UNKNOW =0,
-    URI_METHOD=URI_UNKNOW+1,
 };
 
 enum JustPlayerType {

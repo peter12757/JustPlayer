@@ -8,6 +8,7 @@
 #include "base/cpptest/InvokeMain.h"
 #include "ffmpeg/player/FFPlayer.h"
 #include "JustData.h"
+#include "MyFFPlayer.h"
 
 using namespace JniHelper;
 
@@ -44,10 +45,10 @@ Java_com_eathemeat_player_ffmpeg_FFPlayer_createPlayer(
     Unpack up(strData.data(),strData.size());
     JustContext data;
     JUST_UNMARSHAL(data,up);
-    FFPlayer* player = nullptr;
-            player = new FFPlayer();
+    MyFFPlayer* player = nullptr;
+    player = new MyFFPlayer();
     result = NativeToJavaPoint(player);
-    LOGD("create player %ld,%ld",&(*player),result);
+    LOGD("create player %ld,%ld",&player,result);
     return result;
 }
 
@@ -57,17 +58,26 @@ JNIEXPORT void JNICALL
 Java_com_eathemeat_player_ffmpeg_FFPlayer_destory(JNIEnv *env, jobject thiz,jlong jplayer) {
     LOGD("destory player");
     if(jplayer <0) return;
-    auto* player = reinterpret_cast<FFPlayer*>(jplayer);
+    auto* player = reinterpret_cast<MyFFPlayer*>(jplayer);
     delete player;
 }
 
 extern "C"
-JNIEXPORT void JNICALL
+JNIEXPORT jint JNICALL
 Java_com_eathemeat_player_ffmpeg_FFPlayer_setSurface(JNIEnv *env, jobject thiz,jlong handle, jobject android_surface) {
-    LOGD("setSurface:method");
-    if(handle <0) return;
-    auto* player = reinterpret_cast<FFPlayer*>(handle);
-    player->setSurface(env,android_surface);
+    std::ostringstream logOs;
+    if(handle <0 || android_surface == nullptr) logOs<< "handle <0 || android_surface == nullptr\n";
+    auto* player = reinterpret_cast<MyFFPlayer*>(handle);
+    ANativeWindow *native_window = ANativeWindow_fromSurface(env, android_surface);
+    if (!native_window) {
+        logOs<<"ANativeWindow_fromSurface: failed\n");
+        // do not return fail here;
+    }
+    player->setSurface(env,native_window);
+    if (native_window) ANativeWindow_release(native_window);
+    LOGD("%s",logOs.c_str());
+    return 1;   //always ok
+
 }
 
 extern "C"
@@ -76,16 +86,48 @@ Java_com_eathemeat_player_ffmpeg_FFPlayer_invoke(JNIEnv *env, jobject thiz,jlong
     std::ostringstream logOs;
     std::string strData = JniHelper::jbyteArray2str(env, data);
     JustPackage::Unpack up(strData.data(), strData.size());
-    uint32_t uri = up.pop_uint32();
-    logOs<<"uri: "<<uri;
-    RET ret = RET_ERR;
-    switch (uri) {
-        case URI_METHOD:{
-            auto* player = reinterpret_cast<FFPlayer*>(handle);
-            if(player){
-                ret = player->invoke(up);
+    int ret =-1;
+    auto* player = reinterpret_cast<MyFFPlayer*>(handle);
+    if(player){
+        uint32_t methodId = up.pop_uint32();
+        logOs<<" methodId: "<<methodId;
+        switch (methodId) {
+            case METHOD_SET_DATA_SOURCE: {
+                string source = up.pop_varstr32();
+                logOs<<"setDataSource:"<< source.c_str();
+                ret = player->setDataSource(&source);
             }
-            break;
+                break;
+            case METHOD_PREPARE: {
+//                ret = player->prepare();
+
+            }
+                break;
+            case METHOD_START:{
+//                ret = player->start();
+            }
+                break;
+            case METHOD_PAUSE: {
+//                ret = player->pause();
+            }
+                break;
+            case METHOD_RESET: {
+
+            }
+                break;
+            case METHOD_SEEK: {
+
+            }
+                break;
+            case METHOD_GET_POSITION: {
+
+            }
+                break;
+            case METHOD_STOP: {
+
+            }
+                break;
+
         }
     }
     LOGD("ffmpeg_FFPlayer_invoke:method:%s",logOs.str().c_str());
@@ -97,9 +139,9 @@ JNIEXPORT void JNICALL
 Java_com_eathemeat_player_ffmpeg_FFPlayer_setCallBack(JNIEnv *env, jobject thiz, jlong handle,jobject jcallback) {
     std::ostringstream logOs;
     logOs<<"ffmpeg_FFPlayer_setCallBack";
-    auto* player = reinterpret_cast<FFPlayer*>(handle);
+    auto* player = reinterpret_cast<MyFFPlayer*>(handle);
     jobject  callback = env->NewLocalRef(jcallback);
-    player->setCallBack(env,callback);
+//    player->setCallBack(env,callback);
     LOGD("%s",logOs.str().c_str());
 }
 
