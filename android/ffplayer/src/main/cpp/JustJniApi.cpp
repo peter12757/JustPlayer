@@ -99,7 +99,7 @@ Java_com_eathemeat_player_ffmpeg_FFPlayer_invoke(JNIEnv *env, jobject thiz,jlong
             }
                 break;
             case METHOD_PREPARE: {
-//                ret = player->prepare();
+                ret = player->prepare_async();
 
             }
                 break;

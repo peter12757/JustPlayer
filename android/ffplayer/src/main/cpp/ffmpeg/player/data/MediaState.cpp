@@ -6,7 +6,7 @@
 
 
 
-MediaState::MediaState(std::string& uri, double lastTime)
+MediaState::MediaState(std::string uri, double lastTime)
 :iformat(nullptr)
 ,abort_request(0)
 ,force_refresh(1)

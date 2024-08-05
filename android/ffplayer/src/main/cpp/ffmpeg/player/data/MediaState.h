@@ -25,7 +25,7 @@
  */
 class MediaState {
 public:
-    MediaState(std::string& uri, double lastTime = 0);
+    MediaState(std::string uri, double lastTime = 0);
 
     ~MediaState();
 
