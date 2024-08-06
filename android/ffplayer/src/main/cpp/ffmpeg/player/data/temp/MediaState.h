@@ -12,7 +12,6 @@
 #include "SubtitleObj.h"
 #include "constants.h"
 #include <sstream>
-#include "MediaState.h"
 #include "Util.h"
 #include "data/temp/Decoder.h"
 

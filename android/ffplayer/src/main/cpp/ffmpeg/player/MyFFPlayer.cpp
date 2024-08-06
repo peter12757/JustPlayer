@@ -40,10 +40,10 @@ int MyFFPlayer::setSurface(ANativeWindow *native_window) {
     return 1;
 }
 
-int MyFFPlayer::setDataSource(std::string *url) {
+int MyFFPlayer::setDataSource(std::string url) {
     std::ostringstream logOs;
     logOs<<"MyFFPlayer::setDataSource";
-    if (!url) logOs<< "url is null";
+    if (url.empty()) logOs<< "url is null";
     if (mp_state != IDLE) logOs<<"player state err : state="<<mp_state;
     data_source = url;
     changeState(INITIALIZED);
@@ -75,7 +75,7 @@ int MyFFPlayer::prepare_async() {
     logOs<<"MyFFPlayer::prepare_async";
     if (mp_state != INITIALIZED && mp_state != STOPPED) logOs<<"state err state :"<<mp_state;
 
-    if (data_source == nullptr){
+    if (data_source == NULL){
         logOs<<"data_source = nullptr";
         LOGD("%s",logOs.str().c_str());
         return -1;
@@ -84,7 +84,7 @@ int MyFFPlayer::prepare_async() {
     msg_queue->startMsgQueue();
 
     //prepared
-    const char *source = data_source->c_str();
+    const char *source = data_source.c_str();
     if (av_stristart(source,"rtmp", nullptr) || av_stristart(source,"rtsp", nullptr)) {
         // There is total different meaning for 'timeout' option in rtmp
         logOs<<"remove 'timeout' option for rtmp.\n";

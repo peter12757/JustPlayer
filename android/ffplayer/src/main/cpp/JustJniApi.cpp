@@ -69,12 +69,12 @@ Java_com_eathemeat_player_ffmpeg_FFPlayer_setSurface(JNIEnv *env, jobject thiz,j
     auto* player = reinterpret_cast<MyFFPlayer*>(handle);
     ANativeWindow *native_window = ANativeWindow_fromSurface(env, android_surface);
     if (!native_window) {
-        logOs<<"ANativeWindow_fromSurface: failed\n");
+        logOs<<"ANativeWindow_fromSurface: failed\n";
         // do not return fail here;
     }
-    player->setSurface(env,native_window);
+    player->setSurface(native_window);
     if (native_window) ANativeWindow_release(native_window);
-    LOGD("%s",logOs.c_str());
+    LOGD("%s",logOs.str().c_str());
     return 1;   //always ok
 
 }
@@ -94,7 +94,7 @@ Java_com_eathemeat_player_ffmpeg_FFPlayer_invoke(JNIEnv *env, jobject thiz,jlong
             case METHOD_SET_DATA_SOURCE: {
                 string source = up.pop_varstr32();
                 logOs<<"setDataSource:"<< source.c_str();
-                ret = player->setDataSource(&source);
+                ret = player->setDataSource(source);
             }
                 break;
             case METHOD_PREPARE: {

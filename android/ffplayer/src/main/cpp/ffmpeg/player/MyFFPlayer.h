@@ -33,7 +33,7 @@ public:
     VideoState *mediaState;
 
     PLAYER_STATE mp_state = IDLE;
-    std::string *data_source;
+    std::string data_source;
 
 
     //消息通知线程，需要在queue钟实现线程 todo
@@ -61,7 +61,7 @@ public:
     int setSurface(ANativeWindow *native_window);
 
 
-    int setDataSource(std::string *pString);
+    int setDataSource(std::string pString);
 
 
     int prepare_async();
