@@ -16,7 +16,7 @@
 #include "data/MessageQueue.h"
 #include "FFinc.h"
 #include "data/audio/AudioObj.h"
-#include "MediaState.h"
+#include "data/temp/MediaState.h"
 
 enum PLAYER_STATE {
     IDLE,INITIALIZED,PREPARING,PREPARED,STARTED,PAUSED,COMPLETED,STOPPED,ERROR

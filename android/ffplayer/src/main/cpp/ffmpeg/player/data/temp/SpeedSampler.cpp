@@ -5,7 +5,7 @@
 #include <string.h>
 #include <bits/timespec.h>
 #include "SpeedSampler.h"
-#include "../../../base/log/LogUtil.h"
+#include "LogUtil.h"
 
 void SpeedSampler::resetSpeedSampler() {
     memset(this,0, sizeof(SpeedSampler));

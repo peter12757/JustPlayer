@@ -4,7 +4,6 @@
 
 #ifndef ANDROIDTEST_AUDIOOBJ_H
 #define ANDROIDTEST_AUDIOOBJ_H
-#include "FFObj.h"
 #include <sstream>
 #include "jni.h"
 

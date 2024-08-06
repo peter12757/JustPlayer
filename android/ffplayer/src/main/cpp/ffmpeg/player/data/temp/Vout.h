@@ -5,7 +5,7 @@
 #ifndef ANDROIDTEST_VIDEOOBJ_H
 #define ANDROIDTEST_VIDEOOBJ_H
 #include "FFinc.h"
-#include "FrameQueue.h"
+#include "data/FrameQueue.h"
 
 
 #define VIDEO_PICTURE_QUEUE_SIZE 3

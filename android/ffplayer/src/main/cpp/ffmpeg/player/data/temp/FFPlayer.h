@@ -5,34 +5,34 @@
 #ifndef ANDROIDTEST_JUSTPLAYER_H
 #define ANDROIDTEST_JUSTPLAYER_H
 
-#include "../../base/log/LogUtil.h"
-#include "../../base/const/constants.h"
-#include "../../base/protocol/package.h"
-#include "../../JustData.h"
+#include "LogUtil.h"
+#include "constants.h"
+#include "package.h"
+#include "../../../../JustData.h"
 #include <sstream>
 #include <jni.h>
 #include <android/native_window_jni.h>
-#include "../../base/statemachine/StateMachine.h"
+#include "StateMachine.h"
 
-#include "../../base/util/Util.h"
-#include "data/MediaState.h"
+#include "Util.h"
+#include "data/temp/MediaState.h"
 #include "PlayerEventHandler.h"
 #include "package.h"
 #include "data/MessageQueue.h"
-#include "data/SpeedSampler.h"
+#include "data/temp/SpeedSampler.h"
 #include "data/statistic/FFStatistic.h"
-#include "data/FFDemuxCacheControl.h"
+#include "data/temp/FFDemuxCacheControl.h"
 #include "FFinc.h"
 #include "config/FFConfig.h"
 #include "FFPlayerOptions.h"
 #include "data/meta/MediaMeta.h"
 #include "data/PacketQueue.h"
-#include "data/Decoder.h"
+#include "data/temp/Decoder.h"
 #include "common.h"
-#include "FFPipenode.h"
-#include "FFPipeline.h"
-#include "data/Aout.h"
-#include "data/Vout.h"
+#include "data/temp/FFPipenode.h"
+#include "data/temp/FFPipeline.h"
+#include "data/temp/Aout.h"
+#include "data/temp/Vout.h"
 #include "XThread.h"
 
 

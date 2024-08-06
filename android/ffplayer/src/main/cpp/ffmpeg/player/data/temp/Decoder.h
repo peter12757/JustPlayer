@@ -9,7 +9,6 @@
 #include "PacketQueue.h"
 #include "FrameQueue.h"
 #include "Profiler.h"
-#include "../FFPlayer.h"
 
 #define FFP_XPS_PERIOD (3)
 
@@ -49,7 +48,6 @@ public:
     Decoder(AVCodecContext *avctx,PacketQueue *queue);
     ~Decoder();
 
-    int decoder_decode_frame(FFPlayer *ffp,AVFrame *frame, AVSubtitle *sub);
 
     void decoder_abort(FrameQueue *fq);
 

@@ -6,7 +6,7 @@
 #include "JniHelper.h"
 #include "JustData.h"
 #include "base/cpptest/InvokeMain.h"
-#include "ffmpeg/player/FFPlayer.h"
+#include "data/temp/FFPlayer.h"
 #include "JustData.h"
 #include "MyFFPlayer.h"
 

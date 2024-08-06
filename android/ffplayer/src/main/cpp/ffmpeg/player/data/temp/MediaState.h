@@ -8,13 +8,13 @@
 #include <string>
 #include "FFinc.h"
 #include "Vout.h"
-#include "Aout.h"
+#include "data/temp/Aout.h"
 #include "SubtitleObj.h"
-#include "../../../base/const/constants.h"
+#include "constants.h"
 #include <sstream>
 #include "MediaState.h"
-#include "../../../base/util/Util.h"
-#include "Decoder.h"
+#include "Util.h"
+#include "data/temp/Decoder.h"
 
 
 /* NOTE: the size must be big enough to compensate the hardware audio buffersize size */

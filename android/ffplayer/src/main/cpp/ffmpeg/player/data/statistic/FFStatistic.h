@@ -7,7 +7,7 @@
 
 
 #include <cstdint>
-#include "../SpeedSampler2.h"
+#include "data/temp/SpeedSampler2.h"
 
 #define FFP_TCP_READ_SAMPLE_RANGE 2000
 

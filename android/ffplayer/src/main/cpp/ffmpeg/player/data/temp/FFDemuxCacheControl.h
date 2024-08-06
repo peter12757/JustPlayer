@@ -5,7 +5,7 @@
 #ifndef JUSTPLAYER_FFDEMUXCACHECONTROL_H
 #define JUSTPLAYER_FFDEMUXCACHECONTROL_H
 
-#include "../config/FFdef.h"
+#include "config/FFdef.h"
 
 class FFDemuxCacheControl {
 public:
