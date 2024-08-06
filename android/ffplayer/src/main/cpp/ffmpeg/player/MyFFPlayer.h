@@ -16,7 +16,7 @@
 #include "data/MessageQueue.h"
 #include "FFinc.h"
 #include "data/audio/AudioObj.h"
-#include "data/temp/MediaState.h"
+#include "VideoState.h"
 
 enum PLAYER_STATE {
     IDLE,INITIALIZED,PREPARING,PREPARED,STARTED,PAUSED,COMPLETED,STOPPED,ERROR
@@ -30,7 +30,7 @@ public:
     const AVClass *av_class;
     VideoObj *videObj;
     AudioObj *audioObj;
-    MediaState *mediaState;
+    VideoState *mediaState;
 
     PLAYER_STATE mp_state = IDLE;
     std::string *data_source;
