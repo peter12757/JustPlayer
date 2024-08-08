@@ -16,7 +16,7 @@ static AVPacket *flush_pkt = av_packet_alloc();
 class PacketQueue {
 
 public:
-    PacketQueue();
+    PacketQueue(bool abort_request = true);
     ~PacketQueue();
 
 
@@ -32,7 +32,7 @@ public:
     int recycle_count;
     int alloc_count;
 
-    int is_buffer_indicator;
+    bool is_buffer_indicator;
 
     int put(AVPacket *pkt);
     int put_private(AVPacket *pkt);

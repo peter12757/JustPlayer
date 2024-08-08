@@ -4,25 +4,17 @@
 
 #include "FrameQueue.h"
 
-FrameQueue::FrameQueue() {
+FrameQueue::FrameQueue(PacketQueue *pktq, int max_size, int keep_last)
+:pktq(pktq)
+,max_size(FFMIN(max_size, FRAME_QUEUE_SIZE))
+,keep_last(!!keep_last){
     int i;
-    memset(this, 0, sizeof(FrameQueue));
-//    if (!(mutex = SDL_CreateMutex())) {
-//        av_log(NULL, AV_LOG_FATAL, "SDL_CreateMutex(): %s\n", SDL_GetError());
-//        return AVERROR(ENOMEM);
-//    }
-//    if (!(cond = SDL_CreateCond())) {
-//        av_log(NULL, AV_LOG_FATAL, "SDL_CreateCond(): %s\n", SDL_GetError());
-//        return AVERROR(ENOMEM);
-//    }
-    pktq = pktq;
-    max_size = FFMIN(max_size, FRAME_QUEUE_SIZE);
-    keep_last = !!keep_last;
-    for (i = 0; i < max_size; i++)
+    for (i = 0; i < max_size; i++) {
         if (!(queue[i].frame = av_frame_alloc())) {
-//            LOGE(ENOMEM);
-    AVERROR(ENOMEM);
-}
+            AVERROR(ENOMEM);
+            isvalid = false;
+        }
+    }
 }
 
 FrameQueue::~FrameQueue() {
@@ -32,8 +24,6 @@ FrameQueue::~FrameQueue() {
         frame_queue_unref_item(vp);
         SafeDelete(vp);
     }
-//    SDL_DestroyMutex(mutex);
-//    SDL_DestroyCond(cond);
 }
 
 void FrameQueue::frame_queue_unref_item(Frame *vp) {

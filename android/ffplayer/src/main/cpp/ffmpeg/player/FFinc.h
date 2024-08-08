@@ -50,37 +50,6 @@ enum AVSyncType{
     AV_SYNC_EXTERNAL_CLOCK, /* synchronize to an external clock */
 };
 
-struct Clock {
-    double pts;           /* clock base */
-    double pts_drift;     /* clock base minus time at which we updated the clock */
-    double last_updated;
-    double speed;
-    int serial;           /* clock is based on a packet with this serial */
-    int paused;
-    int *queue_serial;    /* pointer to the current packet queue serial, used for obsolete clock detection */
-
-    void set_clock(double pts, int serial)
-    {
-        double time = av_gettime_relative() / 1000000.0;
-        this->pts = pts;
-        this->last_updated = time;
-        this->pts_drift = this->pts - time;
-        this->serial = serial;
-    }
-
-    double get_clock()
-    {
-        if (*queue_serial != serial)
-            return NAN;
-        if (paused) {
-            return pts;
-        } else {
-            double time = av_gettime_relative() / 1000000.0;
-            return pts_drift + time - (time - last_updated) * (1.0 - speed);
-        }
-    }
-};
-
 
 
 #endif //ANDROIDTEST_FFINC_H

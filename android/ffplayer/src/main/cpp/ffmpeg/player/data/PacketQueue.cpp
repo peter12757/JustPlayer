@@ -4,19 +4,19 @@
 
 #include "PacketQueue.h"
 
-PacketQueue::PacketQueue() {
-//    memset(this, 0, sizeof(PacketQueue));
-//    mutex = SDL_CreateMutex();
-//    if (!mutex) {
-//        av_log(NULL, AV_LOG_FATAL, "SDL_CreateMutex(): %s\n", SDL_GetError());
-//        return AVERROR(ENOMEM);
-//    }
-//    cond = SDL_CreateCond();
-//    if (!cond) {
-//        av_log(NULL, AV_LOG_FATAL, "SDL_CreateCond(): %s\n", SDL_GetError());
-//        return AVERROR(ENOMEM);
-//    }
-    abort_request = 1;
+PacketQueue::PacketQueue(bool abort_request)
+:abort_request(abort_request)
+,last_pkt(nullptr)
+,first_pkt(nullptr)
+,recycle_pkt(nullptr)
+,nb_packets(0)
+,size(0)
+,duration(0)
+,serial(0)
+,recycle_count(0)
+,alloc_count(0)
+,is_buffer_indicator(false)
+{
 }
 
 PacketQueue::~PacketQueue() {
@@ -37,7 +37,6 @@ PacketQueue::~PacketQueue() {
 void PacketQueue::flush() {
     MyAVPacketList *pkt, *pkt1;
 
-//    SDL_LockMutex(mutex);
     for (pkt = first_pkt; pkt; pkt = pkt1) {
         pkt1 = pkt->next;
         av_packet_unref(&pkt->pkt);
@@ -48,12 +47,11 @@ void PacketQueue::flush() {
         recycle_pkt = pkt;
 #endif
     }
-    last_pkt = NULL;
-    first_pkt = NULL;
+    last_pkt = nullptr;
+    first_pkt = nullptr;
     nb_packets = 0;
     size = 0;
     duration = 0;
-//    SDL_UnlockMutex(mutex);
 }
 
 void PacketQueue::abort() {

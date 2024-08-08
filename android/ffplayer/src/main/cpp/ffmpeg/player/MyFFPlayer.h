@@ -32,6 +32,9 @@ public:
     AudioObj *audioObj;
     VideoState *mediaState;
 
+    int av_sync_type;
+    int start_on_prepared;
+
     PLAYER_STATE mp_state = IDLE;
     std::string data_source;
 
@@ -54,6 +57,9 @@ public:
     char *vfilter0;
 #endif
 
+    //config
+    int pictq_size= VIDEO_PICTURE_QUEUE_SIZE_DEFAULT;
+
 
     MyFFPlayer();
     ~MyFFPlayer();
@@ -65,6 +71,7 @@ public:
 
 
     int prepare_async();
+    int stop();
 
 private:
     void changeState(PLAYER_STATE state);

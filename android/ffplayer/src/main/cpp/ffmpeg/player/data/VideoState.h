@@ -9,6 +9,7 @@
 #include "FFinc.h"
 #include "FrameQueue.h"
 #include "PacketQueue.h"
+#include "Clock.h"
 
 class VideoState {
 
@@ -20,16 +21,31 @@ public:
     int width, height, xleft, ytop;
 
 
-    FrameQueue pictq;
-    PacketQueue videoq;
+    FrameQueue *pictq;
+    PacketQueue *videoq;
+    Clock *vidclk;
     int pictq_size;
 
-    FrameQueue subpq;
-    FrameQueue sampq;
+    FrameQueue *subpq;
+    PacketQueue *subtitleq;
+
+    FrameQueue *sampq;
+    PacketQueue *audioq;
+    Clock *audclk;
+    int audio_clock_serial;
+    int audio_volume;
 
 
-    VideoState(std::string url,AVInputFormat *iformat);
+    Clock *extclk;
+
+    bool abort_request;
+    bool pause_req;
+
+    VideoState(std::string url,AVInputFormat *iformat,,int av_sync_type);
     ~VideoState();
+
+
+    void reset();
 
 };
 

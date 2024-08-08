@@ -5,7 +5,8 @@
 
 #include "MyFFPlayer.h"
 
-MyFFPlayer::MyFFPlayer() {
+MyFFPlayer::MyFFPlayer()
+:av_sync_type(AV_SYNC_AUDIO_MASTER){
     videObj = new VideoObj();
     msg_queue = new MessageQueue();
 }
@@ -75,7 +76,7 @@ int MyFFPlayer::prepare_async() {
     logOs<<"MyFFPlayer::prepare_async";
     if (mp_state != INITIALIZED && mp_state != STOPPED) logOs<<"state err state :"<<mp_state;
 
-    if (data_source == NULL){
+    if (data_source.empty()){
         logOs<<"data_source = nullptr";
         LOGD("%s",logOs.str().c_str());
         return -1;
@@ -114,7 +115,37 @@ int MyFFPlayer::prepare_async() {
         LOGE("%s",logOs.str().c_str());
         SafeDelete(mediaState);
     }
-    mediaState = new VideoState(data_source, nullptr);
+    mediaState = new VideoState(data_source, nullptr, av_sync_type);
+    mediaState->iformat = nullptr;
+    mediaState->ytop =0;
+    mediaState->xleft = 0;
+
+    /* start video display */
+    mediaState->videoq = new PacketQueue(true);
+    mediaState->subtitleq = new PacketQueue(true);
+    mediaState->audioq = new PacketQueue(true);
+
+    mediaState->pictq = new FrameQueue(mediaState->videoq,pictq_size,1);
+    mediaState->subpq = new FrameQueue(mediaState->subtitleq,SUBPICTURE_QUEUE_SIZE,0);
+    mediaState->sampq = new FrameQueue(mediaState->audioq,SAMPLE_QUEUE_SIZE,1);
+    if (!mediaState->pictq->isvalid || !mediaState->pictq->isvalid || !mediaState->pictq->isvalid ) {
+        logOs<<" prepared fail!!!";
+        mediaState->abort_request =true;
+        stop();
+    }
+
+    mediaState->vidclk = new Clock(&mediaState->videoq->serial);
+    mediaState->audclk = new Clock(&mediaState->audioq->serial);
+    mediaState->extclk = new Clock(&mediaState->extclk->serial);
+
+    mediaState->pause_req = !start_on_prepared;
+
+    //video_refresh_thread started thread todo
+
+    //read_thread started thread todo
+
+
+
 
     LOGD("%s",logOs.str().c_str());
     return 0;
@@ -137,4 +168,8 @@ void MyFFPlayer::printVersion() {
     logOs<<"swr-opts   "<<swr_opts;
     logOs<< "===================\n";
     LOGD("%s",logOs.str().c_str());
+}
+
+int MyFFPlayer::stop() {
+    return 0;
 }

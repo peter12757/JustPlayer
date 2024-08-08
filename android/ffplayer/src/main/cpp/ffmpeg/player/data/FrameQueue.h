@@ -31,7 +31,9 @@ public:
     int rindex_shown;
     PacketQueue* pktq;
 
-    FrameQueue();
+    bool isvalid = true;
+
+    FrameQueue(PacketQueue *pktq, int max_size, int keep_last);
     ~FrameQueue();
 
     /* return the number of undisplayed frames in the queue */
