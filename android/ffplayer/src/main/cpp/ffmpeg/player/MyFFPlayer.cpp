@@ -89,7 +89,7 @@ int MyFFPlayer::prepare_async() {
     if (av_stristart(source,"rtmp", nullptr) || av_stristart(source,"rtsp", nullptr)) {
         // There is total different meaning for 'timeout' option in rtmp
         logOs<<"remove 'timeout' option for rtmp.\n";
-        av_dict_set(&format_opts, "timeout", NULL, 0);
+        av_dict_set(&mediaState->format_opts, "timeout", NULL, 0);
     }
 
     /* there is a length limit in avformat */
@@ -98,7 +98,7 @@ int MyFFPlayer::prepare_async() {
     }
 
     printVersion();
-    av_opt_set_dict((void *) av_class, &player_opts);
+    av_opt_set_dict((void *) av_class, &mediaState->player_opts);
     if (!audioObj) {
         audioObj = new AudioObj();
 //        audioObj->open();
@@ -143,7 +143,8 @@ int MyFFPlayer::prepare_async() {
     //video_refresh_thread started thread todo
 
     //read_thread started thread todo
-
+    readthread = new ReadThread(mediaState);
+    readthread->startThread();
 
 
 
@@ -161,11 +162,11 @@ void MyFFPlayer::printVersion() {
     logOs<<"libswscale"<<swscale_version();
     logOs<<"libswresample"<<swresample_version();
     logOs<<"===== options =====\n";
-    logOs<<"player-opts"<<player_opts;
-    logOs<<"format-opts"<<format_opts;
-    logOs<<"codec-opts "<<codec_opts;
-    logOs<<"sws-opts   "<<sws_dict;
-    logOs<<"swr-opts   "<<swr_opts;
+//    logOs<<"player-opts"<<player_opts;
+//    logOs<<"format-opts"<<format_opts;
+//    logOs<<"codec-opts "<<codec_opts;
+//    logOs<<"sws-opts   "<<sws_dict;
+//    logOs<<"swr-opts   "<<swr_opts;
     logOs<< "===================\n";
     LOGD("%s",logOs.str().c_str());
 }

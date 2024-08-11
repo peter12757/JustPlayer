@@ -17,6 +17,7 @@
 #include "FFinc.h"
 #include "data/audio/AudioObj.h"
 #include "VideoState.h"
+#include "ReadThread.h"
 
 enum PLAYER_STATE {
     IDLE,INITIALIZED,PREPARING,PREPARED,STARTED,PAUSED,COMPLETED,STOPPED,ERROR
@@ -42,13 +43,8 @@ public:
     //消息通知线程，需要在queue钟实现线程 todo
     MessageQueue *msg_queue;
 
-    /* format/codec options */
-    AVDictionary *format_opts;
-    AVDictionary *codec_opts;
-    AVDictionary *sws_dict;
-    AVDictionary *player_opts;
-    AVDictionary *swr_opts;
-    AVDictionary *swr_preset_opts;
+    //readthread
+    ReadThread *readthread;
 
 #if CONFIG_AVFILTER
     const char **vfilters_list;

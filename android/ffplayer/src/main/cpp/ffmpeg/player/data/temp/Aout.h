@@ -13,6 +13,7 @@
 /* we use about AUDIO_DIFF_AVG_NB A-V differences to make the average */
 #define AUDIO_DIFF_AVG_NB   20
 
+
 typedef uint16_t AudioFormat;
 
 class AudioSpec {
