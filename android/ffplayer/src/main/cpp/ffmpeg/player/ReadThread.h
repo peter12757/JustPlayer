@@ -8,8 +8,9 @@
 #include <vector>
 #include "data/VideoState.h"
 #include "XThread.h"
+#include "FFMsg.h"
 
-
+class VideoState;
 class ReadThread :XThread {
 public:
     VideoState *mediaState;
@@ -18,7 +19,6 @@ public:
     AVDictionaryEntry *t;
 
     int scan_all_pmts_set = 0;
-
 
 
 
@@ -41,12 +41,38 @@ public:
     void setMode(ThreadMode mode);
 
 
-    static int decode_interrupt_cb(void *ctx) {
-        VideoState *is = (VideoState *)ctx;
-        return is->abort_request;
+
+
+
+    //ffmpeg
+    AVDictionary **setup_find_stream_info_opts(AVFormatContext *s,
+                                               AVDictionary *codec_opts);
+    AVDictionary *filter_codec_opts(AVDictionary *opts, enum AVCodecID codec_id,
+                                    AVFormatContext *s, AVStream *st, const AVCodec *codec);
+
+    static int check_stream_specifier(AVFormatContext *s, AVStream *st, const char *spec)
+    {
+        int ret = avformat_match_stream_specifier(s, st, spec);
+        if (ret < 0)
+            av_log(s, AV_LOG_ERROR, "Invalid stream specifier: %s.\n", spec);
+        return ret;
     }
 
+    static int is_realtime(AVFormatContext *s)
+    {
+        if(   !strcmp(s->iformat->name, "rtp")
+              || !strcmp(s->iformat->name, "rtsp")
+              || !strcmp(s->iformat->name, "sdp")
+                )
+            return 1;
 
+        if(s->pb && (   !strncmp(s->filename, "rtp:", 4)
+                        || !strncmp(s->filename, "udp:", 4)
+        )
+                )
+            return 1;
+        return 0;
+    }
 
 };
 

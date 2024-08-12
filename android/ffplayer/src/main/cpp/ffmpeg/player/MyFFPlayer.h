@@ -23,7 +23,8 @@ enum PLAYER_STATE {
     IDLE,INITIALIZED,PREPARING,PREPARED,STARTED,PAUSED,COMPLETED,STOPPED,ERROR
 };
 
-
+class VideoState;
+class ReadThread;
 class MyFFPlayer {
 
 public:

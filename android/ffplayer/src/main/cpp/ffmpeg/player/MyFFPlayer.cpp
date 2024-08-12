@@ -115,7 +115,7 @@ int MyFFPlayer::prepare_async() {
         LOGE("%s",logOs.str().c_str());
         SafeDelete(mediaState);
     }
-    mediaState = new VideoState(data_source, nullptr, av_sync_type);
+    mediaState = new VideoState(this,data_source, nullptr, av_sync_type);
     mediaState->iformat = nullptr;
     mediaState->ytop =0;
     mediaState->xleft = 0;

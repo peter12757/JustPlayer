@@ -11,6 +11,9 @@
 #include "PacketQueue.h"
 #include "Clock.h"
 #include "data/audio/AudioObj.h"
+#include "MyFFPlayer.h"
+
+class MyFFPlayer;
 
 class VideoState {
 
@@ -20,6 +23,7 @@ public:
     AVInputFormat *iformat;
     std::string filename;
     int width, height, xleft, ytop;
+    MyFFPlayer *player;
 
     //video
     FrameQueue *pictq;
@@ -62,14 +66,32 @@ public:
     AVDictionary *swr_opts;
     AVDictionary *swr_preset_opts;
 
-
+    //使用三方同步同步
     Clock *extclk;
+
+    int genpts;//????
+
+    //stream info
+    int find_stream_info;
 
     bool abort_request;
     bool pause_req;
 
-    VideoState(std::string url,AVInputFormat *iformat,int av_sync_type);
+
+    //seek
+    int seek_by_bytes;
+    int64_t start_time;
+    int realtime;
+
+    double max_frame_duration;      // maximum duration of a frame - above this, we consider the jump a timestamp discontinuity
+
+    VideoState(MyFFPlayer * player,std::string url,AVInputFormat *iformat,int av_sync_type);
     ~VideoState();
+
+    static int decode_interrupt_cb(void *ctx) {
+        VideoState *is = (VideoState *)ctx;
+        return is->abort_request;
+    }
 
 
     void reset();

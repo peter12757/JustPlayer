@@ -6,8 +6,9 @@
 
 #include <utility>
 
-VideoState::VideoState(std::string url,AVInputFormat *iformat,int av_sync_type)
-:datasourcel(url)
+VideoState::VideoState(MyFFPlayer * player,std::string url,AVInputFormat *iformat,int av_sync_type)
+:player(player)
+,datasourcel(url)
 ,iformat(iformat)
 ,ytop(0)
 ,xleft(0)
