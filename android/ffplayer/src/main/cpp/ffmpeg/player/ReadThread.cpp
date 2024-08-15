@@ -148,7 +148,7 @@ void ReadThread::onCreate() {
         enum AVMediaType type = stream->codecpar->codec_type;
         stream->discard = AVDISCARD_ALL;
         if (type >= 0 && mediaState->wanted_stream_spec[type] && st_index[type] == -1) {
-
+            //todo
         }
     }
 
