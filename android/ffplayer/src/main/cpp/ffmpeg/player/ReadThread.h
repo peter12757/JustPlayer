@@ -9,6 +9,7 @@
 #include "data/VideoState.h"
 #include "XThread.h"
 #include "FFMsg.h"
+#include "FFinc.h"
 
 class VideoState;
 class ReadThread :XThread {
@@ -19,9 +20,6 @@ public:
     AVDictionaryEntry *t;
 
     int scan_all_pmts_set = 0;
-
-
-
 
 
     ReadThread(VideoState *is);
@@ -58,21 +56,7 @@ public:
         return ret;
     }
 
-    static int is_realtime(AVFormatContext *s)
-    {
-        if(   !strcmp(s->iformat->name, "rtp")
-              || !strcmp(s->iformat->name, "rtsp")
-              || !strcmp(s->iformat->name, "sdp")
-                )
-            return 1;
 
-        if(s->pb && (   !strncmp(s->filename, "rtp:", 4)
-                        || !strncmp(s->filename, "udp:", 4)
-        )
-                )
-            return 1;
-        return 0;
-    }
 
 };
 

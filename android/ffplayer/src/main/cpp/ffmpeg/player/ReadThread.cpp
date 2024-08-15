@@ -133,9 +133,10 @@ void ReadThread::onCreate() {
                    mediaState->filename.c_str(),(double)timeStamp / AV_TIME_BASE);
         }
     }
-    mediaState->realtime = is_realtime(mediaState->ic);
+    mediaState->realtime = mediaState->is_realtime();
 
-    av_dump_format(mediaState->ic, 0, mediaState->filename.c_str(), 0);
+    if (mediaState->show_status)
+        av_dump_format(mediaState->ic, 0, mediaState->filename.c_str(), 0);
 
     //todo readthread temp
 }
@@ -210,7 +211,7 @@ ReadThread::filter_codec_opts(AVDictionary *opts, enum AVCodecID codec_id,
 
         if (av_opt_find(&cc, t->key, NULL, flags, AV_OPT_SEARCH_FAKE_OBJ) ||
             (codec && codec->priv_class &&
-             av_opt_find(&codec->priv_class, t->key, NULL, flags,
+             av_opt_find((void *) &codec->priv_class, t->key, NULL, flags,
                          AV_OPT_SEARCH_FAKE_OBJ)))
             av_dict_set(&ret, t->key, t->value, 0);
         else if (t->key[0] == prefix &&

@@ -20,6 +20,10 @@ class VideoState {
 public:
     std::string datasourcel;
 
+
+    //config
+    bool show_status;
+
     AVInputFormat *iformat;
     std::string filename;
     int width, height, xleft, ytop;
@@ -91,6 +95,21 @@ public:
     static int decode_interrupt_cb(void *ctx) {
         VideoState *is = (VideoState *)ctx;
         return is->abort_request;
+    }
+
+    int is_realtime()
+    {
+        if(!strcmp(ic->iformat->name, "rtp")
+           || !strcmp(ic->iformat->name, "rtsp")
+           || !strcmp(ic->iformat->name, "sdp")) {
+            return 1;
+        }
+        if(ic->pb && (!strncmp(filename.c_str(), "rtp:", 4)
+                          || !strncmp(filename.c_str(), "udp:", 4))) {
+            return 1;
+        }
+
+        return 0;
     }
 
 
