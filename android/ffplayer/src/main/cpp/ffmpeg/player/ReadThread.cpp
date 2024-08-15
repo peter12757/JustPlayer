@@ -138,7 +138,21 @@ void ReadThread::onCreate() {
     if (mediaState->show_status)
         av_dump_format(mediaState->ic, 0, mediaState->filename.c_str(), 0);
 
-    //todo readthread temp
+
+    int video_stream_count = 0;
+    int h264_stream_count = 0;
+    int first_h264_stream = -1;
+    int st_index[AVMEDIA_TYPE_NB];
+    for (int i = 0; i < mediaState->ic->nb_streams; ++i) {
+        AVStream * stream = mediaState->ic->streams[i];
+        enum AVMediaType type = stream->codecpar->codec_type;
+        stream->discard = AVDISCARD_ALL;
+        if (type >= 0 && mediaState->wanted_stream_spec[type] && st_index[type] == -1) {
+
+        }
+    }
+
+
 }
 
 void ReadThread::onStop() {

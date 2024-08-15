@@ -28,6 +28,7 @@ public:
     std::string filename;
     int width, height, xleft, ytop;
     MyFFPlayer *player;
+    const char* wanted_stream_spec[AVMEDIA_TYPE_NB];
 
     //video
     FrameQueue *pictq;
