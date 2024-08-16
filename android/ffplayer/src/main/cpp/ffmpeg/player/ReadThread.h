@@ -39,6 +39,10 @@ public:
     void setMode(ThreadMode mode);
 
 
+    int stream_component_open(VideoState *mediaState, int stream_index);
+    void set_avformat_context(MediaMeta *meta, AVFormatContext *ic);
+
+
 
 
 

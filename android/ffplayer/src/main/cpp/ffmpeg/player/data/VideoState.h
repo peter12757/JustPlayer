@@ -12,8 +12,14 @@
 #include "Clock.h"
 #include "data/audio/AudioObj.h"
 #include "MyFFPlayer.h"
+#include "meta/MediaMeta.h"
+#include "statistic/FFStatistic.h"
 
 class MyFFPlayer;
+
+enum ShowMode {
+    SHOW_MODE_NONE = -1, SHOW_MODE_VIDEO = 0, SHOW_MODE_WAVES, SHOW_MODE_RDFT, SHOW_MODE_NB
+};
 
 class VideoState {
 
@@ -29,6 +35,26 @@ public:
     int width, height, xleft, ytop;
     MyFFPlayer *player;
     const char* wanted_stream_spec[AVMEDIA_TYPE_NB];
+    MediaMeta *meta;
+
+    //seek
+    int seek_by_bytes;
+    int64_t start_time;
+    int realtime;
+
+    double max_frame_duration;      // maximum duration of a frame - above this, we consider the jump a timestamp discontinuity
+    enum ShowMode show_mode;
+
+    //使用三方同步同步
+    Clock *extclk;
+
+    int genpts;//????
+
+    //stream info
+    int find_stream_info;
+
+    bool abort_request;
+    bool pause_req;
 
     //video
     FrameQueue *pictq;
@@ -37,13 +63,14 @@ public:
     int pictq_size;
     int last_video_stream;
     int video_stream;
-
+    bool video_disable;
 
     //subtitle
     FrameQueue *subpq;
     PacketQueue *subtitleq;
     int last_subtitle_stream;
     int subtitle_stream;
+    bool subtitle_disable;
 
     //audio
     FrameQueue *sampq;
@@ -55,6 +82,7 @@ public:
     int last_audio_stream;
     int audio_stream;
     AVSyncType av_sync_type;
+    bool audio_disable;
 
 
     //read stream input
@@ -71,24 +99,9 @@ public:
     AVDictionary *swr_opts;
     AVDictionary *swr_preset_opts;
 
-    //使用三方同步同步
-    Clock *extclk;
 
-    int genpts;//????
+    FFStatistic *stat;
 
-    //stream info
-    int find_stream_info;
-
-    bool abort_request;
-    bool pause_req;
-
-
-    //seek
-    int seek_by_bytes;
-    int64_t start_time;
-    int realtime;
-
-    double max_frame_duration;      // maximum duration of a frame - above this, we consider the jump a timestamp discontinuity
 
     VideoState(MyFFPlayer * player,std::string url,AVInputFormat *iformat,int av_sync_type);
     ~VideoState();
@@ -116,6 +129,7 @@ public:
 
     void reset();
 
+    bool delay_inited;
 };
 
 

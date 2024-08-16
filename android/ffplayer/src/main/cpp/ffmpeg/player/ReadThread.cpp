@@ -148,10 +148,127 @@ void ReadThread::onCreate() {
         enum AVMediaType type = stream->codecpar->codec_type;
         stream->discard = AVDISCARD_ALL;
         if (type >= 0 && mediaState->wanted_stream_spec[type] && st_index[type] == -1) {
-            //todo
+            if (avformat_match_stream_specifier(mediaState->ic, stream, mediaState->wanted_stream_spec[type]) > 0) {
+                st_index[type] = i;
+            }
+        }
+        // choose first h264
+
+        if (type == AVMEDIA_TYPE_VIDEO) {
+            enum AVCodecID codec_id = stream->codecpar->codec_id;
+            video_stream_count++;
+            if (codec_id == AV_CODEC_ID_H264) {
+                h264_stream_count++;
+                if (first_h264_stream < 0)
+                    first_h264_stream = i;
+            }
         }
     }
+    if (video_stream_count > 1 && st_index[AVMEDIA_TYPE_VIDEO] < 0) {
+        st_index[AVMEDIA_TYPE_VIDEO] = first_h264_stream;
+        av_log(NULL, AV_LOG_WARNING, "multiple video stream found, prefer first h264 stream: %d\n", first_h264_stream);
+    }
+    if (!mediaState->video_disable)
+        st_index[AVMEDIA_TYPE_VIDEO] =
+                av_find_best_stream(mediaState->ic, AVMEDIA_TYPE_VIDEO,
+                                    st_index[AVMEDIA_TYPE_VIDEO], -1, NULL, 0);
+    if (!mediaState->audio_disable)
+        st_index[AVMEDIA_TYPE_AUDIO] =
+                av_find_best_stream(mediaState->ic, AVMEDIA_TYPE_AUDIO,
+                                    st_index[AVMEDIA_TYPE_AUDIO],
+                                    st_index[AVMEDIA_TYPE_VIDEO],
+                                    NULL, 0);
+    if (!mediaState->video_disable && !mediaState->subtitle_disable)
+        st_index[AVMEDIA_TYPE_SUBTITLE] =
+                av_find_best_stream(mediaState->ic, AVMEDIA_TYPE_SUBTITLE,
+                                    st_index[AVMEDIA_TYPE_SUBTITLE],
+                                    (st_index[AVMEDIA_TYPE_AUDIO] >= 0 ?
+                                     st_index[AVMEDIA_TYPE_AUDIO] :
+                                     st_index[AVMEDIA_TYPE_VIDEO]),
+                                    NULL, 0);
 
+    mediaState->show_mode = SHOW_MODE_NONE;
+#ifdef FFP_MERGE // bbc: dunno if we need this
+    if (st_index[AVMEDIA_TYPE_VIDEO] >= 0) {
+        AVStream *st = ic->streams[st_index[AVMEDIA_TYPE_VIDEO]];
+        AVCodecParameters *codecpar = st->codecpar;
+        AVRational sar = av_guess_sample_aspect_ratio(ic, st, NULL);
+        if (codecpar->width)
+            set_default_window_size(codecpar->width, codecpar->height, sar);
+    }
+#endif
+    /* open the streams */
+    if (st_index[AVMEDIA_TYPE_AUDIO] >= 0) {
+        stream_component_open(mediaState, st_index[AVMEDIA_TYPE_AUDIO]);
+    } else {
+        mediaState->av_sync_type = AV_SYNC_VIDEO_MASTER;
+    }
+
+    int ret = -1;
+    if (st_index[AVMEDIA_TYPE_VIDEO] >= 0) {
+        ret = stream_component_open(mediaState, st_index[AVMEDIA_TYPE_VIDEO]);
+    }
+    if (mediaState->show_mode == SHOW_MODE_NONE)
+        mediaState->show_mode = ret >= 0 ? SHOW_MODE_VIDEO : SHOW_MODE_RDFT;
+
+    if (st_index[AVMEDIA_TYPE_SUBTITLE] >= 0) {
+        stream_component_open(mediaState, st_index[AVMEDIA_TYPE_SUBTITLE]);
+    }
+    mediaState->player->msg_queue->putEmptyMessage(FFP_MSG_COMPONENT_OPEN);
+
+    if (!mediaState->delay_inited) {
+        set_avformat_context(mediaState->meta, mediaState->ic);
+    }
+
+    mediaState->stat.bit_rate = mediaState->ic->bit_rate;
+//    if (st_index[AVMEDIA_TYPE_VIDEO] >= 0)
+//        ijkmeta_set_int64_l(ffp->meta, IJKM_KEY_VIDEO_STREAM, st_index[AVMEDIA_TYPE_VIDEO]);
+//    if (st_index[AVMEDIA_TYPE_AUDIO] >= 0)
+//        ijkmeta_set_int64_l(ffp->meta, IJKM_KEY_AUDIO_STREAM, st_index[AVMEDIA_TYPE_AUDIO]);
+//    if (st_index[AVMEDIA_TYPE_SUBTITLE] >= 0)
+//        ijkmeta_set_int64_l(ffp->meta, IJKM_KEY_TIMEDTEXT_STREAM, st_index[AVMEDIA_TYPE_SUBTITLE]);
+//
+//    if (is->video_stream < 0 && is->audio_stream < 0) {
+//        av_log(NULL, AV_LOG_FATAL, "Failed to open file '%s' or configure filtergraph\n",
+//               is->filename);
+//        ret = -1;
+//        goto fail;
+//    }
+//    if (is->audio_stream >= 0) {
+//        is->audioq.is_buffer_indicator = 1;
+//        is->buffer_indicator_queue = &is->audioq;
+//    } else if (is->video_stream >= 0) {
+//        is->videoq.is_buffer_indicator = 1;
+//        is->buffer_indicator_queue = &is->videoq;
+//    } else {
+//        assert("invalid streams");
+//    }
+//
+//    if (ffp->infinite_buffer < 0 && is->realtime)
+//        ffp->infinite_buffer = 1;
+//
+//    if (!ffp->render_wait_start && !ffp->start_on_prepared)
+//        toggle_pause(ffp, 1);
+//    if (is->video_st && is->video_st->codecpar) {
+//        AVCodecParameters *codecpar = is->video_st->codecpar;
+//        ffp_notify_msg3(ffp, FFP_MSG_VIDEO_SIZE_CHANGED, codecpar->width, codecpar->height);
+//        ffp_notify_msg3(ffp, FFP_MSG_SAR_CHANGED, codecpar->sample_aspect_ratio.num, codecpar->sample_aspect_ratio.den);
+//    }
+//    ffp->prepared = true;
+//    ffp_notify_msg1(ffp, FFP_MSG_PREPARED);
+//    if (!ffp->render_wait_start && !ffp->start_on_prepared) {
+//        while (is->pause_req && !is->abort_request) {
+//            SDL_Delay(20);
+//        }
+//    }
+//    if (ffp->auto_resume) {
+//        ffp_notify_msg1(ffp, FFP_REQ_START);
+//        ffp->auto_resume = 0;
+//    }
+//    /* offset should be seeked*/
+//    if (ffp->seek_at_start > 0) {
+//        ffp_seek_to_l(ffp, (long)(ffp->seek_at_start));
+//    }
 
 }
 
