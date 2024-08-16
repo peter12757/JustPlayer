@@ -220,20 +220,20 @@ void ReadThread::onCreate() {
         set_avformat_context(mediaState->meta, mediaState->ic);
     }
 
-    mediaState->stat.bit_rate = mediaState->ic->bit_rate;
-//    if (st_index[AVMEDIA_TYPE_VIDEO] >= 0)
-//        ijkmeta_set_int64_l(ffp->meta, IJKM_KEY_VIDEO_STREAM, st_index[AVMEDIA_TYPE_VIDEO]);
-//    if (st_index[AVMEDIA_TYPE_AUDIO] >= 0)
-//        ijkmeta_set_int64_l(ffp->meta, IJKM_KEY_AUDIO_STREAM, st_index[AVMEDIA_TYPE_AUDIO]);
-//    if (st_index[AVMEDIA_TYPE_SUBTITLE] >= 0)
-//        ijkmeta_set_int64_l(ffp->meta, IJKM_KEY_TIMEDTEXT_STREAM, st_index[AVMEDIA_TYPE_SUBTITLE]);
-//
-//    if (is->video_stream < 0 && is->audio_stream < 0) {
-//        av_log(NULL, AV_LOG_FATAL, "Failed to open file '%s' or configure filtergraph\n",
-//               is->filename);
-//        ret = -1;
-//        goto fail;
-//    }
+    mediaState->stat->bit_rate = mediaState->ic->bit_rate;
+    if (st_index[AVMEDIA_TYPE_VIDEO] >= 0) {
+        mediaState->meta->set_int64_l(IJKM_KEY_VIDEO_STREAM, st_index[AVMEDIA_TYPE_VIDEO]);
+    }
+    if (st_index[AVMEDIA_TYPE_AUDIO] >= 0) {
+        mediaState->meta->set_int64_l(IJKM_KEY_AUDIO_STREAM, st_index[AVMEDIA_TYPE_AUDIO]);
+    }
+    if (st_index[AVMEDIA_TYPE_SUBTITLE] >= 0) {
+        mediaState->meta->set_int64_l(IJKM_KEY_TIMEDTEXT_STREAM, st_index[AVMEDIA_TYPE_SUBTITLE])
+    }
+    if (is->video_stream < 0 && is->audio_stream < 0) {
+        av_log(NULL, AV_LOG_FATAL, "Failed to open file '%s' or configure filtergraph\n",mediaState->filename.c_str());
+        ret = -1;
+    }
 //    if (is->audio_stream >= 0) {
 //        is->audioq.is_buffer_indicator = 1;
 //        is->buffer_indicator_queue = &is->audioq;
