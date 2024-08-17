@@ -229,48 +229,48 @@ void ReadThread::onCreate() {
         mediaState->meta->set_int64_l(IJKM_KEY_AUDIO_STREAM, st_index[AVMEDIA_TYPE_AUDIO]);
     }
     if (st_index[AVMEDIA_TYPE_SUBTITLE] >= 0) {
-        mediaState->meta->set_int64_l(IJKM_KEY_TIMEDTEXT_STREAM, st_index[AVMEDIA_TYPE_SUBTITLE])
+        mediaState->meta->set_int64_l(IJKM_KEY_TIMEDTEXT_STREAM, st_index[AVMEDIA_TYPE_SUBTITLE]);
     }
     if (mediaState->video_stream < 0 && mediaState->audio_stream < 0) {
         av_log(NULL, AV_LOG_FATAL, "Failed to open file '%s' or configure filtergraph\n",mediaState->filename.c_str());
         ret = -1;
     }
     if (mediaState->audio_stream >= 0) {
-        mediaState->audioq.is_buffer_indicator = true;
-//        mediaState->buffer_indicator_queue = &mediaState->audioq;
+        mediaState->audioq->is_buffer_indicator = true;
+        mediaState->buffer_indicator_queue = mediaState->audioq;
     } else if (mediaState->video_stream >= 0) {
         mediaState->videoq->is_buffer_indicator = true;
-//        mediaState->buffer_indicator_queue = &mediaState->videoq;
+        mediaState->buffer_indicator_queue = mediaState->videoq;
     } else {
         assert("invalid streams");
     }
-//
-//    if (ffp->infinite_buffer < 0 && is->realtime)
-//        ffp->infinite_buffer = 1;
-//
-//    if (!ffp->render_wait_start && !ffp->start_on_prepared)
-//        toggle_pause(ffp, 1);
-//    if (is->video_st && is->video_st->codecpar) {
-//        AVCodecParameters *codecpar = is->video_st->codecpar;
-//        ffp_notify_msg3(ffp, FFP_MSG_VIDEO_SIZE_CHANGED, codecpar->width, codecpar->height);
-//        ffp_notify_msg3(ffp, FFP_MSG_SAR_CHANGED, codecpar->sample_aspect_ratio.num, codecpar->sample_aspect_ratio.den);
-//    }
-//    ffp->prepared = true;
-//    ffp_notify_msg1(ffp, FFP_MSG_PREPARED);
-//    if (!ffp->render_wait_start && !ffp->start_on_prepared) {
-//        while (is->pause_req && !is->abort_request) {
-//            SDL_Delay(20);
-//        }
-//    }
-//    if (ffp->auto_resume) {
-//        ffp_notify_msg1(ffp, FFP_REQ_START);
-//        ffp->auto_resume = 0;
-//    }
-//    /* offset should be seeked*/
-//    if (ffp->seek_at_start > 0) {
-//        ffp_seek_to_l(ffp, (long)(ffp->seek_at_start));
-//    }
+    if (mediaState->infinite_buffer < 0 && mediaState->realtime) {
+        mediaState->infinite_buffer = 1;
+    }
 
+    if (!mediaState->start_on_prepared) {
+        mediaState->player->pause(true);
+    }
+    if (mediaState->video_st && mediaState->video_st->codecpar) {
+        AVCodecParameters *codecpar = mediaState->video_st->codecpar;
+        mediaState->player->msg_queue->putEmptyMessage(FFP_MSG_VIDEO_SIZE_CHANGED, codecpar->width, codecpar->height);
+        mediaState->player->msg_queue->putEmptyMessage(FFP_MSG_SAR_CHANGED, codecpar->sample_aspect_ratio.num, codecpar->sample_aspect_ratio.den);
+    }
+    mediaState->prepared = true;
+    mediaState->player->msg_queue->putEmptyMessage(FFP_MSG_PREPARED);
+    if (!mediaState->render_wait_start && !mediaState->start_on_prepared) {
+        while (mediaState->pause_req && !mediaState->abort_request) {
+            SDL_Delay(20);
+        }
+    }
+    if (mediaState->auto_resume) {
+        ffp_notify_msg1(ffp, FFP_REQ_START);
+        mediaState->auto_resume = 0;
+    }
+    /* offset should be seeked*/
+    if (mediaState->seek_at_start > 0) {
+        mediaState->player->seek(mediaState->seek_at_start);
+    }
 }
 
 void ReadThread::onStop() {
@@ -355,4 +355,119 @@ ReadThread::filter_codec_opts(AVDictionary *opts, enum AVCodecID codec_id,
             *p = ':';
     }
     return ret;
+}
+
+void ReadThread::set_avformat_context(MediaMeta *meta, AVFormatContext *ic) {
+    if (!meta || !ic) {
+        return;
+    }
+    if (ic->iformat && ic->iformat->name) {
+        meta->set_string_l(IJKM_KEY_FORMAT, ic->iformat->name);
+    }
+    if (ic->duration != AV_NOPTS_VALUE) {
+        meta->set_int64_l(IJKM_KEY_DURATION_US, ic->duration);
+    }
+
+    if (ic->start_time != AV_NOPTS_VALUE) {
+        meta->set_int64_l(IJKM_KEY_START_US, ic->start_time);
+    }
+
+    if (ic->bit_rate) {
+        meta->set_int64_l(IJKM_KEY_BITRATE, ic->bit_rate);
+    }
+
+    MediaMeta *stream_meta = NULL;
+    for (int i = 0; i < ic->nb_streams; i++) {
+        if (!stream_meta) { SafeDelete(stream_meta); }
+
+        AVStream *st = ic->streams[i];
+        if (!st || !st->codecpar)
+            continue;
+
+        stream_meta = new MediaMeta();
+        if (!stream_meta)
+            continue;
+
+        AVCodecParameters *codecpar = st->codecpar;
+        const char *codec_name = avcodec_get_name(codecpar->codec_id);
+        if (codec_name) { stream_meta->set_string_l(IJKM_KEY_CODEC_NAME, codec_name); }
+        if (codecpar->profile != FF_PROFILE_UNKNOWN) {
+            const AVCodec *codec = avcodec_find_decoder(codecpar->codec_id);
+            if (codec) {
+                stream_meta->set_int64_l(IJKM_KEY_CODEC_PROFILE_ID, codecpar->profile);
+                const char *profile = av_get_profile_name(codec, codecpar->profile);
+                if (profile) {
+                    stream_meta->set_string_l(IJKM_KEY_CODEC_PROFILE, profile);
+                }
+                if (codec->long_name) {
+                    stream_meta->set_string_l(IJKM_KEY_CODEC_LONG_NAME, codec->long_name);
+                }
+                stream_meta->set_int64_l(IJKM_KEY_CODEC_LEVEL, codecpar->level);
+                if (codecpar->format != AV_PIX_FMT_NONE) {
+                    stream_meta->set_string_l(IJKM_KEY_CODEC_PIXEL_FORMAT, av_get_pix_fmt_name(
+                            static_cast<AVPixelFormat>(codecpar->format)));
+                }
+            }
+        }
+
+        int64_t bitrate = get_bit_rate(codecpar);
+        if (bitrate > 0) {
+            stream_meta->set_int64_l(IJKM_KEY_BITRATE, bitrate);
+        }
+
+        switch (codecpar->codec_type) {
+            case AVMEDIA_TYPE_VIDEO: {
+                stream_meta->set_string_l(IJKM_KEY_TYPE, IJKM_VAL_TYPE__VIDEO);
+
+                if (codecpar->width > 0) {
+                    stream_meta->set_int64_l(IJKM_KEY_WIDTH, codecpar->width);
+                }
+                if (codecpar->height > 0){
+                    stream_meta->set_int64_l(IJKM_KEY_HEIGHT, codecpar->height);
+                }
+                if (st->sample_aspect_ratio.num > 0 && st->sample_aspect_ratio.den > 0) {
+                    stream_meta->set_int64_l(IJKM_KEY_SAR_NUM, codecpar->sample_aspect_ratio.num);
+                    stream_meta->set_int64_l(IJKM_KEY_SAR_DEN, codecpar->sample_aspect_ratio.den);
+                }
+
+                if (st->avg_frame_rate.num > 0 && st->avg_frame_rate.den > 0) {
+                    stream_meta->set_int64_l(IJKM_KEY_FPS_NUM, st->avg_frame_rate.num);
+                    stream_meta->set_int64_l(IJKM_KEY_FPS_DEN, st->avg_frame_rate.den);
+                }
+                if (st->r_frame_rate.num > 0 && st->r_frame_rate.den > 0) {
+                    stream_meta->set_int64_l(IJKM_KEY_TBR_NUM, st->avg_frame_rate.num);
+                    stream_meta->set_int64_l(IJKM_KEY_TBR_DEN, st->avg_frame_rate.den);
+                }
+                break;
+            }
+            case AVMEDIA_TYPE_AUDIO: {
+                stream_meta->set_string_l(IJKM_KEY_TYPE, IJKM_VAL_TYPE__AUDIO);
+
+                if (codecpar->sample_rate) {
+                    stream_meta->set_int64_l(IJKM_KEY_SAMPLE_RATE, codecpar->sample_rate);
+                }
+                if (codecpar->channel_layout) {
+                    stream_meta->set_int64_l(IJKM_KEY_CHANNEL_LAYOUT, codecpar->channel_layout);
+                }
+                break;
+            }
+            case AVMEDIA_TYPE_SUBTITLE: {
+                stream_meta->set_string_l(IJKM_KEY_TYPE, IJKM_VAL_TYPE__TIMEDTEXT);
+                break;
+            }
+            default: {
+                stream_meta->set_string_l(IJKM_KEY_TYPE, IJKM_VAL_TYPE__UNKNOWN);
+                break;
+            }
+        }
+
+        AVDictionaryEntry *lang = av_dict_get(st->metadata, "language", NULL, 0);
+        if (lang && lang->value) {
+            stream_meta->set_string_l(IJKM_KEY_LANGUAGE, lang->value);
+        }
+        meta->appendChild(stream_meta);
+        SafeDelete(stream_meta);
+    }
+
+
 }

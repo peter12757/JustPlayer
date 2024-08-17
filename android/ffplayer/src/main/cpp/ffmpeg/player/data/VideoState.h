@@ -29,6 +29,9 @@ public:
 
     //config
     bool show_status;
+    bool delay_inited;
+    bool start_on_prepared;
+
 
     AVInputFormat *iformat;
     std::string filename;
@@ -37,10 +40,16 @@ public:
     const char* wanted_stream_spec[AVMEDIA_TYPE_NB];
     MediaMeta *meta;
 
+    //buffer???
+    PacketQueue *buffer_indicator_queue;
+    int infinite_buffer;
+
     //seek
     int seek_by_bytes;
     int64_t start_time;
     int realtime;
+    bool prepared;
+    long seek_at_start;
 
     double max_frame_duration;      // maximum duration of a frame - above this, we consider the jump a timestamp discontinuity
     enum ShowMode show_mode;
@@ -64,6 +73,7 @@ public:
     int last_video_stream;
     int video_stream;
     bool video_disable;
+    AVStream *video_st;
 
     //subtitle
     FrameQueue *subpq;
@@ -129,7 +139,7 @@ public:
 
     void reset();
 
-    bool delay_inited;
+
 };
 
 

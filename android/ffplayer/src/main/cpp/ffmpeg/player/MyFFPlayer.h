@@ -69,6 +69,8 @@ public:
 
     int prepare_async();
     int stop();
+    int pause(bool pause);
+    int seek(long pos);
 
 private:
     void changeState(PLAYER_STATE state);

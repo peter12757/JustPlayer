@@ -10,6 +10,7 @@
 #include "XThread.h"
 #include "FFMsg.h"
 #include "FFinc.h"
+#include "meta/MediaMeta.h"
 
 class VideoState;
 class ReadThread :XThread {
@@ -58,6 +59,29 @@ public:
         if (ret < 0)
             av_log(s, AV_LOG_ERROR, "Invalid stream specifier: %s.\n", spec);
         return ret;
+    }
+
+    static int64_t get_bit_rate(AVCodecParameters *codecpar)
+    {
+        int64_t bit_rate;
+        int bits_per_sample;
+
+        switch (codecpar->codec_type) {
+            case AVMEDIA_TYPE_VIDEO:
+            case AVMEDIA_TYPE_DATA:
+            case AVMEDIA_TYPE_SUBTITLE:
+            case AVMEDIA_TYPE_ATTACHMENT:
+                bit_rate = codecpar->bit_rate;
+                break;
+            case AVMEDIA_TYPE_AUDIO:
+                bits_per_sample = av_get_bits_per_sample(codecpar->codec_id);
+                bit_rate = bits_per_sample ? codecpar->sample_rate * codecpar->channels * bits_per_sample : codecpar->bit_rate;
+                break;
+            default:
+                bit_rate = 0;
+                break;
+        }
+        return bit_rate;
     }
 
 

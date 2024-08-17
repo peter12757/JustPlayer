@@ -172,5 +172,16 @@ void MyFFPlayer::printVersion() {
 }
 
 int MyFFPlayer::stop() {
+    //todo
+    return 0;
+}
+
+int MyFFPlayer::pause(bool pause) {
+    //todo
+    return 0;
+}
+
+int MyFFPlayer::seek(long pos) {
+    //todo
     return 0;
 }
