@@ -185,3 +185,7 @@ int MyFFPlayer::seek(long pos) {
     //todo
     return 0;
 }
+void MyFFPlayer::buffering(bool isBuffering) {
+    //todo
+
+}

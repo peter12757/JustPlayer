@@ -71,6 +71,7 @@ public:
     int stop();
     int pause(bool pause);
     int seek(long pos);
+    void buffering(bool isBuffering);
 
 private:
     void changeState(PLAYER_STATE state);

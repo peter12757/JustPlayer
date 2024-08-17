@@ -14,6 +14,8 @@
 #include "MyFFPlayer.h"
 #include "meta/MediaMeta.h"
 #include "statistic/FFStatistic.h"
+#include "FFPipenode.h"
+#include "FFDemuxCacheControl.h"
 
 class MyFFPlayer;
 
@@ -31,7 +33,9 @@ public:
     bool show_status;
     bool delay_inited;
     bool start_on_prepared;
+    bool auto_resume;
 
+    int completed = 0;
 
     AVInputFormat *iformat;
     std::string filename;
@@ -39,10 +43,13 @@ public:
     MyFFPlayer *player;
     const char* wanted_stream_spec[AVMEDIA_TYPE_NB];
     MediaMeta *meta;
+    int queue_attachments_req;
 
     //buffer???
     PacketQueue *buffer_indicator_queue;
     int infinite_buffer;
+    bool packet_buffering;
+    bool buffering_on;
 
     //seek
     int seek_by_bytes;
@@ -50,6 +57,12 @@ public:
     int realtime;
     bool prepared;
     long seek_at_start;
+    bool seek_req;
+    int seek_flags;
+    volatile int64_t latest_seek_load_start_at;
+    volatile int64_t latest_seek_load_serial;   //todo???
+    int64_t seek_pos;
+    int64_t seek_rel;
 
     double max_frame_duration;      // maximum duration of a frame - above this, we consider the jump a timestamp discontinuity
     enum ShowMode show_mode;
@@ -58,6 +71,9 @@ public:
     Clock *extclk;
 
     int genpts;//????
+
+    //demux
+    FFDemuxCacheControl dcc;
 
     //stream info
     int find_stream_info;
@@ -74,6 +90,7 @@ public:
     int video_stream;
     bool video_disable;
     AVStream *video_st;
+    FFPipenode *node_vdec;
 
     //subtitle
     FrameQueue *subpq;
@@ -138,6 +155,7 @@ public:
 
 
     void reset();
+
 
 
 };

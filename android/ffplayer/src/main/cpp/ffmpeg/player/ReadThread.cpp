@@ -17,6 +17,250 @@ ReadThread::~ReadThread() {
 
 void ReadThread::onThreadRun(uint32_t now) {
 
+    if (mediaState->abort_request) {
+        stopThread();
+    }
+#ifdef FFP_MERGE
+    if (mediaState->paused != mediaState->last_paused) {
+            mediaState->last_paused = mediaState->paused;
+            if (mediaState->paused)
+                mediaState->read_pause_return = av_read_pause(mediaState->ic);
+            else
+                av_read_play(mediaState->ic);
+        }
+#endif
+#if CONFIG_RTSP_DEMUXER || CONFIG_MMSH_PROTOCOL
+    if (mediaState->paused &&
+                (!strcmp(mediaState->ic->iformat->name, "rtsp") ||
+                 (mediaState->ic->pb && !strncmp(mediaState->input_filename, "mmsh:", 5)))) {
+            /* wait 10 ms to avoid trying to get another packet */
+            /* XXX: horrible */
+            sleep(10);
+            continue;
+        }
+#endif
+    if (mediaState->seek_req) {
+        int64_t seek_target = mediaState->seek_pos;
+        int64_t seek_min    = mediaState->seek_rel > 0 ? seek_target - mediaState->seek_rel + 2: INT64_MIN;
+        int64_t seek_max    = mediaState->seek_rel < 0 ? seek_target - mediaState->seek_rel - 2: INT64_MAX;
+// FIXME the +-2 is due to rounding being not done in the correct direction in generation
+//      of the seek_pos/seek_rel variables
+
+        mediaState->player->buffering(true);
+        mediaState->player->msg_queue->putEmptyMessage(FFP_MSG_BUFFERING_UPDATE,0,0);
+        int ret = avformat_seek_file(mediaState->ic, -1, seek_min, seek_target, seek_max, mediaState->seek_flags);
+        if (ret < 0) {
+            av_log(NULL, AV_LOG_ERROR,
+                   "%s: error while seeking\n", mediaState->filename.c_str());
+        } else {
+            if (mediaState->audio_stream >= 0) {
+                mediaState->audioq->flush();
+                mediaState->audioq->put(flush_pkt);
+            }
+            if (mediaState->subtitle_stream >= 0) {
+                mediaState->subtitleq->flush();
+                mediaState->subtitleq->put(flush_pkt);
+            }
+            if (mediaState->video_stream >= 0) {
+                if (mediaState->node_vdec) {
+                    mediaState->node_vdec->func_flush();
+                }
+                mediaState->videoq->flush();
+                mediaState->videoq->put(flush_pkt);
+            }
+            if (mediaState->seek_flags & AVSEEK_FLAG_BYTE) {
+                mediaState->extclk->set_clock(NAN, 0);
+            } else {
+                mediaState->extclk->set_clock(seek_target / (double)AV_TIME_BASE, 0);
+            }
+
+            mediaState->latest_seek_load_serial = mediaState->videoq->serial;
+            mediaState->latest_seek_load_start_at = av_gettime();
+        }
+        mediaState->dcc.current_high_water_mark_in_ms = mediaState->dcc.first_high_water_mark_in_ms;
+        mediaState->seek_req = false;
+        mediaState->queue_attachments_req = 1;
+        mediaState->eof = 0;
+#ifdef FFP_MERGE
+        if (mediaState->paused)
+                mediaState->player->pause(false);
+#endif
+        if (mediaState->auto_resume) {
+            mediaState->pause_req = 0;
+            if (mediaState->packet_buffering)
+                mediaState->buffering_on = true;
+            mediaState->auto_resume = 0;
+            mediaState->player->pause(false);
+        }
+        if (mediaState->pause_req) { mediaState->player->pause(false); }
+        mediaState->player->msg_queue->putEmptyMessage(FFP_MSG_SEEK_COMPLETE, av_rescale(seek_target, 1000, AV_TIME_BASE), ret);
+        mediaState->player->buffering(true);
+    }
+//    if (is->queue_attachments_req) {
+//        if (is->video_st && (is->video_st->disposition & AV_DISPOSITION_ATTACHED_PIC)) {
+//            AVPacket copy;
+//            if ((ret = av_copy_packet(&copy, &is->video_st->attached_pic)) < 0)
+//                goto fail;
+//            packet_queue_put(&is->videoq, &copy);
+//            packet_queue_put_nullpacket(&is->videoq, is->video_stream);
+//        }
+//        is->queue_attachments_req = 0;
+//    }
+//
+//    /* if the queue are full, no need to read more */
+//    if (ffp->infinite_buffer<1 && !is->seek_req &&
+//        #ifdef FFP_MERGE
+//        (is->audioq.size + is->videoq.size + is->subtitleq.size > MAX_QUEUE_SIZE
+//        #else
+//        (is->audioq.size + is->videoq.size + is->subtitleq.size > ffp->dcc.max_buffer_size
+//         #endif
+//         || (   stream_has_enough_packets(is->audio_st, is->audio_stream, &is->audioq, MIN_FRAMES)
+//                && stream_has_enough_packets(is->video_st, is->video_stream, &is->videoq, MIN_FRAMES)
+//                && stream_has_enough_packets(is->subtitle_st, is->subtitle_stream, &is->subtitleq, MIN_FRAMES)))) {
+//        if (!is->eof) {
+//            ffp_toggle_buffering(ffp, 0);
+//        }
+//        /* wait 10 ms */
+//        SDL_LockMutex(wait_mutex);
+//        SDL_CondWaitTimeout(is->continue_read_thread, wait_mutex, 10);
+//        SDL_UnlockMutex(wait_mutex);
+//        continue;
+//    }
+//    if ((!is->paused || completed) &&
+//        (!is->audio_st || (is->auddec.finished == is->audioq.serial && frame_queue_nb_remaining(&is->sampq) == 0)) &&
+//        (!is->video_st || (is->viddec.finished == is->videoq.serial && frame_queue_nb_remaining(&is->pictq) == 0))) {
+//        if (ffp->loop != 1 && (!ffp->loop || --ffp->loop)) {
+//            stream_seek(is, ffp->start_time != AV_NOPTS_VALUE ? ffp->start_time : 0, 0, 0);
+//        } else if (ffp->autoexit) {
+//            ret = AVERROR_EOF;
+//            goto fail;
+//        } else {
+//            ffp_statistic_l(ffp);
+//            if (completed) {
+//                av_log(ffp, AV_LOG_INFO, "ffp_toggle_buffering: eof\n");
+//                SDL_LockMutex(wait_mutex);
+//                // infinite wait may block shutdown
+//                while(!is->abort_request && !is->seek_req)
+//                    SDL_CondWaitTimeout(is->continue_read_thread, wait_mutex, 100);
+//                SDL_UnlockMutex(wait_mutex);
+//                if (!is->abort_request)
+//                    continue;
+//            } else {
+//                completed = 1;
+//                ffp->auto_resume = 0;
+//
+//                // TODO: 0 it's a bit early to notify complete here
+//                ffp_toggle_buffering(ffp, 0);
+//                toggle_pause(ffp, 1);
+//                if (ffp->error) {
+//                    av_log(ffp, AV_LOG_INFO, "ffp_toggle_buffering: error: %d\n", ffp->error);
+//                    ffp_notify_msg1(ffp, FFP_MSG_ERROR);
+//                } else {
+//                    av_log(ffp, AV_LOG_INFO, "ffp_toggle_buffering: completed: OK\n");
+//                    ffp_notify_msg1(ffp, FFP_MSG_COMPLETED);
+//                }
+//            }
+//        }
+//    }
+//    pkt->flags = 0;
+//    ret = av_read_frame(ic, pkt);
+//    if (ret < 0) {
+//        int pb_eof = 0;
+//        int pb_error = 0;
+//        if ((ret == AVERROR_EOF || avio_feof(ic->pb)) && !is->eof) {
+//            pb_eof = 1;
+//            // check error later
+//        }
+//        if (ic->pb && ic->pb->error) {
+//            pb_eof = 1;
+//            pb_error = ic->pb->error;
+//        }
+//        if (ret == AVERROR_EXIT) {
+//            pb_eof = 1;
+//            pb_error = AVERROR_EXIT;
+//        }
+//
+//        if (pb_eof) {
+//            if (is->video_stream >= 0)
+//                packet_queue_put_nullpacket(&is->videoq, is->video_stream);
+//            if (is->audio_stream >= 0)
+//                packet_queue_put_nullpacket(&is->audioq, is->audio_stream);
+//            if (is->subtitle_stream >= 0)
+//                packet_queue_put_nullpacket(&is->subtitleq, is->subtitle_stream);
+//            is->eof = 1;
+//        }
+//        if (pb_error) {
+//            if (is->video_stream >= 0)
+//                packet_queue_put_nullpacket(&is->videoq, is->video_stream);
+//            if (is->audio_stream >= 0)
+//                packet_queue_put_nullpacket(&is->audioq, is->audio_stream);
+//            if (is->subtitle_stream >= 0)
+//                packet_queue_put_nullpacket(&is->subtitleq, is->subtitle_stream);
+//            is->eof = 1;
+//            ffp->error = pb_error;
+//            av_log(ffp, AV_LOG_ERROR, "av_read_frame error: %x(%c,%c,%c,%c): %s\n", ffp->error,
+//                   (char) (0xff & (ffp->error >> 24)),
+//                   (char) (0xff & (ffp->error >> 16)),
+//                   (char) (0xff & (ffp->error >> 8)),
+//                   (char) (0xff & (ffp->error)),
+//                   ffp_get_error_string(ffp->error));
+//            // break;
+//        } else {
+//            ffp->error = 0;
+//        }
+//        if (is->eof) {
+//            ffp_toggle_buffering(ffp, 0);
+//            SDL_Delay(100);
+//        }
+//        SDL_LockMutex(wait_mutex);
+//        SDL_CondWaitTimeout(is->continue_read_thread, wait_mutex, 10);
+//        SDL_UnlockMutex(wait_mutex);
+//        ffp_statistic_l(ffp);
+//        continue;
+//    } else {
+//        is->eof = 0;
+//    }
+//
+//    if (pkt->flags & AV_PKT_FLAG_DISCONTINUITY) {
+//        if (is->audio_stream >= 0) {
+//            packet_queue_put(&is->audioq, &flush_pkt);
+//        }
+//        if (is->subtitle_stream >= 0) {
+//            packet_queue_put(&is->subtitleq, &flush_pkt);
+//        }
+//        if (is->video_stream >= 0) {
+//            packet_queue_put(&is->videoq, &flush_pkt);
+//        }
+//    }
+//
+//    /* check if packet is in play range specified by user, then queue, otherwise discard */
+//    stream_start_time = ic->streams[pkt->stream_index]->start_time;
+//    pkt_ts = pkt->pts == AV_NOPTS_VALUE ? pkt->dts : pkt->pts;
+//    pkt_in_play_range = ffp->duration == AV_NOPTS_VALUE ||
+//                        (pkt_ts - (stream_start_time != AV_NOPTS_VALUE ? stream_start_time : 0)) *
+//                        av_q2d(ic->streams[pkt->stream_index]->time_base) -
+//                        (double)(ffp->start_time != AV_NOPTS_VALUE ? ffp->start_time : 0) / 1000000
+//                        <= ((double)ffp->duration / 1000000);
+//    if (pkt->stream_index == is->audio_stream && pkt_in_play_range) {
+//        packet_queue_put(&is->audioq, pkt);
+//    } else if (pkt->stream_index == is->video_stream && pkt_in_play_range
+//               && !(is->video_st && (is->video_st->disposition & AV_DISPOSITION_ATTACHED_PIC))) {
+//        packet_queue_put(&is->videoq, pkt);
+//    } else if (pkt->stream_index == is->subtitle_stream && pkt_in_play_range) {
+//        packet_queue_put(&is->subtitleq, pkt);
+//    } else {
+//        av_packet_unref(pkt);
+//    }
+//
+//    ffp_statistic_l(ffp);
+//
+//    if (ffp->packet_buffering) {
+//        io_tick_counter = SDL_GetTickHR();
+//        if (abs((int)(io_tick_counter - prev_io_tick_counter)) > BUFFERING_CHECK_PER_MILLISECONDS) {
+//            prev_io_tick_counter = io_tick_counter;
+//            ffp_check_buffering_l(ffp);
+//        }
+//    }
 
 
 }
@@ -258,13 +502,13 @@ void ReadThread::onCreate() {
     }
     mediaState->prepared = true;
     mediaState->player->msg_queue->putEmptyMessage(FFP_MSG_PREPARED);
-    if (!mediaState->render_wait_start && !mediaState->start_on_prepared) {
+    if (!mediaState->start_on_prepared) {
         while (mediaState->pause_req && !mediaState->abort_request) {
-            SDL_Delay(20);
+            sleep(100);
         }
     }
     if (mediaState->auto_resume) {
-        ffp_notify_msg1(ffp, FFP_REQ_START);
+        mediaState->player->msg_queue->putEmptyMessage(FFP_REQ_START);
         mediaState->auto_resume = 0;
     }
     /* offset should be seeked*/
@@ -275,6 +519,14 @@ void ReadThread::onCreate() {
 
 void ReadThread::onStop() {
     XThread::onStop();
+    if (mediaState->ic && !mediaState->ic)
+        avformat_close_input(&mediaState->ic);
+
+    if (!mediaState->prepared || !mediaState->abort_request) {
+        //todo notify err???
+//        mediaState->last_error = last_error;
+//        ffp_notify_msg2(ffp, FFP_MSG_ERROR, last_error);
+    }
 }
 
 AVDictionary **
