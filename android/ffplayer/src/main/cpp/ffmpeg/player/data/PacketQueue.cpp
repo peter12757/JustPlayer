@@ -180,8 +180,8 @@ int PacketQueue::put_private(AVPacket *pkt) {
     return 0;
 }
 
-int PacketQueue::put_nullpacket(AVPacket *pkt, int stream_index) {
-    pkt = av_packet_alloc();
+int PacketQueue::put_nullpacket(int stream_index) {
+    AVPacket *pkt = av_packet_alloc();
     pkt->data = NULL;
     pkt->size = 0;
     pkt->stream_index = stream_index;

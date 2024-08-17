@@ -98,6 +98,7 @@ public:
     int last_subtitle_stream;
     int subtitle_stream;
     bool subtitle_disable;
+    AVStream *subtitle_st;
 
     //audio
     FrameQueue *sampq;
@@ -110,6 +111,7 @@ public:
     int audio_stream;
     AVSyncType av_sync_type;
     bool audio_disable;
+    AVStream *audio_st;
 
 
     //read stream input

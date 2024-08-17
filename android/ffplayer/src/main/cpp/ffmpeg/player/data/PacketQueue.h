@@ -36,7 +36,7 @@ public:
 
     int put(AVPacket *pkt);
     int put_private(AVPacket *pkt);
-    int put_nullpacket(AVPacket *pkt, int stream_index);
+    int put_nullpacket(int stream_index);
     int hasEnoughPackets(AVStream *st, int stream_id, int minFrames);
 
 

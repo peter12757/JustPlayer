@@ -96,36 +96,33 @@ void ReadThread::onThreadRun(uint32_t now) {
         mediaState->player->msg_queue->putEmptyMessage(FFP_MSG_SEEK_COMPLETE, av_rescale(seek_target, 1000, AV_TIME_BASE), ret);
         mediaState->player->buffering(true);
     }
-//    if (is->queue_attachments_req) {
-//        if (is->video_st && (is->video_st->disposition & AV_DISPOSITION_ATTACHED_PIC)) {
-//            AVPacket copy;
-//            if ((ret = av_copy_packet(&copy, &is->video_st->attached_pic)) < 0)
-//                goto fail;
-//            packet_queue_put(&is->videoq, &copy);
-//            packet_queue_put_nullpacket(&is->videoq, is->video_stream);
-//        }
-//        is->queue_attachments_req = 0;
-//    }
-//
-//    /* if the queue are full, no need to read more */
-//    if (ffp->infinite_buffer<1 && !is->seek_req &&
-//        #ifdef FFP_MERGE
-//        (is->audioq.size + is->videoq.size + is->subtitleq.size > MAX_QUEUE_SIZE
-//        #else
-//        (is->audioq.size + is->videoq.size + is->subtitleq.size > ffp->dcc.max_buffer_size
-//         #endif
-//         || (   stream_has_enough_packets(is->audio_st, is->audio_stream, &is->audioq, MIN_FRAMES)
-//                && stream_has_enough_packets(is->video_st, is->video_stream, &is->videoq, MIN_FRAMES)
-//                && stream_has_enough_packets(is->subtitle_st, is->subtitle_stream, &is->subtitleq, MIN_FRAMES)))) {
-//        if (!is->eof) {
-//            ffp_toggle_buffering(ffp, 0);
-//        }
-//        /* wait 10 ms */
-//        SDL_LockMutex(wait_mutex);
-//        SDL_CondWaitTimeout(is->continue_read_thread, wait_mutex, 10);
-//        SDL_UnlockMutex(wait_mutex);
-//        continue;
-//    }
+    if (mediaState->queue_attachments_req) {
+        if (mediaState->video_st && (mediaState->video_st->disposition & AV_DISPOSITION_ATTACHED_PIC)) {
+            AVPacket copy;
+            if (av_packet_ref(&copy, &mediaState->video_st->attached_pic) < 0) { LOGE("av_packet_ref FAIL"); }
+            mediaState->videoq->put(&copy);
+            mediaState->videoq->put_nullpacket(mediaState->video_stream);
+        }
+        mediaState->queue_attachments_req = 0;
+    }
+
+    /* if the queue are full, no need to read more */
+    if (mediaState->infinite_buffer<1 && !mediaState->seek_req &&
+        #ifdef FFP_MERGE
+        (mediaState->audioq.size + mediaState->videoq.size + mediaState->subtitleq.size > MAX_QUEUE_SIZE
+        #else
+        (mediaState->audioq->size + mediaState->videoq->size + mediaState->subtitleq->size > mediaState->dcc.max_buffer_size
+         #endif
+         || (stream_has_enough_packets(mediaState->audio_st, mediaState->audio_stream, mediaState->audioq, MIN_FRAMES)
+                && stream_has_enough_packets(mediaState->video_st, mediaState->video_stream, mediaState->videoq, MIN_FRAMES)
+                && stream_has_enough_packets(mediaState->subtitle_st, mediaState->subtitle_stream, mediaState->subtitleq, MIN_FRAMES)))) {
+        if (!mediaState->eof) {
+            mediaState->player->buffering(false);
+        }
+        /* wait 10 ms */
+        //todo
+        goto nextloop;
+    }
 //    if ((!is->paused || completed) &&
 //        (!is->audio_st || (is->auddec.finished == is->audioq.serial && frame_queue_nb_remaining(&is->sampq) == 0)) &&
 //        (!is->video_st || (is->viddec.finished == is->videoq.serial && frame_queue_nb_remaining(&is->pictq) == 0))) {
@@ -262,6 +259,7 @@ void ReadThread::onThreadRun(uint32_t now) {
 //        }
 //    }
 
+    nextloop:
 
 }
 
