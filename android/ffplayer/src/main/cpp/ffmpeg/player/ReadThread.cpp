@@ -2,6 +2,7 @@
 // Created by PeterXi on 2024/8/10.
 //
 
+#include <assert.h>
 #include "ReadThread.h"
 
 ReadThread::ReadThread(VideoState *is)
@@ -230,19 +231,19 @@ void ReadThread::onCreate() {
     if (st_index[AVMEDIA_TYPE_SUBTITLE] >= 0) {
         mediaState->meta->set_int64_l(IJKM_KEY_TIMEDTEXT_STREAM, st_index[AVMEDIA_TYPE_SUBTITLE])
     }
-    if (is->video_stream < 0 && is->audio_stream < 0) {
+    if (mediaState->video_stream < 0 && mediaState->audio_stream < 0) {
         av_log(NULL, AV_LOG_FATAL, "Failed to open file '%s' or configure filtergraph\n",mediaState->filename.c_str());
         ret = -1;
     }
-//    if (is->audio_stream >= 0) {
-//        is->audioq.is_buffer_indicator = 1;
-//        is->buffer_indicator_queue = &is->audioq;
-//    } else if (is->video_stream >= 0) {
-//        is->videoq.is_buffer_indicator = 1;
-//        is->buffer_indicator_queue = &is->videoq;
-//    } else {
-//        assert("invalid streams");
-//    }
+    if (mediaState->audio_stream >= 0) {
+        mediaState->audioq.is_buffer_indicator = true;
+//        mediaState->buffer_indicator_queue = &mediaState->audioq;
+    } else if (mediaState->video_stream >= 0) {
+        mediaState->videoq->is_buffer_indicator = true;
+//        mediaState->buffer_indicator_queue = &mediaState->videoq;
+    } else {
+        assert("invalid streams");
+    }
 //
 //    if (ffp->infinite_buffer < 0 && is->realtime)
 //        ffp->infinite_buffer = 1;
