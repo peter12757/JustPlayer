@@ -18,3 +18,7 @@ void FFStatistic::resetStatistic() {
     memset(this, 0, sizeof(FFStatistic));
     tcp_read_sampler.resetSpeedSampler(FFP_TCP_READ_SAMPLE_RANGE);
 }
+
+void FFStatistic::track_statistic(VideoState *pState) {
+
+}

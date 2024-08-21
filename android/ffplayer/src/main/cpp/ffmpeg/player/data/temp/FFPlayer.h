@@ -27,7 +27,7 @@
 #include "FFPlayerOptions.h"
 #include "data/meta/MediaMeta.h"
 #include "data/PacketQueue.h"
-#include "data/temp/Decoder.h"
+#include "data/Decoder.h"
 #include "common.h"
 #include "data/FFPipenode.h"
 #include "data/temp/FFPipeline.h"

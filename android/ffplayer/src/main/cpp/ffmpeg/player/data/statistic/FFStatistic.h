@@ -8,6 +8,7 @@
 
 #include <cstdint>
 #include "data/temp/SpeedSampler2.h"
+#include "VideoState.h"
 
 #define FFP_TCP_READ_SAMPLE_RANGE 2000
 
@@ -17,6 +18,8 @@ typedef struct FFTrackCacheStatistic
     int64_t bytes;
     int64_t packets;
 } FFTrackCacheStatistic;
+
+class VideoState;
 
 class FFStatistic {
 public:
@@ -41,6 +44,8 @@ public:
     ~FFStatistic();
 
     void resetStatistic();
+
+    void track_statistic(VideoState *pState);
 };
 
 

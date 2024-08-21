@@ -16,12 +16,15 @@
 #include "statistic/FFStatistic.h"
 #include "FFPipenode.h"
 #include "FFDemuxCacheControl.h"
+#include "Decoder.h"
 
 class MyFFPlayer;
 
 enum ShowMode {
     SHOW_MODE_NONE = -1, SHOW_MODE_VIDEO = 0, SHOW_MODE_WAVES, SHOW_MODE_RDFT, SHOW_MODE_NB
 };
+
+#define AV_PKT_FLAG_DISCONTINUITY 0x0100
 
 class VideoState {
 
@@ -34,6 +37,11 @@ public:
     bool delay_inited;
     bool start_on_prepared;
     bool auto_resume;
+    bool paused;
+    int loop; //loop number
+    bool autoexit;
+    int error;
+    int64_t duration;
 
     int completed = 0;
 
@@ -91,6 +99,8 @@ public:
     bool video_disable;
     AVStream *video_st;
     FFPipenode *node_vdec;
+    Decoder viddec;
+
 
     //subtitle
     FrameQueue *subpq;
@@ -99,6 +109,7 @@ public:
     int subtitle_stream;
     bool subtitle_disable;
     AVStream *subtitle_st;
+    Decoder subdec;
 
     //audio
     FrameQueue *sampq;
@@ -112,6 +123,7 @@ public:
     AVSyncType av_sync_type;
     bool audio_disable;
     AVStream *audio_st;
+    Decoder auddec;
 
 
     //read stream input
@@ -153,6 +165,18 @@ public:
         }
 
         return 0;
+    }
+
+    static const char *get_error_string(int error) {
+        switch (error) {
+            case AVERROR(ENOMEM):       return "AVERROR(ENOMEM)";       // 12
+            case AVERROR(EINVAL):       return "AVERROR(EINVAL)";       // 22
+            case AVERROR(EAGAIN):       return "AVERROR(EAGAIN)";       // 35
+            case AVERROR(ETIMEDOUT):    return "AVERROR(ETIMEDOUT)";    // 60
+            case AVERROR_EOF:           return "AVERROR_EOF";
+            case AVERROR_EXIT:          return "AVERROR_EXIT";
+        }
+        return "unknown";
     }
 
 

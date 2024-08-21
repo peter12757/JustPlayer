@@ -121,146 +121,145 @@ void ReadThread::onThreadRun(uint32_t now) {
         }
         /* wait 10 ms */
         //todo
-        goto nextloop;
+        return;
     }
-//    if ((!is->paused || completed) &&
-//        (!is->audio_st || (is->auddec.finished == is->audioq.serial && frame_queue_nb_remaining(&is->sampq) == 0)) &&
-//        (!is->video_st || (is->viddec.finished == is->videoq.serial && frame_queue_nb_remaining(&is->pictq) == 0))) {
-//        if (ffp->loop != 1 && (!ffp->loop || --ffp->loop)) {
-//            stream_seek(is, ffp->start_time != AV_NOPTS_VALUE ? ffp->start_time : 0, 0, 0);
-//        } else if (ffp->autoexit) {
+    if ((!mediaState->paused || mediaState->completed) &&
+        (!mediaState->audio_st || (mediaState->auddec.finished == mediaState->audioq->serial && mediaState->sampq->frame_queue_nb_remaining() == 0)) &&
+        (!mediaState->video_st || (mediaState->viddec.finished == mediaState->videoq->serial && mediaState->pictq->frame_queue_nb_remaining() == 0))) {
+        if (mediaState->loop != 1 && (!mediaState->loop || --mediaState->loop)) {
+            //stream_seek(is, ffp->start_time != AV_NOPTS_VALUE ? ffp->start_time : 0, 0, 0);
+            if (!mediaState->seek_req) {
+                mediaState->seek_pos = mediaState->start_time != AV_NOPTS_VALUE ? mediaState->start_time:0;
+                mediaState->seek_rel = 0;
+                mediaState->seek_flags &= ~AVSEEK_FLAG_BYTE;
+                mediaState->seek_req = 1;
+            }
+        } else if (mediaState->autoexit) {
 //            ret = AVERROR_EOF;
-//            goto fail;
-//        } else {
-//            ffp_statistic_l(ffp);
-//            if (completed) {
-//                av_log(ffp, AV_LOG_INFO, "ffp_toggle_buffering: eof\n");
-//                SDL_LockMutex(wait_mutex);
-//                // infinite wait may block shutdown
-//                while(!is->abort_request && !is->seek_req)
+            LOGE("mediaState->autoexit AVERROR_EOF")
+        } else {
+            mediaState->stat->track_statistic(mediaState);
+            if (mediaState->completed) {
+                av_log(ffp, AV_LOG_INFO, "ffp_toggle_buffering: eof\n");
+                // infinite wait may block shutdown
+//                while(!mediaState->abort_request && !mediaState->seek_req)
 //                    SDL_CondWaitTimeout(is->continue_read_thread, wait_mutex, 100);
 //                SDL_UnlockMutex(wait_mutex);
-//                if (!is->abort_request)
-//                    continue;
-//            } else {
-//                completed = 1;
-//                ffp->auto_resume = 0;
-//
-//                // TODO: 0 it's a bit early to notify complete here
-//                ffp_toggle_buffering(ffp, 0);
-//                toggle_pause(ffp, 1);
-//                if (ffp->error) {
-//                    av_log(ffp, AV_LOG_INFO, "ffp_toggle_buffering: error: %d\n", ffp->error);
-//                    ffp_notify_msg1(ffp, FFP_MSG_ERROR);
-//                } else {
-//                    av_log(ffp, AV_LOG_INFO, "ffp_toggle_buffering: completed: OK\n");
-//                    ffp_notify_msg1(ffp, FFP_MSG_COMPLETED);
-//                }
-//            }
-//        }
-//    }
-//    pkt->flags = 0;
-//    ret = av_read_frame(ic, pkt);
-//    if (ret < 0) {
-//        int pb_eof = 0;
-//        int pb_error = 0;
-//        if ((ret == AVERROR_EOF || avio_feof(ic->pb)) && !is->eof) {
-//            pb_eof = 1;
-//            // check error later
-//        }
-//        if (ic->pb && ic->pb->error) {
-//            pb_eof = 1;
-//            pb_error = ic->pb->error;
-//        }
-//        if (ret == AVERROR_EXIT) {
-//            pb_eof = 1;
-//            pb_error = AVERROR_EXIT;
-//        }
-//
-//        if (pb_eof) {
-//            if (is->video_stream >= 0)
-//                packet_queue_put_nullpacket(&is->videoq, is->video_stream);
-//            if (is->audio_stream >= 0)
-//                packet_queue_put_nullpacket(&is->audioq, is->audio_stream);
-//            if (is->subtitle_stream >= 0)
-//                packet_queue_put_nullpacket(&is->subtitleq, is->subtitle_stream);
-//            is->eof = 1;
-//        }
-//        if (pb_error) {
-//            if (is->video_stream >= 0)
-//                packet_queue_put_nullpacket(&is->videoq, is->video_stream);
-//            if (is->audio_stream >= 0)
-//                packet_queue_put_nullpacket(&is->audioq, is->audio_stream);
-//            if (is->subtitle_stream >= 0)
-//                packet_queue_put_nullpacket(&is->subtitleq, is->subtitle_stream);
-//            is->eof = 1;
-//            ffp->error = pb_error;
-//            av_log(ffp, AV_LOG_ERROR, "av_read_frame error: %x(%c,%c,%c,%c): %s\n", ffp->error,
-//                   (char) (0xff & (ffp->error >> 24)),
-//                   (char) (0xff & (ffp->error >> 16)),
-//                   (char) (0xff & (ffp->error >> 8)),
-//                   (char) (0xff & (ffp->error)),
-//                   ffp_get_error_string(ffp->error));
-//            // break;
-//        } else {
-//            ffp->error = 0;
-//        }
-//        if (is->eof) {
-//            ffp_toggle_buffering(ffp, 0);
+                if (!mediaState->abort_request)
+                    continue;
+            } else {
+                completed = 1;
+                mediaState->auto_resume = 0;
+
+                // TODO: 0 it's a bit early to notify complete here
+                mediaState->player->buffering(false);
+                mediaState->player->pause(true);
+                if (mediaState->error) {
+                    av_log(ffp, AV_LOG_INFO, "ffp_toggle_buffering: error: %d\n", mediaState->error);
+                    mediaState->player->msg_queue->putEmptyMessage(FFP_MSG_ERROR);
+                } else {
+                    av_log(ffp, AV_LOG_INFO, "ffp_toggle_buffering: completed: OK\n");
+                    mediaState->player->msg_queue->putEmptyMessage(FFP_MSG_COMPLETED);
+                }
+            }
+        }
+    }
+    AVPacket pkt1, *pkt = &pkt1;
+    pkt->flags = 0;
+    int ret = av_read_frame(mediaState->ic, pkt);
+    if (ret < 0) {
+        int pb_eof = 0;
+        int pb_error = 0;
+        if ((ret == AVERROR_EOF || avio_feof(mediaState->ic->pb)) && !mediaState->eof) {
+            pb_eof = 1;
+            // check error later
+        }
+        if (mediaState->ic->pb && mediaState->ic->pb->error) {
+            pb_eof = 1;
+            pb_error = mediaState->ic->pb->error;
+        }
+        if (ret == AVERROR_EXIT) {
+            pb_eof = 1;
+            pb_error = AVERROR_EXIT;
+        }
+
+        if (pb_eof) {
+            if (mediaState->video_stream >= 0)
+                mediaState->videoq->put_nullpacket(mediaState->video_stream);
+            if (mediaState->audio_stream >= 0)
+                mediaState->audioq->put_nullpacket(mediaState->audio_stream);
+            if (mediaState->subtitle_stream >= 0)
+                mediaState->subtitleq->put_nullpacket(mediaState->subtitle_stream);
+            mediaState->eof = 1;
+        }
+        if (pb_error) {
+            if (mediaState->video_stream >= 0)
+                mediaState->videoq->put_nullpacket(mediaState->video_stream);
+            if (mediaState->audio_stream >= 0)
+                mediaState->audioq->put_nullpacket(mediaState->audio_stream);
+            if (mediaState->subtitle_stream >= 0)
+                mediaState->subtitleq->put_nullpacket(mediaState->subtitle_stream);
+            mediaState->eof = 1;
+            mediaState->error = pb_error;
+            av_log(mediaState, AV_LOG_ERROR, "av_read_frame error: %x(%c,%c,%c,%c): %s\n", mediaState->error,
+                   (char) (0xff & (mediaState->error >> 24)),
+                   (char) (0xff & (mediaState->error >> 16)),
+                   (char) (0xff & (mediaState->error >> 8)),
+                   (char) (0xff & (mediaState->error)),
+                   mediaState->get_error_string(mediaState->error));
+            // break;
+        } else {
+            mediaState->error = 0;
+        }
+        if (mediaState->eof) {
+            mediaState->player->buffering(false);
 //            SDL_Delay(100);
-//        }
-//        SDL_LockMutex(wait_mutex);
-//        SDL_CondWaitTimeout(is->continue_read_thread, wait_mutex, 10);
-//        SDL_UnlockMutex(wait_mutex);
-//        ffp_statistic_l(ffp);
-//        continue;
-//    } else {
-//        is->eof = 0;
-//    }
-//
-//    if (pkt->flags & AV_PKT_FLAG_DISCONTINUITY) {
-//        if (is->audio_stream >= 0) {
-//            packet_queue_put(&is->audioq, &flush_pkt);
-//        }
-//        if (is->subtitle_stream >= 0) {
-//            packet_queue_put(&is->subtitleq, &flush_pkt);
-//        }
-//        if (is->video_stream >= 0) {
-//            packet_queue_put(&is->videoq, &flush_pkt);
-//        }
-//    }
-//
-//    /* check if packet is in play range specified by user, then queue, otherwise discard */
-//    stream_start_time = ic->streams[pkt->stream_index]->start_time;
-//    pkt_ts = pkt->pts == AV_NOPTS_VALUE ? pkt->dts : pkt->pts;
-//    pkt_in_play_range = ffp->duration == AV_NOPTS_VALUE ||
-//                        (pkt_ts - (stream_start_time != AV_NOPTS_VALUE ? stream_start_time : 0)) *
-//                        av_q2d(ic->streams[pkt->stream_index]->time_base) -
-//                        (double)(ffp->start_time != AV_NOPTS_VALUE ? ffp->start_time : 0) / 1000000
-//                        <= ((double)ffp->duration / 1000000);
-//    if (pkt->stream_index == is->audio_stream && pkt_in_play_range) {
-//        packet_queue_put(&is->audioq, pkt);
-//    } else if (pkt->stream_index == is->video_stream && pkt_in_play_range
-//               && !(is->video_st && (is->video_st->disposition & AV_DISPOSITION_ATTACHED_PIC))) {
-//        packet_queue_put(&is->videoq, pkt);
-//    } else if (pkt->stream_index == is->subtitle_stream && pkt_in_play_range) {
-//        packet_queue_put(&is->subtitleq, pkt);
-//    } else {
-//        av_packet_unref(pkt);
-//    }
-//
-//    ffp_statistic_l(ffp);
-//
-//    if (ffp->packet_buffering) {
-//        io_tick_counter = SDL_GetTickHR();
-//        if (abs((int)(io_tick_counter - prev_io_tick_counter)) > BUFFERING_CHECK_PER_MILLISECONDS) {
-//            prev_io_tick_counter = io_tick_counter;
-//            ffp_check_buffering_l(ffp);
-//        }
-//    }
+        }
+        mediaState->stat->track_statistic(mediaState);
+        return;
+    } else {
+        mediaState->eof = 0;
+    }
 
-    nextloop:
+    if (pkt->flags & AV_PKT_FLAG_DISCONTINUITY) {
+        if (mediaState->audio_stream >= 0) {
+            mediaState->audioq->put(flush_pkt);
+        }
+        if (mediaState->subtitle_stream >= 0) {
+            mediaState->subtitleq->put(flush_pkt);
+        }
+        if (mediaState->video_stream >= 0) {
+            mediaState->videoq->put(flush_pkt);
+        }
+    }
 
+    /* check if packet is in play range specified by user, then queue, otherwise discard */
+    int64_t stream_start_time = mediaState->ic->streams[pkt->stream_index]->start_time;
+    int64_t pkt_ts = pkt->pts == AV_NOPTS_VALUE ? pkt->dts : pkt->pts;
+    int pkt_in_play_range = mediaState->duration == AV_NOPTS_VALUE ||
+                        (pkt_ts - (stream_start_time != AV_NOPTS_VALUE ? stream_start_time : 0)) *
+                        av_q2d(mediaState->ic->streams[pkt->stream_index]->time_base) -
+                        (double)(mediaState->start_time != AV_NOPTS_VALUE ? mediaState->start_time : 0) / 1000000
+                        <= ((double)mediaState->duration / 1000000);
+    if (pkt->stream_index == mediaState->audio_stream && pkt_in_play_range) {
+        mediaState->audioq->put(pkt);
+    } else if (pkt->stream_index == mediaState->video_stream && pkt_in_play_range
+               && !(mediaState->video_st && (mediaState->video_st->disposition & AV_DISPOSITION_ATTACHED_PIC))) {
+        mediaState->videoq->put(pkt);
+    } else if (pkt->stream_index == mediaState->subtitle_stream && pkt_in_play_range) {
+        mediaState->subtitleq->put(pkt);
+    } else {
+        av_packet_unref(pkt);
+    }
+    mediaState->stat->track_statistic(mediaState);
+
+    if (mediaState->packet_buffering) {
+        int64_t io_tick_counter = SDL_GetTickHR();
+        if (abs((int)(io_tick_counter - prev_io_tick_counter)) > BUFFERING_CHECK_PER_MILLISECONDS) {
+            prev_io_tick_counter = io_tick_counter;
+            mediaState->player.checkbuffering();
+        }
+    }
 }
 
 void ReadThread::onCreate() {
