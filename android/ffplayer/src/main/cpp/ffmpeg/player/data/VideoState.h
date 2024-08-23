@@ -91,7 +91,7 @@ public:
     bool pause_req;
 
     //video
-    FrameQueue *pictq;
+    FrameQueue *video_fq;
     PacketQueue *videoq;
     Clock *vidclk;
     int pictq_size;
@@ -113,7 +113,7 @@ public:
     Decoder *subdec;
 
     //audio
-    FrameQueue *sampq;
+    FrameQueue *audio_fq;
     PacketQueue *audioq;
     Clock *audclk;
     int audio_clock_serial;
@@ -125,6 +125,7 @@ public:
     bool audio_disable;
     AVStream *audio_st;
     Decoder *auddec;
+    int volume;
 
 
     //read stream input

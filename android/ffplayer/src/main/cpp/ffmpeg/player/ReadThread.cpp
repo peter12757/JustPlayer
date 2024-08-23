@@ -124,8 +124,8 @@ void ReadThread::onThreadRun(uint32_t now) {
         return;
     }
     if ((!mediaState->paused || mediaState->completed) &&
-        (!mediaState->audio_st || (mediaState->auddec->finished == mediaState->audioq->serial && mediaState->sampq->frame_queue_nb_remaining() == 0)) &&
-        (!mediaState->video_st || (mediaState->viddec->finished == mediaState->videoq->serial && mediaState->pictq->frame_queue_nb_remaining() == 0))) {
+        (!mediaState->audio_st || (mediaState->auddec->finished == mediaState->audioq->serial && mediaState->audio_fq->frame_queue_nb_remaining() == 0)) &&
+        (!mediaState->video_st || (mediaState->viddec->finished == mediaState->videoq->serial && mediaState->video_fq->frame_queue_nb_remaining() == 0))) {
         if (mediaState->loop != 1 && (!mediaState->loop || --mediaState->loop)) {
             //stream_seek(is, ffp->start_time != AV_NOPTS_VALUE ? ffp->start_time : 0, 0, 0);
             if (!mediaState->seek_req) {
@@ -265,15 +265,6 @@ void ReadThread::onThreadRun(uint32_t now) {
 
 void ReadThread::onCreate() {
     XThread::onCreate();
-    mediaState->last_video_stream = mediaState->video_stream = -1;
-    mediaState->last_audio_stream = mediaState->audio_stream = -1;
-    mediaState->last_subtitle_stream = mediaState->subtitle_stream = -1;
-    mediaState->eof = 0;
-
-    mediaState->ic = avformat_alloc_context();
-    if (!mediaState->ic) {
-        LOGE("ReadThread::onCreate ERROR");
-    }
     mediaState->ic->interrupt_callback.callback = mediaState->decode_interrupt_cb;
     mediaState->ic->interrupt_callback.opaque = mediaState;
 

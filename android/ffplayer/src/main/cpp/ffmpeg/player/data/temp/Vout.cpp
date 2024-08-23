@@ -8,13 +8,13 @@
 //Vout::Vout() {
 //    std::ostringstream logOs;
 //    logOs<<"Vout::Vout";
-//    pictq = new FrameQueue();
+//    video_fq = new FrameQueue();
 //    videoq = new PacketQueue();
-//    pictq->pktq = videoq;
-//    pictq->max_size = VIDEO_PICTURE_QUEUE_SIZE;
-//    pictq->keep_last = 1;
-//    for (int i = 0; i < pictq->max_size; i++)
-//        if (!(pictq->queue[i].frame = av_frame_alloc()))
+//    video_fq->pktq = videoq;
+//    video_fq->max_size = VIDEO_PICTURE_QUEUE_SIZE;
+//    video_fq->keep_last = 1;
+//    for (int i = 0; i < video_fq->max_size; i++)
+//        if (!(video_fq->queue[i].frame = av_frame_alloc()))
 //            logOs<<"fail alloc";
 //
 //    //    packet_queue_init
@@ -40,6 +40,6 @@
 //}
 //
 //Vout::~Vout() {
-//    SafeDelete(pictq);
+//    SafeDelete(video_fq);
 //    SafeDelete(videoq);
 //}

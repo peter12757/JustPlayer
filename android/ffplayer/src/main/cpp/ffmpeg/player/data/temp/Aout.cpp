@@ -9,13 +9,13 @@
 //{
 //    std::ostringstream logOs;
 //    logOs<<"Aout::Aout";
-//    sampq = new FrameQueue();
+//    audio_fq = new FrameQueue();
 //    audioq = new PacketQueue();
-//    sampq->pktq = audioq;
-//    sampq->max_size = SAMPLE_QUEUE_SIZE;
-//    sampq->keep_last = 1;
-//    for (int i = 0; i < sampq->max_size; i++)
-//        if (!(sampq->queue[i].frame = av_frame_alloc()))
+//    audio_fq->pktq = audioq;
+//    audio_fq->max_size = SAMPLE_QUEUE_SIZE;
+//    audio_fq->keep_last = 1;
+//    for (int i = 0; i < audio_fq->max_size; i++)
+//        if (!(audio_fq->queue[i].frame = av_frame_alloc()))
 //            logOs<<"fail alloc";
 //
 //    //    packet_queue_init
@@ -43,6 +43,6 @@
 //}
 //
 //Aout::~Aout() {
-//    SafeDelete(sampq);
+//    SafeDelete(audio_fq);
 //    SafeDelete(audioq);
 //}

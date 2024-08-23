@@ -16,7 +16,7 @@
 //    virtual ~Vout();
 //
 //public:
-//    FrameQueue *pictq;   // 视频队列
+//    FrameQueue *video_fq;   // 视频队列
 //    Clock *vidclk;                              // 视频时钟
 //
 //    double frame_timer;                     // 帧计时器

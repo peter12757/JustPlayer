@@ -7,19 +7,18 @@
 FrameQueue::FrameQueue(PacketQueue *pktq, int max_size, int keep_last)
 :pktq(pktq)
 ,max_size(FFMIN(max_size, FRAME_QUEUE_SIZE))
-,keep_last(!!keep_last){
-    int i;
-    for (i = 0; i < max_size; i++) {
+,keep_last(!!keep_last) {
+    for (int i = 0; i < max_size; i++) {
         if (!(queue[i].frame = av_frame_alloc())) {
             AVERROR(ENOMEM);
+            LOGE("!(queue[i].frame = av_frame_alloc()) ERROR");
             isvalid = false;
         }
     }
 }
 
 FrameQueue::~FrameQueue() {
-    int i;
-    for (i = 0; i < max_size; i++) {
+    for (int i = 0; i < max_size; i++) {
         Frame *vp = &queue[i];
         frame_queue_unref_item(vp);
         SafeDelete(vp);

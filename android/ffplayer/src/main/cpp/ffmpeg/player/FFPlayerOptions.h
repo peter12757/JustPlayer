@@ -94,7 +94,7 @@ static const AVOption FFPlayerOptions[] = {
         { "start-on-prepared",                  "automatically start playing on prepared",
           OPTION_OFFSET(start_on_prepared),   OPTION_INT(1, 0, 1) },
 
-        { "video-pictq-size",                   "max picture queue frame count",
+        { "video-video_fq-size",                   "max picture queue frame count",
           OPTION_OFFSET(pictq_size),          OPTION_INT(VIDEO_PICTURE_QUEUE_SIZE_DEFAULT,
                                                          VIDEO_PICTURE_QUEUE_SIZE_MIN,
                                                          VIDEO_PICTURE_QUEUE_SIZE_MAX) },
