@@ -73,6 +73,8 @@ public:
     int seek(long pos);
     void buffering(bool isBuffering);
 
+    void checkbuffering();
+
 private:
     void changeState(PLAYER_STATE state);
 

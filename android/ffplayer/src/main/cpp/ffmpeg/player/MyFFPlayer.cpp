@@ -189,3 +189,7 @@ void MyFFPlayer::buffering(bool isBuffering) {
     //todo
 
 }
+
+void MyFFPlayer::checkbuffering() {
+
+}

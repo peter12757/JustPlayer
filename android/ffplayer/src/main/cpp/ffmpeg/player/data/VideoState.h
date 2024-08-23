@@ -19,6 +19,7 @@
 #include "Decoder.h"
 
 class MyFFPlayer;
+class FFStatistic;
 
 enum ShowMode {
     SHOW_MODE_NONE = -1, SHOW_MODE_VIDEO = 0, SHOW_MODE_WAVES, SHOW_MODE_RDFT, SHOW_MODE_NB
@@ -99,7 +100,7 @@ public:
     bool video_disable;
     AVStream *video_st;
     FFPipenode *node_vdec;
-    Decoder viddec;
+    Decoder *viddec;
 
 
     //subtitle
@@ -109,7 +110,7 @@ public:
     int subtitle_stream;
     bool subtitle_disable;
     AVStream *subtitle_st;
-    Decoder subdec;
+    Decoder *subdec;
 
     //audio
     FrameQueue *sampq;
@@ -123,7 +124,7 @@ public:
     AVSyncType av_sync_type;
     bool audio_disable;
     AVStream *audio_st;
-    Decoder auddec;
+    Decoder *auddec;
 
 
     //read stream input

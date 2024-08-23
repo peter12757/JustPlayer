@@ -124,8 +124,8 @@ void ReadThread::onThreadRun(uint32_t now) {
         return;
     }
     if ((!mediaState->paused || mediaState->completed) &&
-        (!mediaState->audio_st || (mediaState->auddec.finished == mediaState->audioq->serial && mediaState->sampq->frame_queue_nb_remaining() == 0)) &&
-        (!mediaState->video_st || (mediaState->viddec.finished == mediaState->videoq->serial && mediaState->pictq->frame_queue_nb_remaining() == 0))) {
+        (!mediaState->audio_st || (mediaState->auddec->finished == mediaState->audioq->serial && mediaState->sampq->frame_queue_nb_remaining() == 0)) &&
+        (!mediaState->video_st || (mediaState->viddec->finished == mediaState->videoq->serial && mediaState->pictq->frame_queue_nb_remaining() == 0))) {
         if (mediaState->loop != 1 && (!mediaState->loop || --mediaState->loop)) {
             //stream_seek(is, ffp->start_time != AV_NOPTS_VALUE ? ffp->start_time : 0, 0, 0);
             if (!mediaState->seek_req) {
@@ -136,29 +136,30 @@ void ReadThread::onThreadRun(uint32_t now) {
             }
         } else if (mediaState->autoexit) {
 //            ret = AVERROR_EOF;
-            LOGE("mediaState->autoexit AVERROR_EOF")
+            LOGE("mediaState->autoexit AVERROR_EOF");
+            stopThread();
         } else {
             mediaState->stat->track_statistic(mediaState);
             if (mediaState->completed) {
-                av_log(ffp, AV_LOG_INFO, "ffp_toggle_buffering: eof\n");
+                av_log(mediaState, AV_LOG_INFO, "ffp_toggle_buffering: eof\n");
                 // infinite wait may block shutdown
 //                while(!mediaState->abort_request && !mediaState->seek_req)
 //                    SDL_CondWaitTimeout(is->continue_read_thread, wait_mutex, 100);
 //                SDL_UnlockMutex(wait_mutex);
                 if (!mediaState->abort_request)
-                    continue;
+                    return;
             } else {
-                completed = 1;
+                mediaState->completed = 1;
                 mediaState->auto_resume = 0;
 
                 // TODO: 0 it's a bit early to notify complete here
                 mediaState->player->buffering(false);
                 mediaState->player->pause(true);
                 if (mediaState->error) {
-                    av_log(ffp, AV_LOG_INFO, "ffp_toggle_buffering: error: %d\n", mediaState->error);
+                    av_log(mediaState, AV_LOG_INFO, "ffp_toggle_buffering: error: %d\n", mediaState->error);
                     mediaState->player->msg_queue->putEmptyMessage(FFP_MSG_ERROR);
                 } else {
-                    av_log(ffp, AV_LOG_INFO, "ffp_toggle_buffering: completed: OK\n");
+                    av_log(mediaState, AV_LOG_INFO, "ffp_toggle_buffering: completed: OK\n");
                     mediaState->player->msg_queue->putEmptyMessage(FFP_MSG_COMPLETED);
                 }
             }
@@ -257,7 +258,7 @@ void ReadThread::onThreadRun(uint32_t now) {
         int64_t io_tick_counter = SDL_GetTickHR();
         if (abs((int)(io_tick_counter - prev_io_tick_counter)) > BUFFERING_CHECK_PER_MILLISECONDS) {
             prev_io_tick_counter = io_tick_counter;
-            mediaState->player.checkbuffering();
+            mediaState->player->checkbuffering();
         }
     }
 }
@@ -520,9 +521,7 @@ void ReadThread::onStop() {
         avformat_close_input(&mediaState->ic);
 
     if (!mediaState->prepared || !mediaState->abort_request) {
-        //todo notify err???
-//        mediaState->last_error = last_error;
-//        ffp_notify_msg2(ffp, FFP_MSG_ERROR, last_error);
+        mediaState->player->msg_queue->putEmptyMessage(FFP_MSG_ERROR,mediaState->error);
     }
 }
 

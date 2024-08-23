@@ -95,9 +95,9 @@ public:
                queue->nb_packets > min_frames;
     }
 
-    Uint64 SDL_GetTickHR(void)
+    uint64_t SDL_GetTickHR(void)
     {
-        Uint64 clock;
+        uint64_t clock;
 #if defined(__ANDROID__)
         struct timespec now;
 #ifdef CLOCK_MONOTONIC_COARSE
