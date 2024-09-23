@@ -207,7 +207,7 @@ void ReadThread::onThreadRun(uint32_t now) {
                    (char) (0xff & (mediaState->error >> 16)),
                    (char) (0xff & (mediaState->error >> 8)),
                    (char) (0xff & (mediaState->error)),
-                   mediaState->get_error_string(mediaState->error));
+                   VideoState::get_error_string(mediaState->error));
             // break;
         } else {
             mediaState->error = 0;
@@ -265,7 +265,7 @@ void ReadThread::onThreadRun(uint32_t now) {
 
 void ReadThread::onCreate() {
     XThread::onCreate();
-    mediaState->ic->interrupt_callback.callback = mediaState->decode_interrupt_cb;
+    mediaState->ic->interrupt_callback.callback = VideoState::decode_interrupt_cb;
     mediaState->ic->interrupt_callback.opaque = mediaState;
 
     //format

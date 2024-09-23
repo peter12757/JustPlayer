@@ -122,10 +122,6 @@ public:
 #endif
         return (clock);
     }
-
-
-
-
 };
 
 

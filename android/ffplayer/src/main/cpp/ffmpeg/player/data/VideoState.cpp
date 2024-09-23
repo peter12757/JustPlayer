@@ -40,7 +40,7 @@ VideoState::VideoState(MyFFPlayer * player,std::string url,AVInputFormat *iforma
 
     //video
     video_fq = new FrameQueue(videoq,pictq_size,1);
-
+ //
     audio_fq = new FrameQueue(audioq,SAMPLE_QUEUE_SIZE,0);
 
     subpq = new FrameQueue(subtitleq,SUBPICTURE_QUEUE_SIZE,0);

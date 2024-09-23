@@ -80,6 +80,7 @@ AUX_SOURCE_DIRECTORY(player/data FFlayerSrc)
 AUX_SOURCE_DIRECTORY(player/data/audio FFlayerSrc)
 AUX_SOURCE_DIRECTORY(player/data/mediacodec FFlayerSrc)
 AUX_SOURCE_DIRECTORY(player/data/meta FFlayerSrc)
+AUX_SOURCE_DIRECTORY(player/data/base FFlayerSrc)
 AUX_SOURCE_DIRECTORY(player/data/video FFlayerSrc)
 AUX_SOURCE_DIRECTORY(player/data/statistic FFlayerSrc)
 AUX_SOURCE_DIRECTORY(player/config FFlayerSrc)
@@ -122,6 +123,9 @@ target_include_directories(${LIBNAME} PRIVATE
         player/data
         player/data/audio
         player/data/video
+        player/data/base
+        player/data/mediacodec
+        player/data/meta
         player/data/statistic
         player/config
         player/audio
