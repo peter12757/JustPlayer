@@ -86,10 +86,10 @@ void ReadThread::onThreadRun(uint32_t now) {
                 mediaState->player->pause(false);
 #endif
         if (mediaState->auto_resume) {
-            mediaState->pause_req = 0;
+            mediaState->pause_req = false;
             if (mediaState->packet_buffering)
                 mediaState->buffering_on = true;
-            mediaState->auto_resume = 0;
+            mediaState->auto_resume = false;
             mediaState->player->pause(false);
         }
         if (mediaState->pause_req) { mediaState->player->pause(false); }

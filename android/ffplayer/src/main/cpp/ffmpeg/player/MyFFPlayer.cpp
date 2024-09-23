@@ -15,7 +15,7 @@ MyFFPlayer::~MyFFPlayer() {
     SafeDelete(videObj);
 }
 
-int MyFFPlayer::setSurface(ANativeWindow *native_window) {
+int MyFFPlayer::setSurface(ANativeWindow *native_window) const {
     std::ostringstream logOs;
     logOs<< "MyFFPlayer::setSurface";
     //todo mutex?

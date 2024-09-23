@@ -61,7 +61,7 @@ public:
     MyFFPlayer();
     ~MyFFPlayer();
 
-    int setSurface(ANativeWindow *native_window);
+    int setSurface(ANativeWindow *native_window) const;
 
 
     int setDataSource(std::string pString);

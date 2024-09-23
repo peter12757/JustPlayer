@@ -99,7 +99,6 @@ Java_com_eathemeat_player_ffmpeg_FFPlayer_invoke(JNIEnv *env, jobject thiz,jlong
                 break;
             case METHOD_PREPARE: {
                 ret = player->prepare_async();
-
             }
                 break;
             case METHOD_START:{
@@ -125,6 +124,8 @@ Java_com_eathemeat_player_ffmpeg_FFPlayer_invoke(JNIEnv *env, jobject thiz,jlong
             case METHOD_STOP: {
 
             }
+                break;
+            default:
                 break;
 
         }
