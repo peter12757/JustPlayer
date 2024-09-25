@@ -1,0 +1,14 @@
+prefix=/Users/peterxi/work/github/JustPlayer/ffbuild/android/android/armeabi-v7a
+exec_prefix=${prefix}
+libdir=/Users/peterxi/work/github/JustPlayer/ffbuild/android/android/armeabi-v7a/libs
+includedir=/Users/peterxi/work/github/JustPlayer/ffbuild/android/android/armeabi-v7a/include
+
+Name: libavcodec
+Description: FFmpeg codec library
+Version: 61.3.100
+Requires: 
+Requires.private: libavutil >= 59.8.100
+Conflicts:
+Libs: -L${libdir}  -lavcodec 
+Libs.private: -pthread -lm -latomic -lz
+Cflags: -I${includedir}
