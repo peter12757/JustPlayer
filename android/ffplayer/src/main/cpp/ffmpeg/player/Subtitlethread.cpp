@@ -22,8 +22,7 @@ void Subtitlethread::onCreate() {
 
 
 }
-
-void Subtitlethread::onThreadRun(uint32_t now) {
+  void Subtitlethread::onThreadRun(uint32_t now) {
 
 }
 
