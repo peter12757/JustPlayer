@@ -7,13 +7,14 @@
 
 
 #include "VideoState.h"
+#include "../JustLogger.h"
 
 class StreamThread {
 public:
     VideoState *mediaState;
     AVCodecContext *avctx;
     const AVCodec *codec;
-    const std::string forced_codec_name;
+    std::string forced_codec_name;
     AVDictionary *opts;
     const AVDictionaryEntry *t;
     int stream_index = -1;

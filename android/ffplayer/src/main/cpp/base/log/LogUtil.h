@@ -6,6 +6,8 @@
 #define ANDROIDTEST_LOGUTIL_H
 
 #include <android/log.h>
+#include <sstream>
+#include <string>
 #define LOG_TAG "JustPlayer"
 
 

@@ -54,6 +54,8 @@ public:
     MediaMeta *meta;
     int queue_attachments_req;
 
+    bool fast = false;
+
     //buffer???
     PacketQueue *buffer_indicator_queue;
     int infinite_buffer;
@@ -101,6 +103,7 @@ public:
     AVStream *video_st;
     FFPipenode *node_vdec;
     Decoder *viddec;
+    std::string video_codec_name;
 
 
     //subtitle

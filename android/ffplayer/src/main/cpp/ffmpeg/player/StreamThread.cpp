@@ -8,15 +8,7 @@
 
 
 StreamThread::StreamThread(VideoState *is,int stream_index,int stream_lowers)
-:mediaState(is)
-,stream_index(stream_index)
-,stream_lowers(stream_lowers) {
-
-    if (stream_index <0 || stream_index>= mediaState->ic->nb_streams) {
-        log(
-
-                )
-    }
+{
 
 }
 

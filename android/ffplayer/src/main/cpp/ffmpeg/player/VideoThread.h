@@ -7,13 +7,13 @@
 
 
 #include "VideoState.h"
+#include "StreamThread.h"
 
-class VideoThread {
+class VideoThread: StreamThread {
 public:
-    VideoState *mediaState;
 
 
-    VideoThread(VideoState *is);
+    VideoThread(VideoState *is,int stream_index,int stream_lowers);
     ~VideoThread();
 
     //thread
@@ -28,6 +28,10 @@ public:
     bool isQuit() const;
     void resetWakeUpEvent();
     void setMode(ThreadMode mode);
+
+
+    //video
+    int create_hwaccel(AVBufferRef **device_ctx);
 
 };
 
