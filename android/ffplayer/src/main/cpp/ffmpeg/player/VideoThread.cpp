@@ -56,7 +56,8 @@ VideoThread::VideoThread(VideoState *is,int stream_index,int stream_lowers)
         log<<"filter_codec_opts error";
         LOGE("%s",log.str().c_str());
     }
-    if (!av_dict_get(opts, "threads", NULL, 0))
+    if (!av_dict_get(opts, "threads", nullptr, 0))
+
         av_dict_set(&opts, "threads", "auto", 0);
     if (stream_lowers)
         av_dict_set_int(&opts, "lowres", stream_lowers, 0);
@@ -82,7 +83,7 @@ VideoThread::VideoThread(VideoState *is,int stream_index,int stream_lowers)
 
     mediaState->eof = 0;
     mediaState->ic->streams[stream_index]->discard = AVDISCARD_DEFAULT;
-
+    mediaState
 
 
 
