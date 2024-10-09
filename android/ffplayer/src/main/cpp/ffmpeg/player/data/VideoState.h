@@ -43,6 +43,8 @@ public:
     bool autoexit;
     int error;
     int64_t duration;
+    const char *hwaccel = NULL;
+    int autorotate = 1;
 
     int completed = 0;
 
@@ -80,6 +82,7 @@ public:
 
     //使用三方同步同步
     Clock *extclk;
+    int decoder_reorder_pts = -1;
 
     int genpts;//????
 
@@ -104,6 +107,7 @@ public:
     FFPipenode *node_vdec;
     Decoder *viddec;
     std::string video_codec_name;
+    int vfilter_idx;
 
 
     //subtitle
@@ -147,6 +151,11 @@ public:
 
 
     FFStatistic *stat;
+
+    double frame_last_filter_delay;
+    int frame_drops_early;
+    int filter_nbthreads = 0;   //number of filter threads per graph
+    char **vfilters_list = NULL;
 
 
     VideoState(MyFFPlayer * player,std::string url,AVInputFormat *iformat,int av_sync_type);

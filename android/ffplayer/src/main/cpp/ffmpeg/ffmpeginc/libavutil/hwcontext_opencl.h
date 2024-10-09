@@ -19,7 +19,7 @@
 #ifndef AVUTIL_HWCONTEXT_OPENCL_H
 #define AVUTIL_HWCONTEXT_OPENCL_H
 
-#ifdef _APPLE
+#ifdef __APPLE__
 #include <OpenCL/cl.h>
 #else
 #include <CL/cl.h>
@@ -41,7 +41,7 @@
  * OpenCL frame descriptor for pool allocation.
  *
  * In user-allocated pools, AVHWFramesContext.pool must return AVBufferRefs
- * with the data pointer pointing at an object of this playerType describing the
+ * with the data pointer pointing at an object of this type describing the
  * planes of the frame.
  */
 typedef struct AVOpenCLFrameDescriptor {

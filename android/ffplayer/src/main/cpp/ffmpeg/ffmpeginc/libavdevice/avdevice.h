@@ -19,7 +19,13 @@
 #ifndef AVDEVICE_AVDEVICE_H
 #define AVDEVICE_AVDEVICE_H
 
+#include "version_major.h"
+#ifndef HAVE_AV_CONFIG_H
+/* When included as part of the ffmpeg build, only include the major version
+ * to avoid unnecessary rebuilds. When included externally, keep including
+ * the full version information. */
 #include "version.h"
+#endif
 
 /**
  * @file
@@ -34,7 +40,7 @@
  * Libavdevice is a complementary library to @ref libavf "libavformat". It
  * provides various "special" platform-specific muxers and demuxers, e.g. for
  * grabbing devices, audio capture and playback etc. As a consequence, the
- * (de)muxers in libavdevice are of the AVFMT_NOFILE playerType (they use their own
+ * (de)muxers in libavdevice are of the AVFMT_NOFILE type (they use their own
  * I/O functions). The filename passed to avformat_open_input() often does not
  * refer to an actually existing file, but has some special device-specific
  * meaning - e.g. for xcbgrab it is the display name.
@@ -45,10 +51,10 @@
  * @{
  */
 
-#include "../libavutil/log.h"
-#include "../libavutil/opt.h"
-#include "../libavutil/dict.h"
-#include "../libavformat/avformat.h"
+#include "libavutil/log.h"
+#include "libavutil/opt.h"
+#include "libavutil/dict.h"
+#include "libavformat/avformat.h"
 
 /**
  * Return the LIBAVDEVICE_VERSION_INT constant.
@@ -297,8 +303,8 @@ enum AVDevToAppMessageType {
  * Send control message from application to device.
  *
  * @param s         device context.
- * @param type      message playerType.
- * @param data      message data. Exact playerType depends on message playerType.
+ * @param type      message type.
+ * @param data      message data. Exact type depends on message type.
  * @param data_size size of message data.
  * @return >= 0 on success, negative on error.
  *         AVERROR(ENOSYS) when device doesn't implement handler of the message.
@@ -311,7 +317,7 @@ int avdevice_app_to_dev_control_message(struct AVFormatContext *s,
  * Send control message from device to application.
  *
  * @param s         device context.
- * @param type      message playerType.
+ * @param type      message type.
  * @param data      message data. Can be NULL.
  * @param data_size size of message data.
  * @return >= 0 on success, negative on error.
@@ -320,136 +326,6 @@ int avdevice_app_to_dev_control_message(struct AVFormatContext *s,
 int avdevice_dev_to_app_control_message(struct AVFormatContext *s,
                                         enum AVDevToAppMessageType type,
                                         void *data, size_t data_size);
-
-#if FF_API_DEVICE_CAPABILITIES
-/**
- * Following API allows user to probe device capabilities (supported codecs,
- * pixel formats, sample formats, resolutions, channel counts, etc).
- * It is build on top op AVOption API.
- * Queried capabilities make it possible to set up converters of video or audio
- * parameters that fit to the device.
- *
- * List of capabilities that can be queried:
- *  - Capabilities valid for both audio and video devices:
- *    - codec:          supported audio/video codecs.
- *                      playerType: AV_OPT_TYPE_INT (AVCodecID value)
- *  - Capabilities valid for audio devices:
- *    - sample_format:  supported sample formats.
- *                      playerType: AV_OPT_TYPE_INT (AVSampleFormat value)
- *    - sample_rate:    supported sample rates.
- *                      playerType: AV_OPT_TYPE_INT
- *    - channels:       supported number of channels.
- *                      playerType: AV_OPT_TYPE_INT
- *    - channel_layout: supported channel layouts.
- *                      playerType: AV_OPT_TYPE_INT64
- *  - Capabilities valid for video devices:
- *    - pixel_format:   supported pixel formats.
- *                      playerType: AV_OPT_TYPE_INT (AVPixelFormat value)
- *    - window_size:    supported window sizes (describes size of the window size presented to the user).
- *                      playerType: AV_OPT_TYPE_IMAGE_SIZE
- *    - frame_size:     supported frame sizes (describes size of provided video frames).
- *                      playerType: AV_OPT_TYPE_IMAGE_SIZE
- *    - fps:            supported fps values
- *                      playerType: AV_OPT_TYPE_RATIONAL
- *
- * Value of the capability may be set by user using av_opt_set() function
- * and AVDeviceCapabilitiesQuery object. Following queries will
- * limit results to the values matching already set capabilities.
- * For example, setting a codec may impact number of formats or fps values
- * returned during next query. Setting invalid value may limit results to zero.
- *
- * Example of the usage basing on opengl output device:
- *
- * @code
- *  AVFormatContext *oc = NULL;
- *  AVDeviceCapabilitiesQuery *caps = NULL;
- *  AVOptionRanges *ranges;
- *  int ret;
- *
- *  if ((ret = avformat_alloc_output_context2(&oc, NULL, "opengl", NULL)) < 0)
- *      goto fail;
- *  if (avdevice_capabilities_create(&caps, oc, NULL) < 0)
- *      goto fail;
- *
- *  //query codecs
- *  if (av_opt_query_ranges(&ranges, caps, "codec", AV_OPT_MULTI_COMPONENT_RANGE)) < 0)
- *      goto fail;
- *  //pick codec here and set it
- *  av_opt_set(caps, "codec", AV_CODEC_ID_RAWVIDEO, 0);
- *
- *  //query format
- *  if (av_opt_query_ranges(&ranges, caps, "pixel_format", AV_OPT_MULTI_COMPONENT_RANGE)) < 0)
- *      goto fail;
- *  //pick format here and set it
- *  av_opt_set(caps, "pixel_format", AV_PIX_FMT_YUV420P, 0);
- *
- *  //query and set more capabilities
- *
- * fail:
- *  //clean up code
- *  avdevice_capabilities_free(&query, oc);
- *  avformat_free_context(oc);
- * @endcode
- */
-
-/**
- * Structure describes device capabilities.
- *
- * It is used by devices in conjunction with av_device_capabilities AVOption table
- * to implement capabilities probing API based on AVOption API. Should not be used directly.
- */
-typedef struct AVDeviceCapabilitiesQuery {
-    const AVClass *av_class;
-    AVFormatContext *device_context;
-    enum AVCodecID codec;
-    enum AVSampleFormat sample_format;
-    enum AVPixelFormat pixel_format;
-    int sample_rate;
-    int channels;
-    int64_t channel_layout;
-    int window_width;
-    int window_height;
-    int frame_width;
-    int frame_height;
-    AVRational fps;
-} AVDeviceCapabilitiesQuery;
-
-/**
- * AVOption table used by devices to implement device capabilities API. Should not be used by a user.
- */
-attribute_deprecated
-extern const AVOption av_device_capabilities[];
-
-/**
- * Initialize capabilities probing API based on AVOption API.
- *
- * avdevice_capabilities_free() must be called when query capabilities API is
- * not used anymore.
- *
- * @param[out] caps      Device capabilities data. Pointer to a NULL pointer must be passed.
- * @param s              Context of the device.
- * @param device_options An AVDictionary filled with device-private options.
- *                       On return this parameter will be destroyed and replaced with a dict
- *                       containing options that were not found. May be NULL.
- *                       The same options must be passed later to avformat_write_header() for output
- *                       devices or avformat_open_input() for input devices, or at any other place
- *                       that affects device-private options.
- *
- * @return >= 0 on success, negative otherwise.
- */
-attribute_deprecated
-int avdevice_capabilities_create(AVDeviceCapabilitiesQuery **caps, AVFormatContext *s,
-                                 AVDictionary **device_options);
-
-/**
- * Free resources created by avdevice_capabilities_create()
- *
- * @param caps Device capabilities data to be freed.
- * @param s    Context of the device.
- */
-attribute_deprecated
-void avdevice_capabilities_free(AVDeviceCapabilitiesQuery **caps, AVFormatContext *s);
-#endif
 
 /**
  * Structure describes basic parameters of the device.
@@ -488,7 +364,7 @@ int avdevice_list_devices(struct AVFormatContext *s, AVDeviceInfoList **device_l
 /**
  * Convenient function to free result of avdevice_list_devices().
  *
- * @param devices device list to be freed.
+ * @param device_list device list to be freed.
  */
 void avdevice_free_list_devices(AVDeviceInfoList **device_list);
 

@@ -39,6 +39,10 @@ public:
     void resetWakeUpEvent();
     void setMode(ThreadMode mode);
 
+    //sync clock
+    int get_master_sync_type();
+    double get_master_clock();
+
 };
 
 

@@ -21,7 +21,7 @@
 #ifndef AVCODEC_CODEC_DESC_H
 #define AVCODEC_CODEC_DESC_H
 
-#include "../libavutil/avutil.h"
+#include "libavutil/avutil.h"
 
 #include "codec_id.h"
 
@@ -53,14 +53,14 @@ typedef struct AVCodecDescriptor {
      */
     int             props;
     /**
-     * MIME playerType(s) associated with the codec.
+     * MIME type(s) associated with the codec.
      * May be NULL; if not, a NULL-terminated array of MIME types.
-     * The first item is always non-NULL and is the preferred MIME playerType.
+     * The first item is always non-NULL and is the preferred MIME type.
      */
     const char *const *mime_types;
     /**
      * If non-NULL, an array of profiles recognized for this codec.
-     * Terminated with FF_PROFILE_UNKNOWN.
+     * Terminated with AV_PROFILE_UNKNOWN.
      */
     const struct AVProfile *profiles;
 } AVCodecDescriptor;
@@ -90,6 +90,12 @@ typedef struct AVCodecDescriptor {
  * equal.
  */
 #define AV_CODEC_PROP_REORDER       (1 << 3)
+
+/**
+ * Video codec supports separate coding of fields in interlaced frames.
+ */
+#define AV_CODEC_PROP_FIELDS        (1 << 4)
+
 /**
  * Subtitle codec is bitmap based
  * Decoded AVSubtitle data can be read from the AVSubtitleRect->pict field.

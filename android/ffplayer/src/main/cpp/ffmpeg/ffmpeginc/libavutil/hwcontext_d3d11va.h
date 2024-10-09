@@ -31,7 +31,7 @@
  * DXGI_FORMAT_420_OPAQUE. av_hwframe_transfer_data() is not supported for
  * this format. Refer to MSDN for details.
  *
- * av_hwdevice_ctx_create() for this device playerType supports a key named "debug"
+ * av_hwdevice_ctx_create() for this device type supports a key named "debug"
  * for the AVDictionary entry. If this is set to any value, the device creation
  * code will try to load various supported D3D debugging layers.
  */
@@ -100,7 +100,7 @@ typedef struct AVD3D11VADeviceContext {
  * D3D11 frame descriptor for pool allocation.
  *
  * In user-allocated pools, AVHWFramesContext.pool must return AVBufferRefs
- * with the data pointer pointing at an object of this playerType describing the
+ * with the data pointer pointing at an object of this type describing the
  * planes of the frame.
  *
  * This has no use outside of custom allocation, and AVFrame AVBufferRef do not

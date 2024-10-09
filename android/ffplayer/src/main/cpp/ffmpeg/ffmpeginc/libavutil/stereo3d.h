@@ -20,6 +20,7 @@
 
 /**
  * @file
+ * @ingroup lavu_video_stereo3d
  * Stereoscopic video
  */
 
@@ -31,19 +32,15 @@
 #include "frame.h"
 
 /**
- * @addtogroup lavu_video
- * @{
- *
  * @defgroup lavu_video_stereo3d Stereo3D types and functions
- * @{
- */
-
-/**
- * @addtogroup lavu_video_stereo3d
+ * @ingroup lavu_video
+ *
  * A stereoscopic video file consists in multiple views embedded in a single
  * frame, usually describing two views of a scene. This file describes all
  * possible codec-independent view arrangements.
- * */
+ *
+ * @{
+ */
 
 /**
  * List of possible 3D Types
@@ -167,7 +164,7 @@ enum AVStereo3DView {
 #define AV_STEREO3D_FLAG_INVERT     (1 << 0)
 
 /**
- * Stereo 3D playerType: this structure describes how two videos are packed
+ * Stereo 3D type: this structure describes how two videos are packed
  * within a single video surface, with additional information as needed.
  *
  * @note The struct must be allocated with av_stereo3d_alloc() and
@@ -208,9 +205,9 @@ AVStereo3D *av_stereo3d_alloc(void);
 AVStereo3D *av_stereo3d_create_side_data(AVFrame *frame);
 
 /**
- * Provide a human-readable name of a given stereo3d playerType.
+ * Provide a human-readable name of a given stereo3d type.
  *
- * @param type The input stereo3d playerType value.
+ * @param type The input stereo3d type value.
  *
  * @return The name of the stereo3d value, or "unknown".
  */
@@ -226,7 +223,6 @@ const char *av_stereo3d_type_name(unsigned int type);
 int av_stereo3d_from_name(const char *name);
 
 /**
- * @}
  * @}
  */
 

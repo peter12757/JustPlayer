@@ -24,17 +24,18 @@
 #include <stddef.h>
 #include <stdint.h>
 
-#include "../libavutil/attributes.h"
-#include "../libavutil/buffer.h"
-#include "../libavutil/dict.h"
-#include "../libavutil/rational.h"
+#include "libavutil/attributes.h"
+#include "libavutil/buffer.h"
+#include "libavutil/dict.h"
+#include "libavutil/rational.h"
+#include "libavutil/version.h"
 
-#include "../libavcodec/version.h"
+#include "libavcodec/version_major.h"
 
 /**
- * @defgroup lavc_packet AVPacket
+ * @defgroup lavc_packet_side_data AVPacketSideData
  *
- * Types and functions for working with AVPacket.
+ * Types and functions for working with AVPacketSideData.
  * @{
  */
 enum AVPacketSideDataType {
@@ -123,7 +124,7 @@ enum AVPacketSideDataType {
      * This side data contains quality related information from the encoder.
      * @code
      * u32le quality factor of the compressed frame. Allowed range is between 1 (good) and FF_LAMBDA_MAX (bad).
-     * u8    picture playerType
+     * u8    picture type
      * u8    error count
      * u16   reserved
      * u64le[error count] sum of squared differences between encoder in and output
@@ -160,7 +161,7 @@ enum AVPacketSideDataType {
      * the packet may contain "dual mono" audio specific to Japanese DTV
      * and if it is true, recommends only the selected channel to be used.
      * @code
-     * u8    selected channels (0=mail/left, 1=sub/right, 2=both)
+     * u8    selected channels (0=main/left, 1=sub/right, 2=both)
      * @endcode
      */
     AV_PKT_DATA_JP_DUALMONO,
@@ -299,6 +300,37 @@ enum AVPacketSideDataType {
     AV_PKT_DATA_DYNAMIC_HDR10_PLUS,
 
     /**
+     * IAMF Mix Gain Parameter Data associated with the audio frame. This metadata
+     * is in the form of the AVIAMFParamDefinition struct and contains information
+     * defined in sections 3.6.1 and 3.8.1 of the Immersive Audio Model and
+     * Formats standard.
+     */
+    AV_PKT_DATA_IAMF_MIX_GAIN_PARAM,
+
+    /**
+     * IAMF Demixing Info Parameter Data associated with the audio frame. This
+     * metadata is in the form of the AVIAMFParamDefinition struct and contains
+     * information defined in sections 3.6.1 and 3.8.2 of the Immersive Audio Model
+     * and Formats standard.
+     */
+    AV_PKT_DATA_IAMF_DEMIXING_INFO_PARAM,
+
+    /**
+     * IAMF Recon Gain Info Parameter Data associated with the audio frame. This
+     * metadata is in the form of the AVIAMFParamDefinition struct and contains
+     * information defined in sections 3.6.1 and 3.8.3 of the Immersive Audio Model
+     * and Formats standard.
+     */
+    AV_PKT_DATA_IAMF_RECON_GAIN_INFO_PARAM,
+
+    /**
+     * Ambient viewing environment metadata, as defined by H.274. This metadata
+     * should be associated with a video stream and contains data in the form
+     * of the AVAmbientViewingEnvironment struct.
+    */
+    AV_PKT_DATA_AMBIENT_VIEWING_ENVIRONMENT,
+
+    /**
      * The number of side data types.
      * This is not part of the public API/ABI in the sense that it may
      * change when new side data types are added.
@@ -311,11 +343,128 @@ enum AVPacketSideDataType {
 
 #define AV_PKT_DATA_QUALITY_FACTOR AV_PKT_DATA_QUALITY_STATS //DEPRECATED
 
+/**
+ * This structure stores auxiliary information for decoding, presenting, or
+ * otherwise processing the coded stream. It is typically exported by demuxers
+ * and encoders and can be fed to decoders and muxers either in a per packet
+ * basis, or as global side data (applying to the entire coded stream).
+ *
+ * Global side data is handled as follows:
+ * - During demuxing, it may be exported through
+ *   @ref AVStream.codecpar.side_data "AVStream's codec parameters", which can
+ *   then be passed as input to decoders through the
+ *   @ref AVCodecContext.coded_side_data "decoder context's side data", for
+ *   initialization.
+ * - For muxing, it can be fed through @ref AVStream.codecpar.side_data
+ *   "AVStream's codec parameters", typically  the output of encoders through
+ *   the @ref AVCodecContext.coded_side_data "encoder context's side data", for
+ *   initialization.
+ *
+ * Packet specific side data is handled as follows:
+ * - During demuxing, it may be exported through @ref AVPacket.side_data
+ *   "AVPacket's side data", which can then be passed as input to decoders.
+ * - For muxing, it can be fed through @ref AVPacket.side_data "AVPacket's
+ *   side data", typically the output of encoders.
+ *
+ * Different modules may accept or export different types of side data
+ * depending on media type and codec. Refer to @ref AVPacketSideDataType for a
+ * list of defined types and where they may be found or used.
+ */
 typedef struct AVPacketSideData {
     uint8_t *data;
     size_t   size;
     enum AVPacketSideDataType type;
 } AVPacketSideData;
+
+/**
+ * Allocate a new packet side data.
+ *
+ * @param sd    pointer to an array of side data to which the side data should
+ *              be added. *sd may be NULL, in which case the array will be
+ *              initialized.
+ * @param nb_sd pointer to an integer containing the number of entries in
+ *              the array. The integer value will be increased by 1 on success.
+ * @param type  side data type
+ * @param size  desired side data size
+ * @param flags currently unused. Must be zero
+ *
+ * @return pointer to freshly allocated side data on success, or NULL otherwise.
+ */
+AVPacketSideData *av_packet_side_data_new(AVPacketSideData **psd, int *pnb_sd,
+                                          enum AVPacketSideDataType type,
+                                          size_t size, int flags);
+
+/**
+ * Wrap existing data as packet side data.
+ *
+ * @param sd    pointer to an array of side data to which the side data should
+ *              be added. *sd may be NULL, in which case the array will be
+ *              initialized
+ * @param nb_sd pointer to an integer containing the number of entries in
+ *              the array. The integer value will be increased by 1 on success.
+ * @param type  side data type
+ * @param data  a data array. It must be allocated with the av_malloc() family
+ *              of functions. The ownership of the data is transferred to the
+ *              side data array on success
+ * @param size  size of the data array
+ * @param flags currently unused. Must be zero
+ *
+ * @return pointer to freshly allocated side data on success, or NULL otherwise
+ *         On failure, the side data array is unchanged and the data remains
+ *         owned by the caller.
+ */
+AVPacketSideData *av_packet_side_data_add(AVPacketSideData **sd, int *nb_sd,
+                                          enum AVPacketSideDataType type,
+                                          void *data, size_t size, int flags);
+
+/**
+ * Get side information from a side data array.
+ *
+ * @param sd    the array from which the side data should be fetched
+ * @param nb_sd value containing the number of entries in the array.
+ * @param type  desired side information type
+ *
+ * @return pointer to side data if present or NULL otherwise
+ */
+const AVPacketSideData *av_packet_side_data_get(const AVPacketSideData *sd,
+                                                int nb_sd,
+                                                enum AVPacketSideDataType type);
+
+/**
+ * Remove side data of the given type from a side data array.
+ *
+ * @param sd    the array from which the side data should be removed
+ * @param nb_sd pointer to an integer containing the number of entries in
+ *              the array. Will be reduced by the amount of entries removed
+ *              upon return
+ * @param type  side information type
+ */
+void av_packet_side_data_remove(AVPacketSideData *sd, int *nb_sd,
+                                enum AVPacketSideDataType type);
+
+/**
+ * Convenience function to free all the side data stored in an array, and
+ * the array itself.
+ *
+ * @param sd    pointer to array of side data to free. Will be set to NULL
+ *              upon return.
+ * @param nb_sd pointer to an integer containing the number of entries in
+ *              the array. Will be set to 0 upon return.
+ */
+void av_packet_side_data_free(AVPacketSideData **sd, int *nb_sd);
+
+const char *av_packet_side_data_name(enum AVPacketSideDataType type);
+
+/**
+ * @}
+ */
+
+/**
+ * @defgroup lavc_packet AVPacket
+ *
+ * Types and functions for working with AVPacket.
+ * @{
+ */
 
 /**
  * This structure stores compressed data. It is typically exported by demuxers
@@ -447,8 +596,6 @@ typedef struct AVPacketList {
 #define AV_PKT_FLAG_DISPOSABLE 0x0010
 
 enum AVSideDataParamChangeFlags {
-    AV_SIDE_DATA_PARAM_CHANGE_CHANNEL_COUNT  = 0x0001,
-    AV_SIDE_DATA_PARAM_CHANGE_CHANNEL_LAYOUT = 0x0002,
     AV_SIDE_DATA_PARAM_CHANGE_SAMPLE_RATE    = 0x0004,
     AV_SIDE_DATA_PARAM_CHANGE_DIMENSIONS     = 0x0008,
 };
@@ -551,7 +698,7 @@ int av_packet_from_data(AVPacket *pkt, uint8_t *data, int size);
  * Allocate new information of a packet.
  *
  * @param pkt packet
- * @param type side information playerType
+ * @param type side information type
  * @param size side information size
  * @return pointer to fresh allocated data or NULL otherwise
  */
@@ -562,7 +709,7 @@ uint8_t* av_packet_new_side_data(AVPacket *pkt, enum AVPacketSideDataType type,
  * Wrap an existing array as a packet side data.
  *
  * @param pkt packet
- * @param type side information playerType
+ * @param type side information type
  * @param data the side data array. It must be allocated with the av_malloc()
  *             family of functions. The ownership of the data is transferred to
  *             pkt.
@@ -578,7 +725,7 @@ int av_packet_add_side_data(AVPacket *pkt, enum AVPacketSideDataType type,
  * Shrink the already allocated side data buffer
  *
  * @param pkt packet
- * @param type side information playerType
+ * @param type side information type
  * @param size new side information size
  * @return 0 on success, < 0 on failure
  */
@@ -589,15 +736,13 @@ int av_packet_shrink_side_data(AVPacket *pkt, enum AVPacketSideDataType type,
  * Get side information from packet.
  *
  * @param pkt packet
- * @param type desired side information playerType
+ * @param type desired side information type
  * @param size If supplied, *size will be set to the size of the side data
  *             or to zero if the desired side data is not present.
  * @return pointer to data if present or NULL otherwise
  */
 uint8_t* av_packet_get_side_data(const AVPacket *pkt, enum AVPacketSideDataType type,
                                  size_t *size);
-
-const char *av_packet_side_data_name(enum AVPacketSideDataType type);
 
 /**
  * Pack a dictionary for use in side_data.

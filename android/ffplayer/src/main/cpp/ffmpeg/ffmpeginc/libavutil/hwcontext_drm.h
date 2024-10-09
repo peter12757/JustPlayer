@@ -116,7 +116,7 @@ typedef struct AVDRMLayerDescriptor {
  * This is used as the data pointer for AV_PIX_FMT_DRM_PRIME frames.
  * It is also used by user-allocated frame pools - allocating in
  * AVHWFramesContext.pool must return AVBufferRefs which contain
- * an object of this playerType.
+ * an object of this type.
  *
  * The fields of this structure should be set such it can be
  * imported directly by EGL using the EGL_EXT_image_dma_buf_import

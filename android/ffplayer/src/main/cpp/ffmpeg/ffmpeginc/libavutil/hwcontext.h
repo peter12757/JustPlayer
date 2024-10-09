@@ -37,9 +37,8 @@ enum AVHWDeviceType {
     AV_HWDEVICE_TYPE_OPENCL,
     AV_HWDEVICE_TYPE_MEDIACODEC,
     AV_HWDEVICE_TYPE_VULKAN,
+    AV_HWDEVICE_TYPE_D3D12VA,
 };
-
-typedef struct AVHWDeviceInternal AVHWDeviceInternal;
 
 /**
  * This struct aggregates all the (hardware/vendor-specific) "high-level" state,
@@ -63,12 +62,6 @@ typedef struct AVHWDeviceContext {
      * A class for logging. Set by av_hwdevice_ctx_alloc().
      */
     const AVClass *av_class;
-
-    /**
-     * Private data used internally by libavutil. Must not be accessed in any
-     * way by the caller.
-     */
-    AVHWDeviceInternal *internal;
 
     /**
      * This field identifies the underlying API used for hardware access.
@@ -109,8 +102,6 @@ typedef struct AVHWDeviceContext {
     void *user_opaque;
 } AVHWDeviceContext;
 
-typedef struct AVHWFramesInternal AVHWFramesInternal;
-
 /**
  * This struct describes a set or pool of "hardware" frames (i.e. those with
  * data not located in normal system memory). All the frames in the pool are
@@ -126,12 +117,6 @@ typedef struct AVHWFramesContext {
      * A class for logging.
      */
     const AVClass *av_class;
-
-    /**
-     * Private data used internally by libavutil. Must not be accessed in any
-     * way by the caller.
-     */
-    AVHWFramesInternal *internal;
 
     /**
      * A reference to the parent AVHWDeviceContext. This reference is owned and
@@ -152,9 +137,12 @@ typedef struct AVHWFramesContext {
      * The format-specific data, allocated and freed automatically along with
      * this context.
      *
-     * Should be cast by the user to the format-specific context defined in the
-     * corresponding header (hwframe_*.h) and filled as described in the
-     * documentation before calling av_hwframe_ctx_init().
+     * The user shall ignore this field if the corresponding format-specific
+     * header (hwcontext_*.h) does not define a context to be used as
+     * AVHWFramesContext.hwctx.
+     *
+     * Otherwise, it should be cast by the user to said context and filled
+     * as described in the documentation before calling av_hwframe_ctx_init().
      *
      * After any frames using this context are created, the contents of this
      * struct should not be modified by the caller.
@@ -179,7 +167,7 @@ typedef struct AVHWFramesContext {
      * This field may be set by the caller before calling av_hwframe_ctx_init().
      * The buffers returned by calling av_buffer_pool_get() on this pool must
      * have the properties described in the documentation in the corresponding hw
-     * playerType's header (hwcontext_*.h). The pool will be freed strictly before
+     * type's header (hwcontext_*.h). The pool will be freed strictly before
      * this struct's free() callback is invoked.
      *
      * This field may be NULL, then libavutil will attempt to allocate a pool
@@ -190,16 +178,16 @@ typedef struct AVHWFramesContext {
     AVBufferPool *pool;
 
     /**
-     * Initial size of the frame pool. If a device playerType does not support
+     * Initial size of the frame pool. If a device type does not support
      * dynamically resizing the pool, then this is also the maximum pool size.
      *
      * May be set by the caller before calling av_hwframe_ctx_init(). Must be
-     * set if pool is NULL and the device playerType does not support dynamic pools.
+     * set if pool is NULL and the device type does not support dynamic pools.
      */
     int initial_pool_size;
 
     /**
-     * The pixel format identifying the underlying HW surface playerType.
+     * The pixel format identifying the underlying HW surface type.
      *
      * Must be a hwaccel format, i.e. the corresponding descriptor must have the
      * AV_PIX_FMT_FLAG_HWACCEL flag set.
@@ -232,8 +220,8 @@ typedef struct AVHWFramesContext {
 /**
  * Look up an AVHWDeviceType by name.
  *
- * @param name String name of the device playerType (case-insensitive).
- * @return The playerType from enum AVHWDeviceType, or AV_HWDEVICE_TYPE_NONE if
+ * @param name String name of the device type (case-insensitive).
+ * @return The type from enum AVHWDeviceType, or AV_HWDEVICE_TYPE_NONE if
  *         not found.
  */
 enum AVHWDeviceType av_hwdevice_find_type_by_name(const char *name);
@@ -241,7 +229,7 @@ enum AVHWDeviceType av_hwdevice_find_type_by_name(const char *name);
 /** Get the string name of an AVHWDeviceType.
  *
  * @param type Type from enum AVHWDeviceType.
- * @return Pointer to a static string containing the name, or NULL if the playerType
+ * @return Pointer to a static string containing the name, or NULL if the type
  *         is not valid.
  */
 const char *av_hwdevice_get_type_name(enum AVHWDeviceType type);
@@ -249,17 +237,17 @@ const char *av_hwdevice_get_type_name(enum AVHWDeviceType type);
 /**
  * Iterate over supported device types.
  *
- * @param type AV_HWDEVICE_TYPE_NONE initially, then the previous playerType
+ * @param prev AV_HWDEVICE_TYPE_NONE initially, then the previous type
  *             returned by this function in subsequent iterations.
- * @return The next usable device playerType from enum AVHWDeviceType, or
+ * @return The next usable device type from enum AVHWDeviceType, or
  *         AV_HWDEVICE_TYPE_NONE if there are no more.
  */
 enum AVHWDeviceType av_hwdevice_iterate_types(enum AVHWDeviceType prev);
 
 /**
- * Allocate an AVHWDeviceContext for a given hardware playerType.
+ * Allocate an AVHWDeviceContext for a given hardware type.
  *
- * @param type the playerType of the hardware device to allocate.
+ * @param type the type of the hardware device to allocate.
  * @return a reference to the newly created AVHWDeviceContext on success or NULL
  *         on failure.
  */
@@ -276,7 +264,7 @@ AVBufferRef *av_hwdevice_ctx_alloc(enum AVHWDeviceType type);
 int av_hwdevice_ctx_init(AVBufferRef *ref);
 
 /**
- * Open a device of the specified playerType and create an AVHWDeviceContext for it.
+ * Open a device of the specified type and create an AVHWDeviceContext for it.
  *
  * This is a convenience function intended to cover the simple cases. Callers
  * who need to fine-tune device creation/management should open the device
@@ -292,9 +280,9 @@ int av_hwdevice_ctx_init(AVBufferRef *ref);
  *                   will be written here. The reference is owned by the caller
  *                   and must be released with av_buffer_unref() when no longer
  *                   needed. On failure, NULL will be written to this pointer.
- * @param type The playerType of the device to create.
- * @param device A playerType-specific string identifying the device to open.
- * @param opts A dictionary of additional (playerType-specific) options to use in
+ * @param type The type of the device to create.
+ * @param device A type-specific string identifying the device to open.
+ * @param opts A dictionary of additional (type-specific) options to use in
  *             opening the device. The dictionary remains owned by the caller.
  * @param flags currently unused
  *
@@ -304,21 +292,21 @@ int av_hwdevice_ctx_create(AVBufferRef **device_ctx, enum AVHWDeviceType type,
                            const char *device, AVDictionary *opts, int flags);
 
 /**
- * Create a new device of the specified playerType from an existing device.
+ * Create a new device of the specified type from an existing device.
  *
- * If the source device is a device of the target playerType or was originally
+ * If the source device is a device of the target type or was originally
  * derived from such a device (possibly through one or more intermediate
  * devices of other types), then this will return a reference to the
- * existing device of the same playerType as is requested.
+ * existing device of the same type as is requested.
  *
  * Otherwise, it will attempt to derive a new device from the given source
- * device.  If direct derivation to the new playerType is not implemented, it will
+ * device.  If direct derivation to the new type is not implemented, it will
  * attempt the same derivation from each ancestor of the source device in
  * turn looking for an implemented derivation method.
  *
  * @param dst_ctx On success, a reference to the newly-created
  *                AVHWDeviceContext.
- * @param type    The playerType of the new device to create.
+ * @param type    The type of the new device to create.
  * @param src_ctx A reference to an existing AVHWDeviceContext which will be
  *                used to create the new device.
  * @param flags   Currently unused; should be set to zero.
@@ -329,14 +317,14 @@ int av_hwdevice_ctx_create_derived(AVBufferRef **dst_ctx,
                                    AVBufferRef *src_ctx, int flags);
 
 /**
- * Create a new device of the specified playerType from an existing device.
+ * Create a new device of the specified type from an existing device.
  *
  * This function performs the same action as av_hwdevice_ctx_create_derived,
  * however, it is able to set options for the new device to be derived.
  *
  * @param dst_ctx On success, a reference to the newly-created
  *                AVHWDeviceContext.
- * @param type    The playerType of the new device to create.
+ * @param type    The type of the new device to create.
  * @param src_ctx A reference to an existing AVHWDeviceContext which will be
  *                used to create the new device.
  * @param options Options for the new device to create, same format as in
@@ -571,6 +559,10 @@ enum {
  * possible with the given arguments and hwframe setup, while other return
  * values indicate that it failed somehow.
  *
+ * On failure, the destination frame will be left blank, except for the
+ * hw_frames_ctx/format fields thay may have been set by the caller - those will
+ * be preserved as they were.
+ *
  * @param dst Destination frame, to contain the mapping.
  * @param src Source frame, to be mapped.
  * @param flags Some combination of AV_HWFRAME_MAP_* flags.
@@ -587,6 +579,7 @@ int av_hwframe_map(AVFrame *dst, const AVFrame *src, int flags);
  *
  * @param derived_frame_ctx  On success, a reference to the newly created
  *                           AVHWFramesContext.
+ * @param format             The AVPixelFormat for the derived context.
  * @param derived_device_ctx A reference to the device to create the new
  *                           AVHWFramesContext on.
  * @param source_frame_ctx   A reference to an existing AVHWFramesContext

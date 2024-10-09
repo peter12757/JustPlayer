@@ -68,7 +68,7 @@
  */
 
 /**
- * A reference counted buffer playerType. It is opaque and is meant to be used through
+ * A reference counted buffer type. It is opaque and is meant to be used through
  * references (AVBufferRef).
  */
 typedef struct AVBuffer AVBuffer;

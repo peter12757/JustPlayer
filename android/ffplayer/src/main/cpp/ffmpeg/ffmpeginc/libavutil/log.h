@@ -22,8 +22,8 @@
 #define AVUTIL_LOG_H
 
 #include <stdarg.h>
-#include "avutil.h"
 #include "attributes.h"
+#include "version.h"
 
 typedef enum {
     AV_CLASS_CATEGORY_NA = 0,
@@ -66,7 +66,7 @@ struct AVOptionRanges;
 typedef struct AVClass {
     /**
      * The name of the class; usually it is the same name as the
-     * context structure playerType to which the AVClass is associated.
+     * context structure type to which the AVClass is associated.
      */
     const char* class_name;
 

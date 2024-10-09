@@ -30,7 +30,7 @@
  * the display used to master the content (SMPTE 2086:2014).
  *
  * To be used as payload of a AVFrameSideData or AVPacketSideData with the
- * appropriate playerType.
+ * appropriate type.
  *
  * @note The struct should be allocated with av_mastering_display_metadata_alloc()
  *       and its size is not a part of the public ABI.
@@ -90,7 +90,7 @@ AVMasteringDisplayMetadata *av_mastering_display_metadata_create_side_data(AVFra
  * Content light level needed by to transmit HDR over HDMI (CTA-861.3).
  *
  * To be used as payload of a AVFrameSideData or AVPacketSideData with the
- * appropriate playerType.
+ * appropriate type.
  *
  * @note The struct should be allocated with av_content_light_metadata_alloc()
  *       and its size is not a part of the public ABI.

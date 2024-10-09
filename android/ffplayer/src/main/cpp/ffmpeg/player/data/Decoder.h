@@ -21,8 +21,8 @@
 
 class Decoder {
 public:
-    AVPacket pkt;
-    AVPacket pkt_temp;
+    AVPacket *pkt;
+    AVPacket *pkt_temp;
     PacketQueue *queue;
     AVCodecContext *avctx;
     int pkt_serial;

@@ -93,6 +93,7 @@ av_get_detection_bbox(const AVDetectionBBoxHeader *header, unsigned int idx)
  * AVDetectionBBox, and initializes the variables.
  * Can be freed with a normal av_free() call.
  *
+ * @param nb_bboxes number of AVDetectionBBox structures to allocate
  * @param out_size if non-NULL, the size in bytes of the resulting data array is
  * written here.
  */
@@ -100,7 +101,7 @@ AVDetectionBBoxHeader *av_detection_bbox_alloc(uint32_t nb_bboxes, size_t *out_s
 
 /**
  * Allocates memory for AVDetectionBBoxHeader, plus an array of {@code nb_bboxes}
- * AVDetectionBBox, in the given AVFrame {@code frame} as AVFrameSideData of playerType
+ * AVDetectionBBox, in the given AVFrame {@code frame} as AVFrameSideData of type
  * AV_FRAME_DATA_DETECTION_BBOXES and initializes the variables.
  */
 AVDetectionBBoxHeader *av_detection_bbox_create_side_data(AVFrame *frame, uint32_t nb_bboxes);

@@ -22,8 +22,8 @@
 #include <stddef.h>
 #include <stdint.h>
 
-#include "../libavutil/avassert.h"
-#include "../libavutil/frame.h"
+#include "libavutil/avassert.h"
+#include "libavutil/frame.h"
 
 enum AVVideoEncParamsType {
     AV_VIDEO_ENC_PARAMS_NONE = -1,
@@ -98,7 +98,7 @@ typedef struct AVVideoEncParams {
      * Base quantisation parameter for the frame. The final quantiser for a
      * given block in a given plane is obtained from this value, possibly
      * combined with {@code delta_qp} and the per-block delta in a manner
-     * documented for each playerType.
+     * documented for each type.
      */
     int32_t qp;
 
@@ -136,8 +136,8 @@ typedef struct AVVideoBlockParams {
     int32_t delta_qp;
 } AVVideoBlockParams;
 
-/*
- * Get the block at the specified {@code idx}. Must be between 0 and nb_blocks.
+/**
+ * Get the block at the specified {@code idx}. Must be between 0 and nb_blocks - 1.
  */
 static av_always_inline AVVideoBlockParams*
 av_video_enc_params_block(AVVideoEncParams *par, unsigned int idx)
@@ -148,7 +148,7 @@ av_video_enc_params_block(AVVideoEncParams *par, unsigned int idx)
 }
 
 /**
- * Allocates memory for AVVideoEncParams of the given playerType, plus an array of
+ * Allocates memory for AVVideoEncParams of the given type, plus an array of
  * {@code nb_blocks} AVVideoBlockParams and initializes the variables. Can be
  * freed with a normal av_free() call.
  *
@@ -161,7 +161,7 @@ AVVideoEncParams *av_video_enc_params_alloc(enum AVVideoEncParamsType type,
 /**
  * Allocates memory for AVEncodeInfoFrame plus an array of
  * {@code nb_blocks} AVEncodeInfoBlock in the given AVFrame {@code frame}
- * as AVFrameSideData of playerType AV_FRAME_DATA_VIDEO_ENC_PARAMS
+ * as AVFrameSideData of type AV_FRAME_DATA_VIDEO_ENC_PARAMS
  * and initializes the variables.
  */
 AVVideoEncParams*

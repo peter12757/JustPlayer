@@ -45,7 +45,7 @@ typedef struct AVDXVA2DeviceContext {
  */
 typedef struct AVDXVA2FramesContext {
     /**
-     * The surface playerType (e.g. DXVA2_VideoProcessorRenderTarget or
+     * The surface type (e.g. DXVA2_VideoProcessorRenderTarget or
      * DXVA2_VideoDecoderRenderTarget). Must be set by the caller.
      */
     DWORD               surface_type;

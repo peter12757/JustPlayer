@@ -27,7 +27,7 @@
 #define AVUTIL_COMMON_H
 
 #if defined(__cplusplus) && !defined(__STDC_CONSTANT_MACROS) && !defined(UINT64_C)
-//#error missing -D__STDC_CONSTANT_MACROS / #define __STDC_CONSTANT_MACROS
+#error missing -D__STDC_CONSTANT_MACROS / #define __STDC_CONSTANT_MACROS
 #endif
 
 #include <errno.h>
@@ -40,8 +40,15 @@
 #include <string.h>
 
 #include "attributes.h"
+#include "error.h"
 #include "macros.h"
-#include "version.h"
+#include "mem.h"
+
+#ifdef HAVE_AV_CONFIG_H
+#   include "config.h"
+#   include "intmath.h"
+#   include "internal.h"
+#endif /* HAVE_AV_CONFIG_H */
 
 //rounded division & shift
 #define RSHIFT(a,b) ((a) > 0 ? ((a) + ((1<<(b))>>1))>>(b) : ((a) + ((1<<(b))>>1)-1)>>(b))
@@ -58,7 +65,7 @@
 
 /**
  * Absolute value, Note, INT_MIN / INT64_MIN result in undefined behavior as they
- * are not representable as absolute values of their playerType. This is the same
+ * are not representable as absolute values of their type. This is the same
  * as with *abs()
  * @see FFNABS()
  */
@@ -83,11 +90,6 @@
 #define FFABS64U(a) ((a) <= 0 ? -(uint64_t)(a) : (uint64_t)(a))
 
 /* misc math functions */
-
-#ifdef HAVE_AV_CONFIG_H
-#   include "config.h"
-#   include "intmath.h"
-#endif
 
 #ifndef av_ceil_log2
 #   define av_ceil_log2     av_ceil_log2_c
@@ -452,7 +454,7 @@ static av_always_inline av_const int av_parity_c(uint32_t v)
 /**
  * Convert a UTF-8 character (up to 4 bytes) to its 32-bit UCS-4 encoded form.
  *
- * @param val      Output value, must be an lvalue of playerType uint32_t.
+ * @param val      Output value, must be an lvalue of type uint32_t.
  * @param GET_BYTE Expression reading one byte from the input.
  *                 Evaluated up to 7 times (4 for the currently
  *                 assigned Unicode range).  With a memory buffer
@@ -486,7 +488,7 @@ static av_always_inline av_const int av_parity_c(uint32_t v)
 /**
  * Convert a UTF-16 character (2 or 4 bytes) to its 32-bit UCS-4 encoded form.
  *
- * @param val       Output value, must be an lvalue of playerType uint32_t.
+ * @param val       Output value, must be an lvalue of type uint32_t.
  * @param GET_16BIT Expression returning two bytes of UTF-16 data converted
  *                  to native byte order.  Evaluated one or two times.
  * @param ERROR     Expression to be evaluated on invalid input,
@@ -507,10 +509,10 @@ static av_always_inline av_const int av_parity_c(uint32_t v)
 /**
  * @def PUT_UTF8(val, tmp, PUT_BYTE)
  * Convert a 32-bit Unicode character to its UTF-8 encoded form (up to 4 bytes long).
- * @param val is an input-only argument and should be of playerType uint32_t. It holds
+ * @param val is an input-only argument and should be of type uint32_t. It holds
  * a UCS-4 encoded Unicode character that is to be converted to UTF-8. If
  * val is given as a function it is executed only once.
- * @param tmp is a temporary variable and should be of playerType uint8_t. It
+ * @param tmp is a temporary variable and should be of type uint8_t. It
  * represents an intermediate value during conversion that is to be
  * output by PUT_BYTE.
  * @param PUT_BYTE writes the converted UTF-8 bytes to any proper destination.
@@ -543,10 +545,10 @@ static av_always_inline av_const int av_parity_c(uint32_t v)
 /**
  * @def PUT_UTF16(val, tmp, PUT_16BIT)
  * Convert a 32-bit Unicode character to its UTF-16 encoded form (2 or 4 bytes).
- * @param val is an input-only argument and should be of playerType uint32_t. It holds
+ * @param val is an input-only argument and should be of type uint32_t. It holds
  * a UCS-4 encoded Unicode character that is to be converted to UTF-16. If
  * val is given as a function it is executed only once.
- * @param tmp is a temporary variable and should be of playerType uint16_t. It
+ * @param tmp is a temporary variable and should be of type uint16_t. It
  * represents an intermediate value during conversion that is to be
  * output by PUT_16BIT.
  * @param PUT_16BIT writes the converted UTF-16 data to any proper destination
@@ -567,13 +569,5 @@ static av_always_inline av_const int av_parity_c(uint32_t v)
             PUT_16BIT\
         }\
     }\
-
-
-
-#include "mem.h"
-
-#ifdef HAVE_AV_CONFIG_H
-#    include "internal.h"
-#endif /* HAVE_AV_CONFIG_H */
 
 #endif /* AVUTIL_COMMON_H */
