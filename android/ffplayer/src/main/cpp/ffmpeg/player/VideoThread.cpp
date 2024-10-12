@@ -2,6 +2,7 @@
 // Created by Administrator on 2024/9/23.
 //
 
+
 #include "VideoThread.h"
 
 
@@ -135,20 +136,21 @@ void VideoThread::onThreadRun(uint32_t now) {
             LOGE("%s",log.str().c_str());
         }
         graph->nb_threads = mediaState->filter_nbthreads;
-        if ((ret = configure_video_filters(graph, mediaState, mediaState->vfilters_list ? mediaState->vfilters_list[mediaState->vfilter_idx] : NULL, frame)) < 0) {
-            SDL_Event event;
-            event.type = FF_QUIT_EVENT;
-            event.user.data1 = is;
-            SDL_PushEvent(&event);
-            goto the_end;
+        if ((ret = configure_video_filters()) < 0) {
+//            //todo event
+//            SDL_Event event;
+//            event.type = FF_QUIT_EVENT;
+//            event.user.data1 = is;
+//            SDL_PushEvent(&event);
+//            goto the_end;
         }
-        filt_in  = is->in_video_filter;
-        filt_out = is->out_video_filter;
+        filt_in  = mediaState->in_video_filter;
+        filt_out = mediaState->out_video_filter;
         last_w = frame->width;
         last_h = frame->height;
-        last_format = frame->format;
-        last_serial = is->viddec.pkt_serial;
-        last_vfilter_idx = is->vfilter_idx;
+        last_format = static_cast<AVPixelFormat>(frame->format);
+        last_serial = mediaState->viddec->pkt_serial;
+        last_vfilter_idx = mediaState->vfilter_idx;
         frame_rate = av_buffersink_get_frame_rate(filt_out);
     }
 
@@ -293,7 +295,8 @@ int VideoThread::decoder_decode_frame() {
 }
 
 int VideoThread::configure_video_filters() {
-//    enum AVPixelFormat pix_fmts[FF_ARRAY_ELEMS(sdl_texture_format_map)];
+    std::ostringstream log;
+    enum AVPixelFormat pix_fmts[FF_ARRAY_ELEMS(sdl_texture_format_map)];
     char sws_flags_str[512] = "";
     char buffersrc_args[256];
     int ret;
@@ -337,13 +340,16 @@ int VideoThread::configure_video_filters() {
              codecpar->sample_aspect_ratio.num, FFMAX(codecpar->sample_aspect_ratio.den, 1),
              frame->colorspace, frame->color_range);
     if (fr.num && fr.den)
-        av_strlcatf(buffersrc_args, sizeof(buffersrc_args), ":frame_rate=%d/%d", fr.num, fr.den);
+        av_strlcatf(buffersrc_args, sizeof(buffersrc_args), ":frame_rate=%d/%d" , fr.num, fr.den);
 
     if ((ret = avfilter_graph_create_filter(&filt_src,
                                             avfilter_get_by_name("buffer"),
                                             "ffplay_buffer", buffersrc_args, NULL,
-                                            graph)) < 0)
-        goto fail;
+                                            graph)) < 0) {
+        log<<"avfilter_graph_create_filter error"<<ret;
+        LOGE("%s",log.str().c_str());
+
+    }
     par->hw_frames_ctx = frame->hw_frames_ctx;
     ret = av_buffersrc_parameters_set(filt_src, par);
     if (ret < 0)
@@ -388,8 +394,8 @@ int VideoThread::configure_video_filters() {
         if (sd)
             displaymatrix = (int32_t *)sd->data;
         if (!displaymatrix) {
-            const AVPacketSideData *psd = av_packet_side_data_get(is->video_st->codecpar->coded_side_data,
-                                                                  is->video_st->codecpar->nb_coded_side_data,
+            const AVPacketSideData *psd = av_packet_side_data_get(mediaState->video_st->codecpar->coded_side_data,
+                                                                  mediaState->video_st->codecpar->nb_coded_side_data,
                                                                   AV_PKT_DATA_DISPLAYMATRIX);
             if (psd)
                 displaymatrix = (int32_t *)psd->data;
@@ -397,6 +403,7 @@ int VideoThread::configure_video_filters() {
         theta = get_rotation(displaymatrix);
 
         if (fabs(theta - 90) < 1.0) {
+
             INSERT_FILT("transpose", "clock");
         } else if (fabs(theta - 180) < 1.0) {
             INSERT_FILT("hflip", NULL);
@@ -410,7 +417,7 @@ int VideoThread::configure_video_filters() {
         }
     }
 
-    if ((ret = configure_filtergraph(graph, vfilters, filt_src, last_filter)) < 0)
+    if ((ret = configure_filtergraph(graph, mediaState->vfilters, filt_src, last_filter)) < 0)
         goto fail;
 
     mediaState->in_video_filter  = filt_src;

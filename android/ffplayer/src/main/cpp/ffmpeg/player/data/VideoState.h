@@ -108,6 +108,8 @@ public:
     Decoder *viddec;
     std::string video_codec_name;
     int vfilter_idx;
+    AVFilterContext *in_video_filter;   // the first filter in the video chain
+    AVFilterContext *out_video_filter;  // the last filter in the video chain
 
 
     //subtitle
@@ -133,6 +135,8 @@ public:
     AVStream *audio_st;
     Decoder *auddec;
     int volume;
+    AVFilterContext *in_audio_filter;   // the first filter in the audio chain
+    AVFilterContext *out_audio_filter;  // the last filter in the audio chain
 
 
     //read stream input

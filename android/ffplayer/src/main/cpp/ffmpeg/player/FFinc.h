@@ -22,6 +22,7 @@ extern "C"{
 #include "../ffmpeginc/libswscale/swscale.h"
 #include "../ffmpeginc/libavutil/error.h"
 #include "../ffmpeginc/fftool/cmdutils.c"
+#include "../ffmpeginc/libavutil/frame.h"
 
 #include "../ffmpeginc/libavutil/file.h"
 #include "../ffmpeginc/libavutil/mem.h"
