@@ -49,6 +49,10 @@ public:
     void setMode(ThreadMode mode);
 
 
+    //audio thread
+    int configure_audio_filters(const std::stringafilters, int force_output_format);
+    int audio_open(void *opaque, AVChannelLayout *wanted_channel_layout, int wanted_sample_rate, struct AudioParams *audio_hw_params)
+
 };
 
 

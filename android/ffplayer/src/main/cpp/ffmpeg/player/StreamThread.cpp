@@ -9,7 +9,24 @@
 
 StreamThread::StreamThread(VideoState *is,int stream_index,int stream_lowers)
 {
-
+    std::ostringstream log;
+    log<<"VideoThread::VideoThread";
+    if (stream_index <0 || stream_index>= mediaState->ic->nb_streams) {
+        log<<"stream_index error:"<<stream_index;
+        LOGE("%s",log.str().c_str());
+    }
+    avctx = avcodec_alloc_context3(NULL);
+    if (!avctx) {
+        log<<"avctx error:"<< AVERROR(ENOMEM);
+        LOGE("%s",log.str().c_str());
+    }
+    err_code = avcodec_parameters_to_context(avctx,mediaState->ic->streams[stream_index]->codecpar);
+    if (err_code <0) {
+        log<<"avcodec_parameters_to_context error";
+        LOGE("%s",log.str().c_str());
+    }
+    avctx->pkt_timebase = mediaState->ic->streams[stream_index]->time_base;
+    codec = avcodec_find_decoder(avctx->codec_id);
 }
 
 StreamThread::~StreamThread() {

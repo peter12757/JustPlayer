@@ -10,10 +10,10 @@
 #include "FFinc.h"
 
 class AudioParams {
+public:
     int freq;
-    int channels;
-    int64_t channel_layout;
-    AVSampleFormat fmt;
+    AVChannelLayout ch_layout;
+    enum AVSampleFormat fmt;
     int frame_size;
     int bytes_per_sec;
 };

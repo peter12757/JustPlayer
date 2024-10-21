@@ -10,27 +10,13 @@ VideoThread::VideoThread(VideoState *is,int stream_index,int stream_lowers)
         :StreamThread(is,stream_index,stream_lowers)
 {
     std::ostringstream log;
+    log<<"VideoThread::VideoThread";
     frame = av_frame_alloc();
     if (!frame) {
         log<<"frame is null";
         LOGE("%s",log.str().c_str());
     }
-    if (stream_index <0 || stream_index>= mediaState->ic->nb_streams) {
-        log<<"stream_index error:"<<stream_index;
-        LOGE("%s",log.str().c_str());
-    }
-    avctx = avcodec_alloc_context3(NULL);
-    if (!avctx) {
-        log<<"avctx error:"<< AVERROR(ENOMEM);
-        LOGE("%s",log.str().c_str());
-    }
-    err_code = avcodec_parameters_to_context(avctx,mediaState->ic->streams[stream_index]->codecpar);
-    if (err_code <0) {
-        log<<"avcodec_parameters_to_context error";
-        LOGE("%s",log.str().c_str());
-    }
-    avctx->pkt_timebase = mediaState->ic->streams[stream_index]->time_base;
-    codec = avcodec_find_decoder(avctx->codec_id);
+
 
     mediaState->last_video_stream = stream_index;
     forced_codec_name = mediaState->video_codec_name;

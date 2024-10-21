@@ -17,6 +17,7 @@
 #include "FFPipenode.h"
 #include "FFDemuxCacheControl.h"
 #include "Decoder.h"
+#include "audio/AudioParams.h"
 
 class MyFFPlayer;
 class FFStatistic;
@@ -130,6 +131,7 @@ public:
     bool muted;
     int last_audio_stream;
     int audio_stream;
+    std::string audio_codec_name;
     AVSyncType av_sync_type;
     bool audio_disable;
     AVStream *audio_st;
@@ -137,7 +139,9 @@ public:
     int volume;
     AVFilterContext *in_audio_filter;   // the first filter in the audio chain
     AVFilterContext *out_audio_filter;  // the last filter in the audio chain
+    AudioParams *audio_filter_src;
 
+    std::string afilters;   //"set audio filters", "filter_graph"
 
     //read stream input
     int eof;
