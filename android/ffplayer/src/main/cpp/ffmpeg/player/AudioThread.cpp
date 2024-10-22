@@ -5,6 +5,8 @@
 
 #include "AudioThread.h"
 
+#include<cmath>
+
 AudioThread::AudioThread(VideoState *is,int stream_index,int stream_lowers)
         : StreamThread(is,stream_index,stream_lowers)
         {
@@ -98,7 +100,7 @@ void AudioThread::onCreate() {
         LOGE("%s",log.str().c_str());
     }
     mediaState->audio_filter_src->fmt = avctx->sample_fmt;
-    if ((err_code = configure_audio_filters(afilters, 0)) < 0) {
+    if ((err_code = configure_audio_filters(mediaState->afilters, 0)) < 0) {
         log<<"configure_audio_filters error"<<err_code;
         LOGE("%s",log.str().c_str());
     }
@@ -111,11 +113,11 @@ void AudioThread::onCreate() {
         LOGE("%s",log.str().c_str());
     }
     /* prepare audio output */
-    if ((err_code = audio_open(mediaState, &ch_layout, sample_rate, &mediaState->audio_tgt)) < 0) {
+    if ((err_code = audio_open(mediaState, &ch_layout, sample_rate, mediaState->audio_tgt)) < 0) {
         log<<"audio_open error"<<err_code;
         LOGE("%s",log.str().c_str());
     }
-    mediaState->audio_hw_buf_size = ret;
+    mediaState->audio_hw_buf_size = err_code;
     mediaState->audio_src = mediaState->audio_tgt;
     mediaState->audio_buf_size  = 0;
     mediaState->audio_buf_index = 0;

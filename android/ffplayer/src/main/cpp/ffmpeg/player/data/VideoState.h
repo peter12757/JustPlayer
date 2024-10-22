@@ -140,6 +140,16 @@ public:
     AVFilterContext *in_audio_filter;   // the first filter in the audio chain
     AVFilterContext *out_audio_filter;  // the last filter in the audio chain
     AudioParams *audio_filter_src;
+    AudioParams *audio_tgt;
+    AudioParams *audio_src;
+    unsigned int audio_buf_size; /* in bytes */
+    int audio_buf_index; /* in bytes */
+
+    double audio_diff_avg_coef;
+    double audio_diff_threshold;
+    int audio_diff_avg_count;
+
+    int audio_hw_buf_size;
 
     std::string afilters;   //"set audio filters", "filter_graph"
 

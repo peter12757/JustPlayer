@@ -21,6 +21,7 @@ public:
     int last_w = 0;
     int last_h = 0;
     enum AVPixelFormat last_format = AV_PIX_FMT_NONE;
+    AVChannelLayout ch_layout = {static_cast<AVChannelOrder>(0)};
     int last_serial = -1;
     int last_vfilter_idx = 0;
 
@@ -50,7 +51,7 @@ public:
 
 
     //audio thread
-    int configure_audio_filters(const std::stringafilters, int force_output_format);
+    int configure_audio_filters(const std::string afilters, int force_output_format);
     int audio_open(void *opaque, AVChannelLayout *wanted_channel_layout, int wanted_sample_rate, struct AudioParams *audio_hw_params)
 
 };
