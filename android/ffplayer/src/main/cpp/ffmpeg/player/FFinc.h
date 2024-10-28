@@ -16,6 +16,8 @@ extern "C"{
 #include "../ffmpeginc/libavutil/dict.h"
 #include "../ffmpeginc/libavutil/channel_layout.h"
 #include "../ffmpeginc/libavutil/samplefmt.h"
+#include "../ffmpeginc/libavutil/bprint.h"
+#include "../ffmpeginc/libavutil/opt.h"
 #include "../ffmpeginc/libavfilter/buffersrc.h"
 #include "../ffmpeginc/libavfilter/buffersink.h"
 #include "../ffmpeginc/libavutil/fifo.h"

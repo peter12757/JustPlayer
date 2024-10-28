@@ -56,6 +56,7 @@ public:
     const char* wanted_stream_spec[AVMEDIA_TYPE_NB];
     MediaMeta *meta;
     int queue_attachments_req;
+    int filter_nbthreads = 0;   //number of filter threads per graph
 
     bool fast = false;
 
@@ -144,6 +145,7 @@ public:
     AudioParams *audio_src;
     unsigned int audio_buf_size; /* in bytes */
     int audio_buf_index; /* in bytes */
+    AVFilterGraph *agraph;              // audio filter graph
 
     double audio_diff_avg_coef;
     double audio_diff_threshold;
@@ -213,8 +215,6 @@ public:
 
 
     void reset();
-
-
 
 };
 

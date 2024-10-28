@@ -52,7 +52,8 @@ public:
 
     //audio thread
     int configure_audio_filters(const std::string afilters, int force_output_format);
-    int audio_open(void *opaque, AVChannelLayout *wanted_channel_layout, int wanted_sample_rate, struct AudioParams *audio_hw_params)
+    int audio_open(void *opaque, AVChannelLayout *wanted_channel_layout, int wanted_sample_rate, struct AudioParams *audio_hw_params);
+    int configure_filtergraph(AVFilterGraph *graph, const char *filtergraph,AVFilterContext *source_ctx, AVFilterContext *sink_ctx);
 
 };
 

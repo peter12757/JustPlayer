@@ -152,9 +152,9 @@ void AudioThread::onStop() {
 }
 
 int AudioThread::configure_audio_filters(const std::string afilters, int force_output_format) {
-    enum AVSampleFormat sample_fmts[] = { AV_SAMPLE_FMT_S16, AV_SAMPLE_FMT_NONE·11·5 };
+    enum AVSampleFormat sample_fmts[] = { AV_SAMPLE_FMT_S16, AV_SAMPLE_FMT_NONE };
     int sample_rates[2] = { 0, -1 };
-    AVFilterContext *filt_asrc = NULL, *filt_asin k = NULL;
+    AVFilterContext *filt_asrc = NULL, *filt_asink = NULL;
     char aresample_swr_opts[512] = "";
     const AVDictionaryEntry *e = NULL;
     AVBPrint bp;
@@ -165,7 +165,7 @@ int AudioThread::configure_audio_filters(const std::string afilters, int force_o
     avfilter_graph_free(&mediaState->agraph);
     if (!(mediaState->agraph = avfilter_graph_alloc()))
         return AVERROR(ENOMEM);
-    mediaState->agraph->nb_threads = filter_nbthreads;
+    mediaState->agraph->nb_threads = mediaState->filter_nbthreads;
 
     av_bprint_init(&bp, 0, AV_BPRINT_SIZE_AUTOMATIC);
 
@@ -173,14 +173,14 @@ int AudioThread::configure_audio_filters(const std::string afilters, int force_o
         av_strlcatf(aresample_swr_opts, sizeof(aresample_swr_opts), "%s=%s:", e->key, e->value);
     if (strlen(aresample_swr_opts))
         aresample_swr_opts[strlen(aresample_swr_opts)-1] = '\0';
-    av_opt_set(mediaState->agraph, "aresample_swr_opts", aresample_swr_opts, 0);
+    av_opt_set(&mediaState->agraph, "aresample_swr_opts", aresample_swr_opts, 0);
 
-    av_channel_layout_describe_bprint(&mediaState->audio_filter_src.ch_layout, &bp);
+    av_channel_layout_describe_bprint(&mediaState->audio_filter_src->ch_layout, &bp);
 
     ret = snprintf(asrc_args, sizeof(asrc_args),
                    "sample_rate=%d:sample_fmt=%s:time_base=%d/%d:channel_layout=%s",
-                   mediaState->audio_filter_src.freq, av_get_sample_fmt_name(mediaState->audio_filter_src.fmt),
-                   1, mediaState->audio_filter_src.freq, bp.str);
+                   mediaState->audio_filter_src->freq, av_get_sample_fmt_name(mediaState->audio_filter_src->fmt),
+                   1, mediaState->audio_filter_src->freq, bp.str);
 
     ret = avfilter_graph_create_filter(&filt_asrc,
                                        avfilter_get_by_name("abuffer"), "ffplay_abuffer",
@@ -202,8 +202,8 @@ int AudioThread::configure_audio_filters(const std::string afilters, int force_o
 
     if (force_output_format) {
         av_bprint_clear(&bp);
-        av_channel_layout_describe_bprint(&mediaState->audio_tgt.ch_layout, &bp);
-        sample_rates   [0] = mediaState->audio_tgt.freq;
+        av_channel_layout_describe_bprint(&mediaState->audio_tgt->ch_layout, &bp);
+        sample_rates   [0] = mediaState->audio_tgt->freq;
         if ((ret = av_opt_set_int(filt_asink, "all_channel_counts", 0, AV_OPT_SEARCH_CHILDREN)) < 0)
             goto end;
         if ((ret = av_opt_set(filt_asink, "ch_layouts", bp.str, AV_OPT_SEARCH_CHILDREN)) < 0)
@@ -230,77 +230,119 @@ int AudioThread::configure_audio_filters(const std::string afilters, int force_o
 
 int AudioThread::audio_open(void *opaque, AVChannelLayout *wanted_channel_layout,
                             int wanted_sample_rate, struct AudioParams *audio_hw_params) {
-    SDL_AudioSpec wanted_spec, spec;
-    const char *env;
-    static const int next_nb_channels[] = {0, 0, 1, 6, 2, 6, 4, 6};
-    static const int next_sample_rates[] = {0, 44100, 48000, 96000, 192000};
-    int next_sample_rate_idx = FF_ARRAY_ELEMS(next_sample_rates) - 1;
-    int wanted_nb_channels = wanted_channel_layout->nb_channels;
-
-    env = SDL_getenv("SDL_AUDIO_CHANNELS");
-    if (env) {
-        wanted_nb_channels = atoi(env);
-        av_channel_layout_uninit(wanted_channel_layout);
-        av_channel_layout_default(wanted_channel_layout, wanted_nb_channels);
-    }
-    if (wanted_channel_layout->order != AV_CHANNEL_ORDER_NATIVE) {
-        av_channel_layout_uninit(wanted_channel_layout);
-        av_channel_layout_default(wanted_channel_layout, wanted_nb_channels);
-    }
-    wanted_nb_channels = wanted_channel_layout->nb_channels;
-    wanted_spec.channels = wanted_nb_channels;
-    wanted_spec.freq = wanted_sample_rate;
-    if (wanted_spec.freq <= 0 || wanted_spec.channels <= 0) {
-        av_logger(NULL, AV_logger_ERROR, "Invalid sample rate or channel count!\n");
-        return -1;
-    }
-    while (next_sample_rate_idx && next_sample_rates[next_sample_rate_idx] >= wanted_spec.freq)
-        next_sample_rate_idx--;
-    wanted_spec.format = AUDIO_S16SYS;
-    wanted_spec.silence = 0;
-    wanted_spec.samples = FFMAX(SDL_AUDIO_MIN_BUFFER_SIZE, 2 << av_logger2(wanted_spec.freq / SDL_AUDIO_MAX_CALLBACKS_PER_SEC));
-    wanted_spec.callback = sdl_audio_callback;
-    wanted_spec.userdata = opaque;
-    while (!(audio_dev = SDL_OpenAudioDevice(NULL, 0, &wanted_spec, &spec, SDL_AUDIO_ALLOW_FREQUENCY_CHANGE | SDL_AUDIO_ALLOW_CHANNELS_CHANGE))) {
-        av_logger(NULL, AV_logger_WARNING, "SDL_OpenAudio (%d channels, %d Hz): %s\n",
-               wanted_spec.channels, wanted_spec.freq, SDL_GetError());
-        wanted_spec.channels = next_nb_channels[FFMIN(7, wanted_spec.channels)];
-        if (!wanted_spec.channels) {
-            wanted_spec.freq = next_sample_rates[next_sample_rate_idx--];
-            wanted_spec.channels = wanted_nb_channels;
-            if (!wanted_spec.freq) {
-                av_logger(NULL, AV_logger_ERROR,
-                       "No more combinations to try, audio open failed\n");
-                return -1;
-            }
-        }
-        av_channel_layout_default(wanted_channel_layout, wanted_spec.channels);
-    }
-    if (spec.format != AUDIO_S16SYS) {
-        av_logger(NULL, AV_logger_ERROR,
-               "SDL advised audio format %d is not supported!\n", spec.format);
-        return -1;
-    }
-    if (spec.channels != wanted_spec.channels) {
-        av_channel_layout_uninit(wanted_channel_layout);
-        av_channel_layout_default(wanted_channel_layout, spec.channels);
-        if (wanted_channel_layout->order != AV_CHANNEL_ORDER_NATIVE) {
-            av_logger(NULL, AV_logger_ERROR,
-                   "SDL advised channel count %d is not supported!\n", spec.channels);
-            return -1;
-        }
-    }
-
-    audio_hw_params->fmt = AV_SAMPLE_FMT_S16;
-    audio_hw_params->freq = spec.freq;
-    if (av_channel_layout_copy(&audio_hw_params->ch_layout, wanted_channel_layout) < 0)
-        return -1;
-    audio_hw_params->frame_size = av_samples_get_buffer_size(NULL, audio_hw_params->ch_layout.nb_channels, 1, audio_hw_params->fmt, 1);
-    audio_hw_params->bytes_per_sec = av_samples_get_buffer_size(NULL, audio_hw_params->ch_layout.nb_channels, audio_hw_params->freq, audio_hw_params->fmt, 1);
-    if (audio_hw_params->bytes_per_sec <= 0 || audio_hw_params->frame_size <= 0) {
-        av_logger(NULL, AV_logger_ERROR, "av_samples_get_buffer_size failed\n");
-        return -1;
-    }
-    return spec.size;
+//    SDL_AudioSpec wanted_spec, spec;
+//    const char *env;
+//    static const int next_nb_channels[] = {0, 0, 1, 6, 2, 6, 4, 6};
+//    static const int next_sample_rates[] = {0, 44100, 48000, 96000, 192000};
+//    int next_sample_rate_idx = FF_ARRAY_ELEMS(next_sample_rates) - 1;
+//    int wanted_nb_channels = wanted_channel_layout->nb_channels;
+//
+//    env = SDL_getenv("SDL_AUDIO_CHANNELS");
+//    if (env) {
+//        wanted_nb_channels = atoi(env);
+//        av_channel_layout_uninit(wanted_channel_layout);
+//        av_channel_layout_default(wanted_channel_layout, wanted_nb_channels);
+//    }
+//    if (wanted_channel_layout->order != AV_CHANNEL_ORDER_NATIVE) {
+//        av_channel_layout_uninit(wanted_channel_layout);
+//        av_channel_layout_default(wanted_channel_layout, wanted_nb_channels);
+//    }
+//    wanted_nb_channels = wanted_channel_layout->nb_channels;
+//    wanted_spec.channels = wanted_nb_channels;
+//    wanted_spec.freq = wanted_sample_rate;
+//    if (wanted_spec.freq <= 0 || wanted_spec.channels <= 0) {
+//        av_logger(NULL, AV_logger_ERROR, "Invalid sample rate or channel count!\n");
+//        return -1;
+//    }
+//    while (next_sample_rate_idx && next_sample_rates[next_sample_rate_idx] >= wanted_spec.freq)
+//        next_sample_rate_idx--;
+//    wanted_spec.format = AUDIO_S16SYS;
+//    wanted_spec.silence = 0;
+//    wanted_spec.samples = FFMAX(SDL_AUDIO_MIN_BUFFER_SIZE, 2 << av_logger2(wanted_spec.freq / SDL_AUDIO_MAX_CALLBACKS_PER_SEC));
+//    wanted_spec.callback = sdl_audio_callback;
+//    wanted_spec.userdata = opaque;
+//    while (!(audio_dev = SDL_OpenAudioDevice(NULL, 0, &wanted_spec, &spec, SDL_AUDIO_ALLOW_FREQUENCY_CHANGE | SDL_AUDIO_ALLOW_CHANNELS_CHANGE))) {
+//        av_logger(NULL, AV_logger_WARNING, "SDL_OpenAudio (%d channels, %d Hz): %s\n",
+//               wanted_spec.channels, wanted_spec.freq, SDL_GetError());
+//        wanted_spec.channels = next_nb_channels[FFMIN(7, wanted_spec.channels)];
+//        if (!wanted_spec.channels) {
+//            wanted_spec.freq = next_sample_rates[next_sample_rate_idx--];
+//            wanted_spec.channels = wanted_nb_channels;
+//            if (!wanted_spec.freq) {
+//                av_logger(NULL, AV_logger_ERROR,
+//                       "No more combinations to try, audio open failed\n");
+//                return -1;
+//            }
+//        }
+//        av_channel_layout_default(wanted_channel_layout, wanted_spec.channels);
+//    }
+//    if (spec.format != AUDIO_S16SYS) {
+//        av_logger(NULL, AV_logger_ERROR,
+//               "SDL advised audio format %d is not supported!\n", spec.format);
+//        return -1;
+//    }
+//    if (spec.channels != wanted_spec.channels) {
+//        av_channel_layout_uninit(wanted_channel_layout);
+//        av_channel_layout_default(wanted_channel_layout, spec.channels);
+//        if (wanted_channel_layout->order != AV_CHANNEL_ORDER_NATIVE) {
+//            av_logger(NULL, AV_logger_ERROR,
+//                   "SDL advised channel count %d is not supported!\n", spec.channels);
+//            return -1;
+//        }
+//    }
+//
+//    audio_hw_params->fmt = AV_SAMPLE_FMT_S16;
+//    audio_hw_params->freq = spec.freq;
+//    if (av_channel_layout_copy(&audio_hw_params->ch_layout, wanted_channel_layout) < 0)
+//        return -1;
+//    audio_hw_params->frame_size = av_samples_get_buffer_size(NULL, audio_hw_params->ch_layout.nb_channels, 1, audio_hw_params->fmt, 1);
+//    audio_hw_params->bytes_per_sec = av_samples_get_buffer_size(NULL, audio_hw_params->ch_layout.nb_channels, audio_hw_params->freq, audio_hw_params->fmt, 1);
+//    if (audio_hw_params->bytes_per_sec <= 0 || audio_hw_params->frame_size <= 0) {
+//        av_logger(NULL, AV_logger_ERROR, "av_samples_get_buffer_size failed\n");
+//        return -1;
+//    }
+//    return spec.size;
     return 0;
+}
+
+int AudioThread::configure_filtergraph(AVFilterGraph *graph, const char *filtergraph,
+                                       AVFilterContext *source_ctx, AVFilterContext *sink_ctx) {
+    int ret, i;
+    int nb_filters = graph->nb_filters;
+    AVFilterInOut *outputs = NULL, *inputs = NULL;
+
+    if (filtergraph) {
+        outputs = avfilter_inout_alloc();
+        inputs  = avfilter_inout_alloc();
+        if (!outputs || !inputs) {
+            ret = AVERROR(ENOMEM);
+            goto fail;
+        }
+
+        outputs->name       = av_strdup("in");
+        outputs->filter_ctx = source_ctx;
+        outputs->pad_idx    = 0;
+        outputs->next       = NULL;
+
+        inputs->name        = av_strdup("out");
+        inputs->filter_ctx  = sink_ctx;
+        inputs->pad_idx     = 0;
+        inputs->next        = NULL;
+
+        if ((ret = avfilter_graph_parse_ptr(graph, filtergraph, &inputs, &outputs, NULL)) < 0)
+            goto fail;
+    } else {
+        if ((ret = avfilter_link(source_ctx, 0, sink_ctx, 0)) < 0)
+            goto fail;
+    }
+
+    /* Reorder the filters to ensure that inputs of the custom filters are merged first */
+    for (i = 0; i < graph->nb_filters - nb_filters; i++)
+        FFSWAP(AVFilterContext*, graph->filters[i], graph->filters[i + nb_filters]);
+
+    ret = avfilter_graph_config(graph, NULL);
+    fail:
+    avfilter_inout_free(&outputs);
+    avfilter_inout_free(&inputs);
+    return ret;
 }
