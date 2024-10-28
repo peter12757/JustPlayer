@@ -10,12 +10,12 @@
 AudioThread::AudioThread(VideoState *is,int stream_index,int stream_lowers)
         : StreamThread(is,stream_index,stream_lowers)
         {
-    std::ostringstream log;
-    log<<"VideoThread::VideoThread ";
+    std::ostringstream logger;
+    logger<<"VideoThread::VideoThread ";
     frame = av_frame_alloc();
             if (!frame) {
-                log<<"frame is null";
-                LOGE("%s",log.str().c_str());
+                logger<<"frame is null";
+                LOGE("%s",logger.str().c_str());
             }
             mediaState->last_audio_stream = stream_index;
             forced_codec_name = mediaState->audio_codec_name;
@@ -29,23 +29,23 @@ AudioThread::~AudioThread() {
 }
 
 void AudioThread::onCreate() {
-    std::ostringstream log;
-    log<<"AudioThread::onCreate";
+    std::ostringstream logger;
+    logger<<"AudioThread::onCreate";
     if (!forced_codec_name.empty()) {
         codec = avcodec_find_decoder_by_name(forced_codec_name.c_str());
     }
     if (!codec) {
         if (forced_codec_name.empty()) {
-            log<<"No decoder could be found for codec "<<avcodec_get_name(avctx->codec_id);
+            logger<<"No decoder could be found for codec "<<avcodec_get_name(avctx->codec_id);
         }else {
-            log<<"No codec could be found with name "<<forced_codec_name;
+            logger<<"No codec could be found with name "<<forced_codec_name;
         }
-        log<< AVERROR(EINVAL);
-        LOGE("%s",log.str().c_str());
+        logger<< AVERROR(EINVAL);
+        LOGE("%s",logger.str().c_str());
     }
     avctx->codec_id = codec->id;
     if (stream_lowers > codec->max_lowres) {
-        log<<"The maximum value for lowres supported by the decoder is "<<codec->max_lowres<<"\n";
+        logger<<"The maximum value for lowres supported by the decoder is "<<codec->max_lowres<<"\n";
         stream_lowers = codec->max_lowres;
     }
     avctx->lowres = stream_lowers;
@@ -55,8 +55,8 @@ void AudioThread::onCreate() {
     err_code = filter_codec_opts(mediaState->codec_opts, avctx->codec_id, mediaState->ic,
                                  mediaState->ic->streams[stream_index], codec, &opts);
     if (err_code < 0) {
-        log<<"filter_codec_opts error";
-        LOGE("%s",log.str().c_str());
+        logger<<"filter_codec_opts error";
+        LOGE("%s",logger.str().c_str());
     }
     if (!av_dict_get(opts, "threads", nullptr, 0))
         av_dict_set(&opts, "threads", "auto", 0);
@@ -67,19 +67,19 @@ void AudioThread::onCreate() {
 
     err_code = create_hwaccel(&avctx->hw_device_ctx);
     if (err_code < 0) {
-        log<<"create_hwaccel error";
-        LOGE("%s",log.str().c_str());
+        logger<<"create_hwaccel error";
+        LOGE("%s",logger.str().c_str());
     }
 
     if ((err_code = avcodec_open2(avctx, codec, &opts)) < 0) {
-        log<<"avcodec_open2 error";
-        LOGE("%s",log.str().c_str());
+        logger<<"avcodec_open2 error";
+        LOGE("%s",logger.str().c_str());
     }
     if ((t = av_dict_get(opts, "", NULL, AV_DICT_IGNORE_SUFFIX))) {
         av_log(NULL, AV_LOG_ERROR, "Option %s not found.\n", t->key);
         err_code =  AVERROR_OPTION_NOT_FOUND;
-        log<<"AVERROR_OPTION_NOT_FOUND error";
-        LOGE("%s",log.str().c_str());
+        logger<<"AVERROR_OPTION_NOT_FOUND error";
+        LOGE("%s",logger.str().c_str());
     }
 
 
@@ -88,7 +88,7 @@ void AudioThread::onCreate() {
     mediaState->video_stream = stream_index;
     mediaState->video_st = mediaState->ic->streams[stream_index];
     mediaState->viddec = new Decoder(avctx,mediaState->videoq);
-    LOGD("%s",log.str().c_str());
+    LOGD("%s",logger.str().c_str());
 
     //audio type
     AVFilterContext *sink;
@@ -96,26 +96,26 @@ void AudioThread::onCreate() {
     mediaState->audio_filter_src->freq = avctx->sample_rate;
     err_code = av_channel_layout_copy(&mediaState->audio_filter_src->ch_layout, &avctx->ch_layout);
     if (err_code < 0) {
-        log<<"av_channel_layout_copy err";
-        LOGE("%s",log.str().c_str());
+        logger<<"av_channel_layout_copy err";
+        LOGE("%s",logger.str().c_str());
     }
     mediaState->audio_filter_src->fmt = avctx->sample_fmt;
     if ((err_code = configure_audio_filters(mediaState->afilters, 0)) < 0) {
-        log<<"configure_audio_filters error"<<err_code;
-        LOGE("%s",log.str().c_str());
+        logger<<"configure_audio_filters error"<<err_code;
+        LOGE("%s",logger.str().c_str());
     }
 
     sink = mediaState->out_audio_filter;
     sample_rate    = av_buffersink_get_sample_rate(sink);
     err_code = av_buffersink_get_ch_layout(sink, &ch_layout);
     if (err_code < 0) {
-        log<<"av_buffersink_get_ch_layout error"<<err_code;
-        LOGE("%s",log.str().c_str());
+        logger<<"av_buffersink_get_ch_layout error"<<err_code;
+        LOGE("%s",logger.str().c_str());
     }
     /* prepare audio output */
     if ((err_code = audio_open(mediaState, &ch_layout, sample_rate, mediaState->audio_tgt)) < 0) {
-        log<<"audio_open error"<<err_code;
-        LOGE("%s",log.str().c_str());
+        logger<<"audio_open error"<<err_code;
+        LOGE("%s",logger.str().c_str());
     }
     mediaState->audio_hw_buf_size = err_code;
     mediaState->audio_src = mediaState->audio_tgt;
@@ -127,13 +127,16 @@ void AudioThread::onCreate() {
     mediaState->audio_diff_avg_count = 0;
     /* since we do not have a precise anough audio FIFO fullness,
        we correct audio sync only if larger than this threshold */
-    mediaState->audio_diff_threshold = (double)(mediaState->audio_hw_buf_size) / mediaState->audio_tgt.bytes_per_sec;
+    mediaState->audio_diff_threshold = (double)(mediaState->audio_hw_buf_size) / mediaState->audio_tgt->bytes_per_sec;
 
     mediaState->audio_stream = stream_index;
-    mediaState->audio_st = ic->streams[stream_index];
+    mediaState->audio_st = mediaState->ic->streams[stream_index];
+    mediaState->audioq = new
 
-    if ((ret = decoder_init(&mediaState->auddec, avctx, &mediaState->audioq, mediaState->continue_read_thread)) < 0)
-        goto fail;
+    if ((err_code = decoder_init(&mediaState->auddec, avctx, &mediaState->audioq)) < 0) {
+        logger<<"av_buffersink_get_ch_layout error"<<err_code;
+        LOGE("%s",logger.str().c_str());
+    }
     if (mediaState->ic->iformat->flags & AVFMT_NOTIMESTAMPS) {
         mediaState->auddec.start_pts = mediaState->audio_st->start_time;
         mediaState->auddec.start_pts_tb = mediaState->audio_st->time_base;
@@ -148,14 +151,15 @@ void AudioThread::onStop() {
 
 }
 
-int AudioThread::configure_audio_filters(const std::stringafilters, int force_output_format) {
-    enum AVSampleFormat sample_fmts[] = { AV_SAMPLE_FMT_S16, AV_SAMPLE_FMT_NONE };
+int AudioThread::configure_audio_filters(const std::string afilters, int force_output_format) {
+    enum AVSampleFormat sample_fmts[] = { AV_SAMPLE_FMT_S16, AV_SAMPLE_FMT_NONE·11·5 };
     int sample_rates[2] = { 0, -1 };
-    AVFilterContext *filt_asrc = NULL, *filt_asink = NULL;
+    AVFilterContext *filt_asrc = NULL, *filt_asin k = NULL;
     char aresample_swr_opts[512] = "";
     const AVDictionaryEntry *e = NULL;
     AVBPrint bp;
     char asrc_args[256];
+
     int ret;
 
     avfilter_graph_free(&mediaState->agraph);
@@ -247,25 +251,25 @@ int AudioThread::audio_open(void *opaque, AVChannelLayout *wanted_channel_layout
     wanted_spec.channels = wanted_nb_channels;
     wanted_spec.freq = wanted_sample_rate;
     if (wanted_spec.freq <= 0 || wanted_spec.channels <= 0) {
-        av_log(NULL, AV_LOG_ERROR, "Invalid sample rate or channel count!\n");
+        av_logger(NULL, AV_logger_ERROR, "Invalid sample rate or channel count!\n");
         return -1;
     }
     while (next_sample_rate_idx && next_sample_rates[next_sample_rate_idx] >= wanted_spec.freq)
         next_sample_rate_idx--;
     wanted_spec.format = AUDIO_S16SYS;
     wanted_spec.silence = 0;
-    wanted_spec.samples = FFMAX(SDL_AUDIO_MIN_BUFFER_SIZE, 2 << av_log2(wanted_spec.freq / SDL_AUDIO_MAX_CALLBACKS_PER_SEC));
+    wanted_spec.samples = FFMAX(SDL_AUDIO_MIN_BUFFER_SIZE, 2 << av_logger2(wanted_spec.freq / SDL_AUDIO_MAX_CALLBACKS_PER_SEC));
     wanted_spec.callback = sdl_audio_callback;
     wanted_spec.userdata = opaque;
     while (!(audio_dev = SDL_OpenAudioDevice(NULL, 0, &wanted_spec, &spec, SDL_AUDIO_ALLOW_FREQUENCY_CHANGE | SDL_AUDIO_ALLOW_CHANNELS_CHANGE))) {
-        av_log(NULL, AV_LOG_WARNING, "SDL_OpenAudio (%d channels, %d Hz): %s\n",
+        av_logger(NULL, AV_logger_WARNING, "SDL_OpenAudio (%d channels, %d Hz): %s\n",
                wanted_spec.channels, wanted_spec.freq, SDL_GetError());
         wanted_spec.channels = next_nb_channels[FFMIN(7, wanted_spec.channels)];
         if (!wanted_spec.channels) {
             wanted_spec.freq = next_sample_rates[next_sample_rate_idx--];
             wanted_spec.channels = wanted_nb_channels;
             if (!wanted_spec.freq) {
-                av_log(NULL, AV_LOG_ERROR,
+                av_logger(NULL, AV_logger_ERROR,
                        "No more combinations to try, audio open failed\n");
                 return -1;
             }
@@ -273,7 +277,7 @@ int AudioThread::audio_open(void *opaque, AVChannelLayout *wanted_channel_layout
         av_channel_layout_default(wanted_channel_layout, wanted_spec.channels);
     }
     if (spec.format != AUDIO_S16SYS) {
-        av_log(NULL, AV_LOG_ERROR,
+        av_logger(NULL, AV_logger_ERROR,
                "SDL advised audio format %d is not supported!\n", spec.format);
         return -1;
     }
@@ -281,7 +285,7 @@ int AudioThread::audio_open(void *opaque, AVChannelLayout *wanted_channel_layout
         av_channel_layout_uninit(wanted_channel_layout);
         av_channel_layout_default(wanted_channel_layout, spec.channels);
         if (wanted_channel_layout->order != AV_CHANNEL_ORDER_NATIVE) {
-            av_log(NULL, AV_LOG_ERROR,
+            av_logger(NULL, AV_logger_ERROR,
                    "SDL advised channel count %d is not supported!\n", spec.channels);
             return -1;
         }
@@ -294,7 +298,7 @@ int AudioThread::audio_open(void *opaque, AVChannelLayout *wanted_channel_layout
     audio_hw_params->frame_size = av_samples_get_buffer_size(NULL, audio_hw_params->ch_layout.nb_channels, 1, audio_hw_params->fmt, 1);
     audio_hw_params->bytes_per_sec = av_samples_get_buffer_size(NULL, audio_hw_params->ch_layout.nb_channels, audio_hw_params->freq, audio_hw_params->fmt, 1);
     if (audio_hw_params->bytes_per_sec <= 0 || audio_hw_params->frame_size <= 0) {
-        av_log(NULL, AV_LOG_ERROR, "av_samples_get_buffer_size failed\n");
+        av_logger(NULL, AV_logger_ERROR, "av_samples_get_buffer_size failed\n");
         return -1;
     }
     return spec.size;
