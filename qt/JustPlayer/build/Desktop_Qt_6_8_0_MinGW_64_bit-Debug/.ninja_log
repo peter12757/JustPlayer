@@ -1,0 +1,20 @@
+# ninja log v6
+4	137	7528174367569563	F:/github/JustPlayer/qt/JustPlayer/build/Desktop_Qt_6_8_0_MinGW_64_bit-Debug/CMakeFiles/cmake.verify_globs	c3ce806db4c9f9a3
+1016	4071	7524748167478299	CMakeFiles/JustPlayer.dir/JustPlayer_autogen/mocs_compilation.cpp.obj	19eb499bd3c65900
+149	332	7528174369021215	F:/github/JustPlayer/qt/JustPlayer/build/Desktop_Qt_6_8_0_MinGW_64_bit-Debug/JustPlayer_autogen/timestamp	ec8991f3c8aead14
+149	332	7528174369021215	JustPlayer_autogen/timestamp	ec8991f3c8aead14
+149	332	7528174369021215	JustPlayer_autogen/mocs_compilation.cpp	ec8991f3c8aead14
+332	2760	7528174370860300	CMakeFiles/JustPlayer.dir/mainwindow.cpp.obj	6f3f748dc4cc56c7
+149	332	7528174369021215	F:/github/JustPlayer/qt/JustPlayer/build/Desktop_Qt_6_8_0_MinGW_64_bit-Debug/JustPlayer_autogen/mocs_compilation.cpp	ec8991f3c8aead14
+1024	4212	7524748167554009	CMakeFiles/JustPlayer.dir/main.cpp.obj	8d96bbb4a2a4ad46
+2760	2964	7528174395140886	JustPlayer.exe	1bbdb9963c71564e
+120	172	7524748146539012	CMakeFiles/clean.additional	27e0006dad6fcce0
+173	184	7524748147067358	clean	260276da41e36c09
+155	995	7528174630375296	build.ninja	114e24012dd6becc
+4	146	7528174654073731	F:/github/JustPlayer/qt/JustPlayer/build/Desktop_Qt_6_8_0_MinGW_64_bit-Debug/CMakeFiles/cmake.verify_globs	c3ce806db4c9f9a3
+158	341	7528174655614073	JustPlayer_autogen/timestamp	ec8991f3c8aead14
+158	341	7528174655614073	JustPlayer_autogen/mocs_compilation.cpp	ec8991f3c8aead14
+158	341	7528174655614073	F:/github/JustPlayer/qt/JustPlayer/build/Desktop_Qt_6_8_0_MinGW_64_bit-Debug/JustPlayer_autogen/timestamp	ec8991f3c8aead14
+158	341	7528174655614073	F:/github/JustPlayer/qt/JustPlayer/build/Desktop_Qt_6_8_0_MinGW_64_bit-Debug/JustPlayer_autogen/mocs_compilation.cpp	ec8991f3c8aead14
+341	2782	7528174657444574	CMakeFiles/JustPlayer.dir/mainwindow.cpp.obj	6f3f748dc4cc56c7
+2782	2987	7528174681860015	JustPlayer.exe	1bbdb9963c71564e
