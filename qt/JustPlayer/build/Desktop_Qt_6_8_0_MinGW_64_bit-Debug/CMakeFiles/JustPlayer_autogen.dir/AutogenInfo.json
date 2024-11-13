@@ -268,6 +268,30 @@
 		"E:/qt/6.8.0/mingw_64/lib/cmake/Qt6LinguistTools/Qt6LinguistToolsVersionlessTargets.cmake",
 		"E:/qt/6.8.0/mingw_64/lib/cmake/Qt6LinguistTools/Qt6LinguistToolsMacros.cmake",
 		"E:/qt/Tools/CMake_64/share/cmake-3.29/Modules/CMakeParseArguments.cmake",
+		"E:/qt/6.8.0/mingw_64/lib/cmake/Qt6OpenGLWidgets/Qt6OpenGLWidgetsConfigVersion.cmake",
+		"E:/qt/6.8.0/mingw_64/lib/cmake/Qt6OpenGLWidgets/Qt6OpenGLWidgetsConfigVersionImpl.cmake",
+		"E:/qt/6.8.0/mingw_64/lib/cmake/Qt6OpenGLWidgets/Qt6OpenGLWidgetsConfig.cmake",
+		"E:/qt/Tools/CMake_64/share/cmake-3.29/Modules/CMakeFindDependencyMacro.cmake",
+		"E:/qt/6.8.0/mingw_64/lib/cmake/Qt6OpenGLWidgets/Qt6OpenGLWidgetsDependencies.cmake",
+		"E:/qt/6.8.0/mingw_64/lib/cmake/Qt6OpenGL/Qt6OpenGLConfigVersion.cmake",
+		"E:/qt/6.8.0/mingw_64/lib/cmake/Qt6OpenGL/Qt6OpenGLConfigVersionImpl.cmake",
+		"E:/qt/6.8.0/mingw_64/lib/cmake/Qt6OpenGL/Qt6OpenGLConfig.cmake",
+		"E:/qt/Tools/CMake_64/share/cmake-3.29/Modules/CMakeFindDependencyMacro.cmake",
+		"E:/qt/6.8.0/mingw_64/lib/cmake/Qt6OpenGL/Qt6OpenGLDependencies.cmake",
+		"E:/qt/6.8.0/mingw_64/lib/cmake/Qt6/FindWrapVulkanHeaders.cmake",
+		"E:/qt/Tools/CMake_64/share/cmake-3.29/Modules/FindVulkan.cmake",
+		"E:/qt/Tools/CMake_64/share/cmake-3.29/Modules/FindPackageHandleStandardArgs.cmake",
+		"E:/qt/Tools/CMake_64/share/cmake-3.29/Modules/FindPackageMessage.cmake",
+		"E:/qt/Tools/CMake_64/share/cmake-3.29/Modules/FindPackageHandleStandardArgs.cmake",
+		"E:/qt/Tools/CMake_64/share/cmake-3.29/Modules/FindPackageMessage.cmake",
+		"E:/qt/6.8.0/mingw_64/lib/cmake/Qt6OpenGL/Qt6OpenGLTargets.cmake",
+		"E:/qt/6.8.0/mingw_64/lib/cmake/Qt6OpenGL/Qt6OpenGLTargets-relwithdebinfo.cmake",
+		"E:/qt/6.8.0/mingw_64/lib/cmake/Qt6OpenGL/Qt6OpenGLAdditionalTargetInfo.cmake",
+		"E:/qt/6.8.0/mingw_64/lib/cmake/Qt6OpenGL/Qt6OpenGLVersionlessAliasTargets.cmake",
+		"E:/qt/6.8.0/mingw_64/lib/cmake/Qt6OpenGLWidgets/Qt6OpenGLWidgetsTargets.cmake",
+		"E:/qt/6.8.0/mingw_64/lib/cmake/Qt6OpenGLWidgets/Qt6OpenGLWidgetsTargets-relwithdebinfo.cmake",
+		"E:/qt/6.8.0/mingw_64/lib/cmake/Qt6OpenGLWidgets/Qt6OpenGLWidgetsAdditionalTargetInfo.cmake",
+		"E:/qt/6.8.0/mingw_64/lib/cmake/Qt6OpenGLWidgets/Qt6OpenGLWidgetsVersionlessAliasTargets.cmake",
 		"E:/qt/Tools/CMake_64/share/cmake-3.29/Modules/GNUInstallDirs.cmake"
 	],
 	"CMAKE_SOURCE_DIR" : "F:/github/JustPlayer/qt/JustPlayer",
@@ -277,9 +301,9 @@
 	"HEADERS" : 
 	[
 		[
-			"F:/github/JustPlayer/qt/JustPlayer/common.h",
+			"F:/github/JustPlayer/qt/JustPlayer/XVideoWidget.h",
 			"MU",
-			"EWIEGA46WW/moc_common.cpp",
+			"EWIEGA46WW/moc_XVideoWidget.cpp",
 			null
 		],
 		[
@@ -298,6 +322,8 @@
 		"QT_CORE_LIB",
 		"QT_GUI_LIB",
 		"QT_NEEDS_QMAIN",
+		"QT_OPENGLWIDGETS_LIB",
+		"QT_OPENGL_LIB",
 		"QT_WIDGETS_LIB",
 		"UNICODE",
 		"WIN32",
@@ -315,11 +341,14 @@
 	],
 	"MOC_INCLUDES" : 
 	[
+		"F:/github/JustPlayer/qt/JustPlayer",
 		"E:/qt/6.8.0/mingw_64/include/QtCore",
 		"E:/qt/6.8.0/mingw_64/include",
 		"E:/qt/6.8.0/mingw_64/mkspecs/win32-g++",
 		"E:/qt/6.8.0/mingw_64/include/QtWidgets",
 		"E:/qt/6.8.0/mingw_64/include/QtGui",
+		"E:/qt/6.8.0/mingw_64/include/QtOpenGLWidgets",
+		"E:/qt/6.8.0/mingw_64/include/QtOpenGL",
 		"E:/qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++",
 		"E:/qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/x86_64-w64-mingw32",
 		"E:/qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/backward",
@@ -360,6 +389,7 @@
 	"SETTINGS_FILE" : "F:/github/JustPlayer/qt/JustPlayer/build/Desktop_Qt_6_8_0_MinGW_64_bit-Debug/CMakeFiles/JustPlayer_autogen.dir/AutogenUsed.txt",
 	"SOURCES" : 
 	[
+		[ "F:/github/JustPlayer/qt/JustPlayer/XVideoWidget.cpp", "MU", null ],
 		[ "F:/github/JustPlayer/qt/JustPlayer/main.cpp", "MU", null ],
 		[ "F:/github/JustPlayer/qt/JustPlayer/mainwindow.cpp", "MU", null ]
 	],

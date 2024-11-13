@@ -1,4 +1,6 @@
 JustPlayer_autogen/timestamp: \
+	E:/qt/6.8.0/mingw_64/include/QtCore/QDebug \
+	E:/qt/6.8.0/mingw_64/include/QtCore/QObject \
 	E:/qt/6.8.0/mingw_64/include/QtCore/q20functional.h \
 	E:/qt/6.8.0/mingw_64/include/QtCore/q20iterator.h \
 	E:/qt/6.8.0/mingw_64/include/QtCore/q20memory.h \
@@ -59,6 +61,7 @@ JustPlayer_autogen/timestamp: \
 	E:/qt/6.8.0/mingw_64/include/QtCore/qmetatype.h \
 	E:/qt/6.8.0/mingw_64/include/QtCore/qminmax.h \
 	E:/qt/6.8.0/mingw_64/include/QtCore/qnamespace.h \
+	E:/qt/6.8.0/mingw_64/include/QtCore/qnativeinterface.h \
 	E:/qt/6.8.0/mingw_64/include/QtCore/qnumeric.h \
 	E:/qt/6.8.0/mingw_64/include/QtCore/qobject.h \
 	E:/qt/6.8.0/mingw_64/include/QtCore/qobject_impl.h \
@@ -119,6 +122,8 @@ JustPlayer_autogen/timestamp: \
 	E:/qt/6.8.0/mingw_64/include/QtCore/qversiontagging.h \
 	E:/qt/6.8.0/mingw_64/include/QtCore/qxptype_traits.h \
 	E:/qt/6.8.0/mingw_64/include/QtCore/qyieldcpu.h \
+	E:/qt/6.8.0/mingw_64/include/QtGui/QOpenGLFunctions \
+	E:/qt/6.8.0/mingw_64/include/QtGui/QSurfaceFormat \
 	E:/qt/6.8.0/mingw_64/include/QtGui/qaction.h \
 	E:/qt/6.8.0/mingw_64/include/QtGui/qbitmap.h \
 	E:/qt/6.8.0/mingw_64/include/QtGui/qbrush.h \
@@ -130,6 +135,11 @@ JustPlayer_autogen/timestamp: \
 	E:/qt/6.8.0/mingw_64/include/QtGui/qicon.h \
 	E:/qt/6.8.0/mingw_64/include/QtGui/qimage.h \
 	E:/qt/6.8.0/mingw_64/include/QtGui/qkeysequence.h \
+	E:/qt/6.8.0/mingw_64/include/QtGui/qopengl.h \
+	E:/qt/6.8.0/mingw_64/include/QtGui/qopenglcontext.h \
+	E:/qt/6.8.0/mingw_64/include/QtGui/qopenglcontext_platform.h \
+	E:/qt/6.8.0/mingw_64/include/QtGui/qopenglext.h \
+	E:/qt/6.8.0/mingw_64/include/QtGui/qopenglfunctions.h \
 	E:/qt/6.8.0/mingw_64/include/QtGui/qpaintdevice.h \
 	E:/qt/6.8.0/mingw_64/include/QtGui/qpalette.h \
 	E:/qt/6.8.0/mingw_64/include/QtGui/qpixelformat.h \
@@ -138,13 +148,19 @@ JustPlayer_autogen/timestamp: \
 	E:/qt/6.8.0/mingw_64/include/QtGui/qregion.h \
 	E:/qt/6.8.0/mingw_64/include/QtGui/qrgb.h \
 	E:/qt/6.8.0/mingw_64/include/QtGui/qrgba64.h \
+	E:/qt/6.8.0/mingw_64/include/QtGui/qsurfaceformat.h \
 	E:/qt/6.8.0/mingw_64/include/QtGui/qtgui-config.h \
 	E:/qt/6.8.0/mingw_64/include/QtGui/qtguiexports.h \
 	E:/qt/6.8.0/mingw_64/include/QtGui/qtguiglobal.h \
 	E:/qt/6.8.0/mingw_64/include/QtGui/qtransform.h \
 	E:/qt/6.8.0/mingw_64/include/QtGui/qwindowdefs.h \
 	E:/qt/6.8.0/mingw_64/include/QtGui/qwindowdefs_win.h \
+	E:/qt/6.8.0/mingw_64/include/QtOpenGLWidgets/QOpenGLWidget \
+	E:/qt/6.8.0/mingw_64/include/QtOpenGLWidgets/qopenglwidget.h \
+	E:/qt/6.8.0/mingw_64/include/QtOpenGLWidgets/qtopenglwidgetsexports.h \
+	E:/qt/6.8.0/mingw_64/include/QtOpenGLWidgets/qtopenglwidgetsglobal.h \
 	E:/qt/6.8.0/mingw_64/include/QtWidgets/QMainWindow \
+	E:/qt/6.8.0/mingw_64/include/QtWidgets/QWidget \
 	E:/qt/6.8.0/mingw_64/include/QtWidgets/qmainwindow.h \
 	E:/qt/6.8.0/mingw_64/include/QtWidgets/qsizepolicy.h \
 	E:/qt/6.8.0/mingw_64/include/QtWidgets/qtabwidget.h \
@@ -271,6 +287,22 @@ JustPlayer_autogen/timestamp: \
 	E:/qt/6.8.0/mingw_64/lib/cmake/Qt6LinguistTools/Qt6LinguistToolsTargets-relwithdebinfo.cmake \
 	E:/qt/6.8.0/mingw_64/lib/cmake/Qt6LinguistTools/Qt6LinguistToolsTargets.cmake \
 	E:/qt/6.8.0/mingw_64/lib/cmake/Qt6LinguistTools/Qt6LinguistToolsVersionlessTargets.cmake \
+	E:/qt/6.8.0/mingw_64/lib/cmake/Qt6OpenGL/Qt6OpenGLAdditionalTargetInfo.cmake \
+	E:/qt/6.8.0/mingw_64/lib/cmake/Qt6OpenGL/Qt6OpenGLConfig.cmake \
+	E:/qt/6.8.0/mingw_64/lib/cmake/Qt6OpenGL/Qt6OpenGLConfigVersion.cmake \
+	E:/qt/6.8.0/mingw_64/lib/cmake/Qt6OpenGL/Qt6OpenGLConfigVersionImpl.cmake \
+	E:/qt/6.8.0/mingw_64/lib/cmake/Qt6OpenGL/Qt6OpenGLDependencies.cmake \
+	E:/qt/6.8.0/mingw_64/lib/cmake/Qt6OpenGL/Qt6OpenGLTargets-relwithdebinfo.cmake \
+	E:/qt/6.8.0/mingw_64/lib/cmake/Qt6OpenGL/Qt6OpenGLTargets.cmake \
+	E:/qt/6.8.0/mingw_64/lib/cmake/Qt6OpenGL/Qt6OpenGLVersionlessAliasTargets.cmake \
+	E:/qt/6.8.0/mingw_64/lib/cmake/Qt6OpenGLWidgets/Qt6OpenGLWidgetsAdditionalTargetInfo.cmake \
+	E:/qt/6.8.0/mingw_64/lib/cmake/Qt6OpenGLWidgets/Qt6OpenGLWidgetsConfig.cmake \
+	E:/qt/6.8.0/mingw_64/lib/cmake/Qt6OpenGLWidgets/Qt6OpenGLWidgetsConfigVersion.cmake \
+	E:/qt/6.8.0/mingw_64/lib/cmake/Qt6OpenGLWidgets/Qt6OpenGLWidgetsConfigVersionImpl.cmake \
+	E:/qt/6.8.0/mingw_64/lib/cmake/Qt6OpenGLWidgets/Qt6OpenGLWidgetsDependencies.cmake \
+	E:/qt/6.8.0/mingw_64/lib/cmake/Qt6OpenGLWidgets/Qt6OpenGLWidgetsTargets-relwithdebinfo.cmake \
+	E:/qt/6.8.0/mingw_64/lib/cmake/Qt6OpenGLWidgets/Qt6OpenGLWidgetsTargets.cmake \
+	E:/qt/6.8.0/mingw_64/lib/cmake/Qt6OpenGLWidgets/Qt6OpenGLWidgetsVersionlessAliasTargets.cmake \
 	E:/qt/6.8.0/mingw_64/lib/cmake/Qt6Widgets/Qt6QModernWindowsStylePluginAdditionalTargetInfo.cmake \
 	E:/qt/6.8.0/mingw_64/lib/cmake/Qt6Widgets/Qt6QModernWindowsStylePluginConfig.cmake \
 	E:/qt/6.8.0/mingw_64/lib/cmake/Qt6Widgets/Qt6QModernWindowsStylePluginTargets-relwithdebinfo.cmake \
@@ -503,6 +535,7 @@ JustPlayer_autogen/timestamp: \
 	E:/qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/stddef.h \
 	E:/qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/stdint.h \
 	E:/qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/syslimits.h \
+	E:/qt/Tools/mingw1310_64/x86_64-w64-mingw32/include/GL/gl.h \
 	E:/qt/Tools/mingw1310_64/x86_64-w64-mingw32/include/_mingw.h \
 	E:/qt/Tools/mingw1310_64/x86_64-w64-mingw32/include/_mingw_mac.h \
 	E:/qt/Tools/mingw1310_64/x86_64-w64-mingw32/include/_mingw_off_t.h \
@@ -539,12 +572,13 @@ JustPlayer_autogen/timestamp: \
 	E:/qt/Tools/mingw1310_64/x86_64-w64-mingw32/include/vadefs.h \
 	E:/qt/Tools/mingw1310_64/x86_64-w64-mingw32/include/wchar.h \
 	F:/github/JustPlayer/qt/JustPlayer/CMakeLists.txt \
+	F:/github/JustPlayer/qt/JustPlayer/XVideoWidget.cpp \
+	F:/github/JustPlayer/qt/JustPlayer/XVideoWidget.h \
 	F:/github/JustPlayer/qt/JustPlayer/build/Desktop_Qt_6_8_0_MinGW_64_bit-Debug/.qtc/package-manager/auto-setup.cmake \
 	F:/github/JustPlayer/qt/JustPlayer/build/Desktop_Qt_6_8_0_MinGW_64_bit-Debug/CMakeFiles/3.29.3/CMakeCXXCompiler.cmake \
 	F:/github/JustPlayer/qt/JustPlayer/build/Desktop_Qt_6_8_0_MinGW_64_bit-Debug/CMakeFiles/3.29.3/CMakeRCCompiler.cmake \
 	F:/github/JustPlayer/qt/JustPlayer/build/Desktop_Qt_6_8_0_MinGW_64_bit-Debug/CMakeFiles/3.29.3/CMakeSystem.cmake \
 	F:/github/JustPlayer/qt/JustPlayer/build/Desktop_Qt_6_8_0_MinGW_64_bit-Debug/JustPlayer_autogen/moc_predefs.h \
-	F:/github/JustPlayer/qt/JustPlayer/common.h \
 	F:/github/JustPlayer/qt/JustPlayer/main.cpp \
 	F:/github/JustPlayer/qt/JustPlayer/mainwindow.cpp \
 	F:/github/JustPlayer/qt/JustPlayer/mainwindow.h \

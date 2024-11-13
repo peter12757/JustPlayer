@@ -295,13 +295,13 @@ CMAKE_TAPI:FILEPATH=CMAKE_TAPI-NOTFOUND
 CMAKE_VERBOSE_MAKEFILE:BOOL=FALSE
 
 //Value Computed by CMake
-JustPlayer_BINARY_DIR:STATIC=F:/github/JustPlayer/qt/JustPlayer/build/Desktop_Qt_6_8_0_MinGW_64_bit-Debug
+JustPlayer_BINARY_DIR:STATIC=F:/github/JustPlayer/qt/JustPlayer/build/Desktop_Qt_6_8_0_MinGW_64_bit-Debug/ffmpeg/win64
 
 //Value Computed by CMake
-JustPlayer_IS_TOP_LEVEL:STATIC=ON
+JustPlayer_IS_TOP_LEVEL:STATIC=OFF
 
 //Value Computed by CMake
-JustPlayer_SOURCE_DIR:STATIC=F:/github/JustPlayer/qt/JustPlayer
+JustPlayer_SOURCE_DIR:STATIC=F:/github/JustPlayer/qt/JustPlayer/ffmpeg/win64
 
 //Additional directories where find(Qt6 ...) host Qt components
 // are searched
@@ -336,6 +336,12 @@ Qt6Gui_DIR:PATH=E:/qt/6.8.0/mingw_64/lib/cmake/Qt6Gui
 
 //The directory containing a CMake configuration file for Qt6LinguistTools.
 Qt6LinguistTools_DIR:PATH=E:/qt/6.8.0/mingw_64/lib/cmake/Qt6LinguistTools
+
+//The directory containing a CMake configuration file for Qt6OpenGLWidgets.
+Qt6OpenGLWidgets_DIR:PATH=E:/qt/6.8.0/mingw_64/lib/cmake/Qt6OpenGLWidgets
+
+//The directory containing a CMake configuration file for Qt6OpenGL.
+Qt6OpenGL_DIR:PATH=E:/qt/6.8.0/mingw_64/lib/cmake/Qt6OpenGL
 
 //The directory containing a CMake configuration file for Qt6WidgetsTools.
 Qt6WidgetsTools_DIR:PATH=E:/qt/6.8.0/mingw_64/lib/cmake/Qt6WidgetsTools
@@ -483,7 +489,7 @@ CMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_NM
 CMAKE_NM-ADVANCED:INTERNAL=1
 //number of local generators
-CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=1
+CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=3
 //ADVANCED property for variable: CMAKE_OBJCOPY
 CMAKE_OBJCOPY-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_OBJDUMP
