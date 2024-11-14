@@ -3,6 +3,7 @@ F:/github/JustPlayer/qt/JustPlayer/XVideoWidget.h
  mmc:Q_OBJECT
  mdp:E:/qt/6.8.0/mingw_64/include/QtCore/QDebug
  mdp:E:/qt/6.8.0/mingw_64/include/QtCore/QObject
+ mdp:E:/qt/6.8.0/mingw_64/include/QtCore/QTimer
  mdp:E:/qt/6.8.0/mingw_64/include/QtCore/q20functional.h
  mdp:E:/qt/6.8.0/mingw_64/include/QtCore/q20iterator.h
  mdp:E:/qt/6.8.0/mingw_64/include/QtCore/q20memory.h
@@ -17,6 +18,7 @@ F:/github/JustPlayer/qt/JustPlayer/XVideoWidget.h
  mdp:E:/qt/6.8.0/mingw_64/include/QtCore/qatomic.h
  mdp:E:/qt/6.8.0/mingw_64/include/QtCore/qatomic_cxx11.h
  mdp:E:/qt/6.8.0/mingw_64/include/QtCore/qbasicatomic.h
+ mdp:E:/qt/6.8.0/mingw_64/include/QtCore/qbasictimer.h
  mdp:E:/qt/6.8.0/mingw_64/include/QtCore/qbindingstorage.h
  mdp:E:/qt/6.8.0/mingw_64/include/QtCore/qbytearray.h
  mdp:E:/qt/6.8.0/mingw_64/include/QtCore/qbytearrayalgorithms.h
@@ -108,6 +110,7 @@ F:/github/JustPlayer/qt/JustPlayer/XVideoWidget.h
  mdp:E:/qt/6.8.0/mingw_64/include/QtCore/qtdeprecationmarkers.h
  mdp:E:/qt/6.8.0/mingw_64/include/QtCore/qtenvironmentvariables.h
  mdp:E:/qt/6.8.0/mingw_64/include/QtCore/qtextstream.h
+ mdp:E:/qt/6.8.0/mingw_64/include/QtCore/qtimer.h
  mdp:E:/qt/6.8.0/mingw_64/include/QtCore/qtmetamacros.h
  mdp:E:/qt/6.8.0/mingw_64/include/QtCore/qtnoop.h
  mdp:E:/qt/6.8.0/mingw_64/include/QtCore/qtpreprocessorsupport.h
@@ -134,9 +137,11 @@ F:/github/JustPlayer/qt/JustPlayer/XVideoWidget.h
  mdp:E:/qt/6.8.0/mingw_64/include/QtGui/qfont.h
  mdp:E:/qt/6.8.0/mingw_64/include/QtGui/qfontinfo.h
  mdp:E:/qt/6.8.0/mingw_64/include/QtGui/qfontmetrics.h
+ mdp:E:/qt/6.8.0/mingw_64/include/QtGui/qgenericmatrix.h
  mdp:E:/qt/6.8.0/mingw_64/include/QtGui/qicon.h
  mdp:E:/qt/6.8.0/mingw_64/include/QtGui/qimage.h
  mdp:E:/qt/6.8.0/mingw_64/include/QtGui/qkeysequence.h
+ mdp:E:/qt/6.8.0/mingw_64/include/QtGui/qmatrix4x4.h
  mdp:E:/qt/6.8.0/mingw_64/include/QtGui/qopengl.h
  mdp:E:/qt/6.8.0/mingw_64/include/QtGui/qopenglcontext.h
  mdp:E:/qt/6.8.0/mingw_64/include/QtGui/qopenglcontext_platform.h
@@ -147,6 +152,7 @@ F:/github/JustPlayer/qt/JustPlayer/XVideoWidget.h
  mdp:E:/qt/6.8.0/mingw_64/include/QtGui/qpixelformat.h
  mdp:E:/qt/6.8.0/mingw_64/include/QtGui/qpixmap.h
  mdp:E:/qt/6.8.0/mingw_64/include/QtGui/qpolygon.h
+ mdp:E:/qt/6.8.0/mingw_64/include/QtGui/qquaternion.h
  mdp:E:/qt/6.8.0/mingw_64/include/QtGui/qregion.h
  mdp:E:/qt/6.8.0/mingw_64/include/QtGui/qrgb.h
  mdp:E:/qt/6.8.0/mingw_64/include/QtGui/qrgba64.h
@@ -155,8 +161,16 @@ F:/github/JustPlayer/qt/JustPlayer/XVideoWidget.h
  mdp:E:/qt/6.8.0/mingw_64/include/QtGui/qtguiexports.h
  mdp:E:/qt/6.8.0/mingw_64/include/QtGui/qtguiglobal.h
  mdp:E:/qt/6.8.0/mingw_64/include/QtGui/qtransform.h
+ mdp:E:/qt/6.8.0/mingw_64/include/QtGui/qvector2d.h
+ mdp:E:/qt/6.8.0/mingw_64/include/QtGui/qvector3d.h
+ mdp:E:/qt/6.8.0/mingw_64/include/QtGui/qvector4d.h
+ mdp:E:/qt/6.8.0/mingw_64/include/QtGui/qvectornd.h
  mdp:E:/qt/6.8.0/mingw_64/include/QtGui/qwindowdefs.h
  mdp:E:/qt/6.8.0/mingw_64/include/QtGui/qwindowdefs_win.h
+ mdp:E:/qt/6.8.0/mingw_64/include/QtOpenGL/QOpenGLShaderProgram
+ mdp:E:/qt/6.8.0/mingw_64/include/QtOpenGL/qopenglshaderprogram.h
+ mdp:E:/qt/6.8.0/mingw_64/include/QtOpenGL/qtopenglexports.h
+ mdp:E:/qt/6.8.0/mingw_64/include/QtOpenGL/qtopenglglobal.h
  mdp:E:/qt/6.8.0/mingw_64/include/QtOpenGLWidgets/QOpenGLWidget
  mdp:E:/qt/6.8.0/mingw_64/include/QtOpenGLWidgets/qopenglwidget.h
  mdp:E:/qt/6.8.0/mingw_64/include/QtOpenGLWidgets/qtopenglwidgetsexports.h
