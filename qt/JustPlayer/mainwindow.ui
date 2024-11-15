@@ -17,10 +17,10 @@
    <widget class="XVideoWidget" name="openGLWidget">
     <property name="geometry">
      <rect>
-      <x>0</x>
-      <y>50</y>
-      <width>831</width>
-      <height>571</height>
+      <x>80</x>
+      <y>30</y>
+      <width>800</width>
+      <height>600</height>
      </rect>
     </property>
    </widget>

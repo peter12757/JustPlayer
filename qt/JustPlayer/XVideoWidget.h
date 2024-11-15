@@ -7,11 +7,12 @@
 #include <QDebug>
 #include <QOpenGLShaderProgram>
 #include <QTimer>
+#include <QFile>
 
 
 #define GET_STR(x) #x
 #define A_VER 3
-#define T_VER 3
+#define T_VER 4
 
 
 
@@ -35,24 +36,7 @@ private:
     //data
 
 private:
-    //vertex
-    const GLfloat ver[8] = {
-        -1.0f,-1.0f,
-        1.0f,-1.0f,
-        -1.0f,1.0f,
-        1.0f,1.0f,
-    };
-
-    //texture
-    const GLfloat tex[8] = {
-        0.0f,1.0f,
-        1.0f,1.0f,
-        0.0f,0.0f,
-        1.0f,0.0f,
-    };
-
-
-    QOpenGLShaderProgram program;
+    QOpenGLShaderProgram *program;
     //shader中yuv变量地址
     GLuint unis[3] = {0};
     //shader中tex变量地址
@@ -66,6 +50,9 @@ private:
 
     int width =240;
     int height = 128;
+
+    // int width =716;
+    // int height = 1280;
 
 
     //vertex shader
@@ -99,8 +86,41 @@ private:
                        1.13983, -0.58060, 0.0) * yuv;
             gl_FragColor = vec4(rgb, 1.0);
         }
-
         );
+    // const char *tString = GET_STR(
+    //     varying vec2 textureOut;
+    //     uniform sampler2D tex_y;
+    //     uniform sampler2D tex_u;
+    //     uniform sampler2D tex_v;
+    //     void main(void)
+    //     {
+    //         vec3 yuv;
+    //         vec3 rgb;
+    //         vec4 c = vec4((texture(tex_y, textureOut).r - 16./255.) * 1.164);
+    //         vec4 U = vec4(texture(tex_u, textureOut).r - 128./255.);
+    //         vec4 V = vec4(texture(tex_v, textureOut).r - 128./255.);
+    //         c += V * vec4(1.596, -0.813, 0, 0);
+    //         c += U * vec4(0, -0.392, 2.017, 0);
+    //         c.a = 1.0;
+    //         gl_FragColor = c;
+    //     }
+    //     );
+
+    //vertex
+    const GLfloat ver[12] = {
+        -1.0f,-1.0f,0.0f,
+        1.0f,-1.0f,0.0f,
+        -1.0f,1.0f,0.0f,
+        1.0f,1.0f,0.0f,
+    };
+
+    //texture
+    const GLfloat tex[8] = {
+        0.0f,1.0f,
+        1.0f,1.0f,
+        0.0f,0.0f,
+        1.0f,0.0f,
+    };
 
 
 
