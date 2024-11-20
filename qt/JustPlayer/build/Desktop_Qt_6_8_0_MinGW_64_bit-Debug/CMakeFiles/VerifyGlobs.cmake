@@ -41,13 +41,14 @@ endif()
 # _directory_contents at E:/qt/6.8.0/mingw_64/lib/cmake/Qt6LinguistTools/Qt6LinguistToolsMacros.cmake:55 (file)
 file(GLOB_RECURSE NEW_GLOB LIST_DIRECTORIES false "F:/github/JustPlayer/qt/JustPlayer/*.cpp")
 set(OLD_GLOB
-  "F:/github/JustPlayer/qt/JustPlayer/XVideoWidget.cpp"
   "F:/github/JustPlayer/qt/JustPlayer/build/Desktop_Qt_6_8_0_MinGW_64_bit-Debug/CMakeFiles/3.29.3/CompilerIdCXX/CMakeCXXCompilerId.cpp"
-  "F:/github/JustPlayer/qt/JustPlayer/build/Desktop_Qt_6_8_0_MinGW_64_bit-Debug/JustPlayer_autogen/EWIEGA46WW/moc_XVideoWidget.cpp"
   "F:/github/JustPlayer/qt/JustPlayer/build/Desktop_Qt_6_8_0_MinGW_64_bit-Debug/JustPlayer_autogen/EWIEGA46WW/moc_mainwindow.cpp"
+  "F:/github/JustPlayer/qt/JustPlayer/build/Desktop_Qt_6_8_0_MinGW_64_bit-Debug/JustPlayer_autogen/UVLADIE3JM/moc_XVideoWidget.cpp"
   "F:/github/JustPlayer/qt/JustPlayer/build/Desktop_Qt_6_8_0_MinGW_64_bit-Debug/JustPlayer_autogen/mocs_compilation.cpp"
   "F:/github/JustPlayer/qt/JustPlayer/main.cpp"
   "F:/github/JustPlayer/qt/JustPlayer/mainwindow.cpp"
+  "F:/github/JustPlayer/qt/JustPlayer/src/XVideoWidget.cpp"
+  "F:/github/JustPlayer/qt/JustPlayer/src/opengl/OpenglRender.cpp"
   )
 if(NOT "${NEW_GLOB}" STREQUAL "${OLD_GLOB}")
   message("-- GLOB mismatch!")
@@ -66,7 +67,6 @@ endif()
 # _directory_contents at E:/qt/6.8.0/mingw_64/lib/cmake/Qt6LinguistTools/Qt6LinguistToolsMacros.cmake:55 (file)
 file(GLOB_RECURSE NEW_GLOB LIST_DIRECTORIES false "F:/github/JustPlayer/qt/JustPlayer/*.h")
 set(OLD_GLOB
-  "F:/github/JustPlayer/qt/JustPlayer/XVideoWidget.h"
   "F:/github/JustPlayer/qt/JustPlayer/build/Desktop_Qt_6_8_0_MinGW_64_bit-Debug/JustPlayer_autogen/include/ui_mainwindow.h"
   "F:/github/JustPlayer/qt/JustPlayer/build/Desktop_Qt_6_8_0_MinGW_64_bit-Debug/JustPlayer_autogen/moc_predefs.h"
   "F:/github/JustPlayer/qt/JustPlayer/common.h"
@@ -212,6 +212,9 @@ set(OLD_GLOB
   "F:/github/JustPlayer/qt/JustPlayer/ffmpeg/win64/include/libswscale/version.h"
   "F:/github/JustPlayer/qt/JustPlayer/ffmpeg/win64/include/libswscale/version_major.h"
   "F:/github/JustPlayer/qt/JustPlayer/mainwindow.h"
+  "F:/github/JustPlayer/qt/JustPlayer/src/XVideoWidget.h"
+  "F:/github/JustPlayer/qt/JustPlayer/src/opengl/OpenglRender.h"
+  "F:/github/JustPlayer/qt/JustPlayer/src/test/TestCase.h"
   )
 if(NOT "${NEW_GLOB}" STREQUAL "${OLD_GLOB}")
   message("-- GLOB mismatch!")

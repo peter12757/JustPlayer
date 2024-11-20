@@ -303,6 +303,9 @@ JustPlayer_IS_TOP_LEVEL:STATIC=OFF
 //Value Computed by CMake
 JustPlayer_SOURCE_DIR:STATIC=F:/github/JustPlayer/qt/JustPlayer/ffmpeg/win64
 
+//Path to a file.
+PROJECT_SOURCES1:FILEPATH=F:/github/JustPlayer/qt/JustPlayer/opengl
+
 //Additional directories where find(Qt6 ...) host Qt components
 // are searched
 QT_ADDITIONAL_HOST_PACKAGES_PREFIX_PATH:STRING=

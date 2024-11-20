@@ -301,15 +301,27 @@
 	"HEADERS" : 
 	[
 		[
-			"F:/github/JustPlayer/qt/JustPlayer/XVideoWidget.h",
-			"MU",
-			"EWIEGA46WW/moc_XVideoWidget.cpp",
-			null
-		],
-		[
 			"F:/github/JustPlayer/qt/JustPlayer/mainwindow.h",
 			"MU",
 			"EWIEGA46WW/moc_mainwindow.cpp",
+			null
+		],
+		[
+			"F:/github/JustPlayer/qt/JustPlayer/src/XVideoWidget.h",
+			"MU",
+			"UVLADIE3JM/moc_XVideoWidget.cpp",
+			null
+		],
+		[
+			"F:/github/JustPlayer/qt/JustPlayer/src/opengl/OpenglRender.h",
+			"MU",
+			"MMRTY3H5TE/moc_OpenglRender.cpp",
+			null
+		],
+		[
+			"F:/github/JustPlayer/qt/JustPlayer/src/test/TestCase.h",
+			"MU",
+			"B7U3TQATOI/moc_TestCase.cpp",
 			null
 		]
 	],
@@ -341,7 +353,7 @@
 	],
 	"MOC_INCLUDES" : 
 	[
-		"F:/github/JustPlayer/qt/JustPlayer",
+		"F:/github/JustPlayer/qt/JustPlayer/src",
 		"E:/qt/6.8.0/mingw_64/include/QtCore",
 		"E:/qt/6.8.0/mingw_64/include",
 		"E:/qt/6.8.0/mingw_64/mkspecs/win32-g++",
@@ -389,9 +401,14 @@
 	"SETTINGS_FILE" : "F:/github/JustPlayer/qt/JustPlayer/build/Desktop_Qt_6_8_0_MinGW_64_bit-Debug/CMakeFiles/JustPlayer_autogen.dir/AutogenUsed.txt",
 	"SOURCES" : 
 	[
-		[ "F:/github/JustPlayer/qt/JustPlayer/XVideoWidget.cpp", "MU", null ],
 		[ "F:/github/JustPlayer/qt/JustPlayer/main.cpp", "MU", null ],
-		[ "F:/github/JustPlayer/qt/JustPlayer/mainwindow.cpp", "MU", null ]
+		[ "F:/github/JustPlayer/qt/JustPlayer/mainwindow.cpp", "MU", null ],
+		[ "F:/github/JustPlayer/qt/JustPlayer/src/XVideoWidget.cpp", "MU", null ],
+		[
+			"F:/github/JustPlayer/qt/JustPlayer/src/opengl/OpenglRender.cpp",
+			"MU",
+			null
+		]
 	],
 	"UIC_OPTIONS" : [],
 	"UIC_SEARCH_PATHS" : [],

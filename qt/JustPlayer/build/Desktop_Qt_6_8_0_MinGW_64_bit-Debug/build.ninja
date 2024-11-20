@@ -53,7 +53,7 @@ build CMakeFiles/JustPlayer.dir/JustPlayer_autogen/mocs_compilation.cpp.obj: CXX
   DEFINES = -DMINGW_HAS_SECURE_API=1 -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NEEDS_QMAIN -DQT_OPENGLWIDGETS_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DUNICODE -DWIN32 -DWIN64 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -D_UNICODE -D_WIN64
   DEP_FILE = CMakeFiles\JustPlayer.dir\JustPlayer_autogen\mocs_compilation.cpp.obj.d
   FLAGS = -DQT_QML_DEBUG -g -std=gnu++17 -fdiagnostics-color=always
-  INCLUDES = -IF:/github/JustPlayer/qt/JustPlayer/build/Desktop_Qt_6_8_0_MinGW_64_bit-Debug/JustPlayer_autogen/include -IF:/github/JustPlayer/qt/JustPlayer/. -isystem E:/qt/6.8.0/mingw_64/include/QtCore -isystem E:/qt/6.8.0/mingw_64/include -isystem E:/qt/6.8.0/mingw_64/mkspecs/win32-g++ -isystem E:/qt/6.8.0/mingw_64/include/QtWidgets -isystem E:/qt/6.8.0/mingw_64/include/QtGui -isystem E:/qt/6.8.0/mingw_64/include/QtOpenGLWidgets -isystem E:/qt/6.8.0/mingw_64/include/QtOpenGL
+  INCLUDES = -IF:/github/JustPlayer/qt/JustPlayer/build/Desktop_Qt_6_8_0_MinGW_64_bit-Debug/JustPlayer_autogen/include -IF:/github/JustPlayer/qt/JustPlayer/./src -isystem E:/qt/6.8.0/mingw_64/include/QtCore -isystem E:/qt/6.8.0/mingw_64/include -isystem E:/qt/6.8.0/mingw_64/mkspecs/win32-g++ -isystem E:/qt/6.8.0/mingw_64/include/QtWidgets -isystem E:/qt/6.8.0/mingw_64/include/QtGui -isystem E:/qt/6.8.0/mingw_64/include/QtOpenGLWidgets -isystem E:/qt/6.8.0/mingw_64/include/QtOpenGL
   OBJECT_DIR = CMakeFiles\JustPlayer.dir
   OBJECT_FILE_DIR = CMakeFiles\JustPlayer.dir\JustPlayer_autogen
 
@@ -61,7 +61,7 @@ build CMakeFiles/JustPlayer.dir/main.cpp.obj: CXX_COMPILER__JustPlayer_unscanned
   DEFINES = -DMINGW_HAS_SECURE_API=1 -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NEEDS_QMAIN -DQT_OPENGLWIDGETS_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DUNICODE -DWIN32 -DWIN64 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -D_UNICODE -D_WIN64
   DEP_FILE = CMakeFiles\JustPlayer.dir\main.cpp.obj.d
   FLAGS = -DQT_QML_DEBUG -g -std=gnu++17 -fdiagnostics-color=always
-  INCLUDES = -IF:/github/JustPlayer/qt/JustPlayer/build/Desktop_Qt_6_8_0_MinGW_64_bit-Debug/JustPlayer_autogen/include -IF:/github/JustPlayer/qt/JustPlayer/. -isystem E:/qt/6.8.0/mingw_64/include/QtCore -isystem E:/qt/6.8.0/mingw_64/include -isystem E:/qt/6.8.0/mingw_64/mkspecs/win32-g++ -isystem E:/qt/6.8.0/mingw_64/include/QtWidgets -isystem E:/qt/6.8.0/mingw_64/include/QtGui -isystem E:/qt/6.8.0/mingw_64/include/QtOpenGLWidgets -isystem E:/qt/6.8.0/mingw_64/include/QtOpenGL
+  INCLUDES = -IF:/github/JustPlayer/qt/JustPlayer/build/Desktop_Qt_6_8_0_MinGW_64_bit-Debug/JustPlayer_autogen/include -IF:/github/JustPlayer/qt/JustPlayer/./src -isystem E:/qt/6.8.0/mingw_64/include/QtCore -isystem E:/qt/6.8.0/mingw_64/include -isystem E:/qt/6.8.0/mingw_64/mkspecs/win32-g++ -isystem E:/qt/6.8.0/mingw_64/include/QtWidgets -isystem E:/qt/6.8.0/mingw_64/include/QtGui -isystem E:/qt/6.8.0/mingw_64/include/QtOpenGLWidgets -isystem E:/qt/6.8.0/mingw_64/include/QtOpenGL
   OBJECT_DIR = CMakeFiles\JustPlayer.dir
   OBJECT_FILE_DIR = CMakeFiles\JustPlayer.dir
 
@@ -69,17 +69,25 @@ build CMakeFiles/JustPlayer.dir/mainwindow.cpp.obj: CXX_COMPILER__JustPlayer_uns
   DEFINES = -DMINGW_HAS_SECURE_API=1 -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NEEDS_QMAIN -DQT_OPENGLWIDGETS_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DUNICODE -DWIN32 -DWIN64 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -D_UNICODE -D_WIN64
   DEP_FILE = CMakeFiles\JustPlayer.dir\mainwindow.cpp.obj.d
   FLAGS = -DQT_QML_DEBUG -g -std=gnu++17 -fdiagnostics-color=always
-  INCLUDES = -IF:/github/JustPlayer/qt/JustPlayer/build/Desktop_Qt_6_8_0_MinGW_64_bit-Debug/JustPlayer_autogen/include -IF:/github/JustPlayer/qt/JustPlayer/. -isystem E:/qt/6.8.0/mingw_64/include/QtCore -isystem E:/qt/6.8.0/mingw_64/include -isystem E:/qt/6.8.0/mingw_64/mkspecs/win32-g++ -isystem E:/qt/6.8.0/mingw_64/include/QtWidgets -isystem E:/qt/6.8.0/mingw_64/include/QtGui -isystem E:/qt/6.8.0/mingw_64/include/QtOpenGLWidgets -isystem E:/qt/6.8.0/mingw_64/include/QtOpenGL
+  INCLUDES = -IF:/github/JustPlayer/qt/JustPlayer/build/Desktop_Qt_6_8_0_MinGW_64_bit-Debug/JustPlayer_autogen/include -IF:/github/JustPlayer/qt/JustPlayer/./src -isystem E:/qt/6.8.0/mingw_64/include/QtCore -isystem E:/qt/6.8.0/mingw_64/include -isystem E:/qt/6.8.0/mingw_64/mkspecs/win32-g++ -isystem E:/qt/6.8.0/mingw_64/include/QtWidgets -isystem E:/qt/6.8.0/mingw_64/include/QtGui -isystem E:/qt/6.8.0/mingw_64/include/QtOpenGLWidgets -isystem E:/qt/6.8.0/mingw_64/include/QtOpenGL
   OBJECT_DIR = CMakeFiles\JustPlayer.dir
   OBJECT_FILE_DIR = CMakeFiles\JustPlayer.dir
 
-build CMakeFiles/JustPlayer.dir/XVideoWidget.cpp.obj: CXX_COMPILER__JustPlayer_unscanned_Debug F$:/github/JustPlayer/qt/JustPlayer/XVideoWidget.cpp || cmake_object_order_depends_target_JustPlayer
+build CMakeFiles/JustPlayer.dir/src/XVideoWidget.cpp.obj: CXX_COMPILER__JustPlayer_unscanned_Debug F$:/github/JustPlayer/qt/JustPlayer/src/XVideoWidget.cpp || cmake_object_order_depends_target_JustPlayer
   DEFINES = -DMINGW_HAS_SECURE_API=1 -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NEEDS_QMAIN -DQT_OPENGLWIDGETS_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DUNICODE -DWIN32 -DWIN64 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -D_UNICODE -D_WIN64
-  DEP_FILE = CMakeFiles\JustPlayer.dir\XVideoWidget.cpp.obj.d
+  DEP_FILE = CMakeFiles\JustPlayer.dir\src\XVideoWidget.cpp.obj.d
   FLAGS = -DQT_QML_DEBUG -g -std=gnu++17 -fdiagnostics-color=always
-  INCLUDES = -IF:/github/JustPlayer/qt/JustPlayer/build/Desktop_Qt_6_8_0_MinGW_64_bit-Debug/JustPlayer_autogen/include -IF:/github/JustPlayer/qt/JustPlayer/. -isystem E:/qt/6.8.0/mingw_64/include/QtCore -isystem E:/qt/6.8.0/mingw_64/include -isystem E:/qt/6.8.0/mingw_64/mkspecs/win32-g++ -isystem E:/qt/6.8.0/mingw_64/include/QtWidgets -isystem E:/qt/6.8.0/mingw_64/include/QtGui -isystem E:/qt/6.8.0/mingw_64/include/QtOpenGLWidgets -isystem E:/qt/6.8.0/mingw_64/include/QtOpenGL
+  INCLUDES = -IF:/github/JustPlayer/qt/JustPlayer/build/Desktop_Qt_6_8_0_MinGW_64_bit-Debug/JustPlayer_autogen/include -IF:/github/JustPlayer/qt/JustPlayer/./src -isystem E:/qt/6.8.0/mingw_64/include/QtCore -isystem E:/qt/6.8.0/mingw_64/include -isystem E:/qt/6.8.0/mingw_64/mkspecs/win32-g++ -isystem E:/qt/6.8.0/mingw_64/include/QtWidgets -isystem E:/qt/6.8.0/mingw_64/include/QtGui -isystem E:/qt/6.8.0/mingw_64/include/QtOpenGLWidgets -isystem E:/qt/6.8.0/mingw_64/include/QtOpenGL
   OBJECT_DIR = CMakeFiles\JustPlayer.dir
-  OBJECT_FILE_DIR = CMakeFiles\JustPlayer.dir
+  OBJECT_FILE_DIR = CMakeFiles\JustPlayer.dir\src
+
+build CMakeFiles/JustPlayer.dir/src/opengl/OpenglRender.cpp.obj: CXX_COMPILER__JustPlayer_unscanned_Debug F$:/github/JustPlayer/qt/JustPlayer/src/opengl/OpenglRender.cpp || cmake_object_order_depends_target_JustPlayer
+  DEFINES = -DMINGW_HAS_SECURE_API=1 -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NEEDS_QMAIN -DQT_OPENGLWIDGETS_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DUNICODE -DWIN32 -DWIN64 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -D_UNICODE -D_WIN64
+  DEP_FILE = CMakeFiles\JustPlayer.dir\src\opengl\OpenglRender.cpp.obj.d
+  FLAGS = -DQT_QML_DEBUG -g -std=gnu++17 -fdiagnostics-color=always
+  INCLUDES = -IF:/github/JustPlayer/qt/JustPlayer/build/Desktop_Qt_6_8_0_MinGW_64_bit-Debug/JustPlayer_autogen/include -IF:/github/JustPlayer/qt/JustPlayer/./src -isystem E:/qt/6.8.0/mingw_64/include/QtCore -isystem E:/qt/6.8.0/mingw_64/include -isystem E:/qt/6.8.0/mingw_64/mkspecs/win32-g++ -isystem E:/qt/6.8.0/mingw_64/include/QtWidgets -isystem E:/qt/6.8.0/mingw_64/include/QtGui -isystem E:/qt/6.8.0/mingw_64/include/QtOpenGLWidgets -isystem E:/qt/6.8.0/mingw_64/include/QtOpenGL
+  OBJECT_DIR = CMakeFiles\JustPlayer.dir
+  OBJECT_FILE_DIR = CMakeFiles\JustPlayer.dir\src\opengl
 
 
 # =============================================================================
@@ -89,7 +97,7 @@ build CMakeFiles/JustPlayer.dir/XVideoWidget.cpp.obj: CXX_COMPILER__JustPlayer_u
 #############################################
 # Link the executable JustPlayer.exe
 
-build JustPlayer.exe: CXX_EXECUTABLE_LINKER__JustPlayer_Debug CMakeFiles/JustPlayer.dir/JustPlayer_autogen/mocs_compilation.cpp.obj CMakeFiles/JustPlayer.dir/main.cpp.obj CMakeFiles/JustPlayer.dir/mainwindow.cpp.obj CMakeFiles/JustPlayer.dir/XVideoWidget.cpp.obj | E$:/qt/6.8.0/mingw_64/lib/libQt6OpenGLWidgets.a E$:/qt/6.8.0/mingw_64/lib/libQt6Widgets.a E$:/qt/6.8.0/mingw_64/lib/libQt6OpenGL.a E$:/qt/6.8.0/mingw_64/lib/libQt6Gui.a E$:/qt/6.8.0/mingw_64/lib/libQt6Core.a E$:/qt/6.8.0/mingw_64/lib/libQt6EntryPoint.a || JustPlayer_autogen JustPlayer_autogen_timestamp_deps
+build JustPlayer.exe: CXX_EXECUTABLE_LINKER__JustPlayer_Debug CMakeFiles/JustPlayer.dir/JustPlayer_autogen/mocs_compilation.cpp.obj CMakeFiles/JustPlayer.dir/main.cpp.obj CMakeFiles/JustPlayer.dir/mainwindow.cpp.obj CMakeFiles/JustPlayer.dir/src/XVideoWidget.cpp.obj CMakeFiles/JustPlayer.dir/src/opengl/OpenglRender.cpp.obj | E$:/qt/6.8.0/mingw_64/lib/libQt6OpenGLWidgets.a E$:/qt/6.8.0/mingw_64/lib/libQt6Widgets.a E$:/qt/6.8.0/mingw_64/lib/libQt6OpenGL.a E$:/qt/6.8.0/mingw_64/lib/libQt6Gui.a E$:/qt/6.8.0/mingw_64/lib/libQt6Core.a E$:/qt/6.8.0/mingw_64/lib/libQt6EntryPoint.a || JustPlayer_autogen JustPlayer_autogen_timestamp_deps
   FLAGS = -DQT_QML_DEBUG -g
   LINK_FLAGS = -mwindows
   LINK_LIBRARIES = E:/qt/6.8.0/mingw_64/lib/libQt6OpenGLWidgets.a  E:/qt/6.8.0/mingw_64/lib/libQt6Widgets.a  E:/qt/6.8.0/mingw_64/lib/libQt6OpenGL.a  E:/qt/6.8.0/mingw_64/lib/libQt6Gui.a  E:/qt/6.8.0/mingw_64/lib/libQt6Core.a  -lmpr  -luserenv  -lmingw32  E:/qt/6.8.0/mingw_64/lib/libQt6EntryPoint.a  -lshell32  -ld3d11  -ldxgi  -ldxguid  -ld3d12  -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32

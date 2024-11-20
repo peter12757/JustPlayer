@@ -16,6 +16,8 @@ add_subdirectory(ffmpeg)
 
 set(TS_FILES JustPlayer_zh_CN.ts)
 
+
+
 set(PROJECT_SOURCES
         main.cpp
         mainwindow.cpp
@@ -24,11 +26,19 @@ set(PROJECT_SOURCES
         ${TS_FILES}
 )
 
+
+file(GLOB_RECURSE SRC ./src/*.cpp ./src/*.h)    #file会把var中的变量重置，GLOB_RECURSE 会递归的把src文件中的所有文件都添加进去
+file(GLOB_RECURSE TESTSRC ./src/test/*.cpp ./src/test/*.h)
+message("--------------------------SRC:${SRC}")
+
+
+
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(JustPlayer
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
-        XVideoWidget.h XVideoWidget.cpp
+        ${SRC}
+        ${TESTSRC}
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET JustPlayer APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
@@ -54,6 +64,7 @@ endif()
 
 target_link_libraries(JustPlayer PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt6::OpenGLWidgets)
 
+
 target_include_directories(JustPlayer PUBLIC
     ${AVCODEC}
     ${AVDEVICE}
@@ -62,7 +73,7 @@ target_include_directories(JustPlayer PUBLIC
     ${AVUTIL}
     ${SWRESAMPLE}
     ${SWSCALE}
-    ./)
+    ./src/)
 
 target_link_libraries(JustPlayer PRIVATE
     ${AVCODEC}
