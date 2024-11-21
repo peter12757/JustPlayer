@@ -53,11 +53,16 @@ void OpenglRender::initialize()
     #define PROGRAM_VERTEX_ATTRIBUTE 0
     #define PROGRAM_TEXCOORD_ATTRIBUTE 1
     //创建着色器程序容器
-    m_pShaderProgram = new QOpenGLShaderProgram;
+    m_pShaderProgram = new QOpenGLShaderProgram(m_pParent);
     //将片段着色器添加到程序容器
     m_pShaderProgram->addShader(m_pFSHader);
     //将顶点着色器添加到程序容器
     m_pShaderProgram->addShader(m_pVSHader);
+
+    //绑定属性vertexIn到指定位置ATTRIB_VERTEX,该属性在顶点着色源码其中有声明
+    m_pShaderProgram->bindAttributeLocation("vextexIn",ATTRIB_VERTEX);
+    //绑定属性textureIn到指定位置ATTRIB_TEXTURE,该属性在顶点着色源码其中有声明
+    m_pShaderProgram->bindAttributeLocation("textureIn",ATTRIB_TEXTURE);
 
     //链接所有所有添入到的着色器程序
     m_pShaderProgram->link();
@@ -73,10 +78,16 @@ void OpenglRender::initialize()
     }
     //激活所有链接
     m_pShaderProgram->bind();
-//绑定属性vertexIn到指定位置ATTRIB_VERTEX,该属性在顶点着色源码其中有声明
-    int vertsLocation = m_pShaderProgram->attributeLocation("vertexIn");
-    //绑定属性textureIn到指定位置ATTRIB_TEXTURE,该属性在顶点着色源码其中有声明
-    int textureLocation = m_pShaderProgram->attributeLocation("textureIn");
+
+    //设置属性ATTRIB_VERTEX的顶点矩阵值以及格式
+    glVertexAttribPointer(ATTRIB_VERTEX, 2, GL_FLOAT, 0, 0, vertexVertices);
+    //设置属性ATTRIB_TEXTURE的纹理矩阵值以及格式
+    glVertexAttribPointer(ATTRIB_TEXTURE, 2, GL_FLOAT, 0, 0, textureVertices);
+    //启用ATTRIB_VERTEX属性的数据,默认是关闭的
+    glEnableVertexAttribArray(ATTRIB_VERTEX);
+    //启用ATTRIB_TEXTURE属性的数据,默认是关闭的
+    glEnableVertexAttribArray(ATTRIB_TEXTURE);
+
 
 
 
@@ -88,14 +99,7 @@ void OpenglRender::initialize()
     qDebug("textureUniform_y = %d textureUniform_u=%d textureUniform_v=%d\n", y.textureUniform, u.textureUniform, v.textureUniform);
 
 
-    //设置属性ATTRIB_VERTEX的顶点矩阵值以及格式
-    glVertexAttribPointer(vertsLocation, 2, GL_FLOAT, 0, 0, vertexVertices);
-    //设置属性ATTRIB_TEXTURE的纹理矩阵值以及格式
-    glVertexAttribPointer(textureLocation, 2, GL_FLOAT, 0, 0, textureVertices);
-    //启用ATTRIB_VERTEX属性的数据,默认是关闭的
-    glEnableVertexAttribArray(vertsLocation);
-    //启用ATTRIB_TEXTURE属性的数据,默认是关闭的
-    glEnableVertexAttribArray(textureLocation);
+
 
     //分别创建y,u,v纹理对象
     y.m_pTexture = new QOpenGLTexture(QOpenGLTexture::Target2D);
@@ -119,6 +123,7 @@ void OpenglRender::initialize()
 
 void OpenglRender::paintGL()
 {
+    qDebug()<<"OpenglRender::paintGL";
     //加载y数据纹理
     //激活纹理单元GL_TEXTURE0
     glActiveTexture(GL_TEXTURE0);

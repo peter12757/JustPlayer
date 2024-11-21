@@ -7,11 +7,10 @@
 
 int main(int argc, char *argv[])
 {
-    QCoreApplication::setAttribute(Qt::AA_UseSoftwareOpenGL);
     QApplication a(argc, argv);
     QApplication::setAttribute(Qt::AA_UseSoftwareOpenGL, true);
     // QSurfaceFormat fmt;
-    // fmt.setVersion(3, 3);
+    // fmt.setVersion(3, 0);
     // fmt.setProfile(QSurfaceFormat::CoreProfile);
     // QSurfaceFormat::setDefaultFormat(fmt);
 

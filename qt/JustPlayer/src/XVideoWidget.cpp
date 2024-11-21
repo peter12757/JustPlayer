@@ -5,7 +5,7 @@ XVideoWidget::XVideoWidget(QWidget* parent)
 {
     qDebug()<<"XVideoWiget create";
     render = new OpenglRender(this);
-    filename = "out240x128.yuv";
+    filename = "/Users/peterxi/work/github/JustPlayer/qt/JustPlayer/build/Qt_6_8_0_for_macOS-Debug/out240x128.yuv";
     video_width = 240;
     video_height = 128;
     qDebug()<<"XVideoWiget create"<<filename<<"width:"<<video_width<<"height:"<<video_height;
