@@ -88,9 +88,6 @@ void OpenglRender::initialize()
     //启用ATTRIB_TEXTURE属性的数据,默认是关闭的
     glEnableVertexAttribArray(ATTRIB_TEXTURE);
 
-
-
-
     //读取着色器中的数据变量tex_y, tex_u, tex_v的位置,这些变量的声明可以在
     //片段着色器源码中可以看到
     y.textureUniform = m_pShaderProgram->uniformLocation("tex_y");
