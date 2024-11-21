@@ -15,7 +15,8 @@
 
 
 //vertex shader顶点着色器源码
-static const  char *vSrcCode = "attribute vec4 vertexIn; \
+static const  char *vSrcCode = "\
+attribute vec4 vertexIn; \
     attribute vec2 textureIn; \
     varying vec2 textureOut;  \
     void main(void)           \

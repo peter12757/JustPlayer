@@ -9,6 +9,8 @@ XVideoWidget::XVideoWidget(QWidget* parent)
     video_width = 240;
     video_height = 128;
     qDebug()<<"XVideoWiget create"<<filename<<"width:"<<video_width<<"height:"<<video_height;
+    QSurfaceFormat format = QSurfaceFormat::defaultFormat();
+     qDebug()<<"format version"<<format.version().first<<"-"<<format.version().second;
 }
 
 XVideoWidget::~XVideoWidget() {

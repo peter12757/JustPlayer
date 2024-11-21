@@ -21,16 +21,34 @@ void OpenglRender::initialize()
     //着色器：就是使用openGL着色语言(OpenGL Shading Language, GLSL)编写的一个小函数,
     //       GLSL是构成所有OpenGL着色器的语言,具体的GLSL语言的语法需要读者查找相关资料
     //初始化顶点着色器 对象
+     int success =0;
+
     m_pVSHader = new QOpenGLShader(QOpenGLShader::Vertex, m_pParent);
     //编译顶点着色器程序
     bool bCompile = m_pVSHader->compileSourceCode(vSrcCode);
     qDebug()<<"m_pVSHader->compileSourceCode:"<<bCompile;
+    glGetShaderiv(m_pVSHader->shaderId(), GL_COMPILE_STATUS, &success);
+    if (!success)
+    {
+        char infoLog[1024];
+        // 获取错误日志
+        glGetShaderInfoLog(m_pVSHader->shaderId(), 1024, NULL, infoLog);
+        qDebug() << "ERROR::SHADER_COMPILATION_ERROR of type: " << m_pVSHader->shaderType() << "\n" << infoLog << "\n -- --------------------------------------------------- -- ";
+    }
 
     //初始化片段着色器 功能gpu中yuv转换成rgb
     m_pFSHader = new QOpenGLShader(QOpenGLShader::Fragment, m_pParent);
     //将glsl源码送入编译器编译着色器程序
     bCompile = m_pFSHader->compileSourceCode(fSrcCode);
     qDebug()<<"m_pFSHader->compileSourceCode:"<<bCompile;
+    glGetShaderiv(m_pFSHader->shaderId(), GL_COMPILE_STATUS, &success);
+    if (!success)
+    {
+        char infoLog[1024];
+        // 获取错误日志
+        glGetShaderInfoLog(m_pFSHader->shaderId(), 1024, NULL, infoLog);
+        qDebug() << "ERROR::SHADER_COMPILATION_ERROR of type: " << m_pFSHader->shaderType() << "\n" << infoLog << "\n -- --------------------------------------------------- -- ";
+    }
 
     #define PROGRAM_VERTEX_ATTRIBUTE 0
     #define PROGRAM_TEXCOORD_ATTRIBUTE 1
@@ -40,14 +58,27 @@ void OpenglRender::initialize()
     m_pShaderProgram->addShader(m_pFSHader);
     //将顶点着色器添加到程序容器
     m_pShaderProgram->addShader(m_pVSHader);
-    //绑定属性vertexIn到指定位置ATTRIB_VERTEX,该属性在顶点着色源码其中有声明
-    m_pShaderProgram->bindAttributeLocation("vertexIn", ATTRIB_VERTEX);
-    //绑定属性textureIn到指定位置ATTRIB_TEXTURE,该属性在顶点着色源码其中有声明
-    m_pShaderProgram->bindAttributeLocation("textureIn", ATTRIB_TEXTURE);
+
     //链接所有所有添入到的着色器程序
     m_pShaderProgram->link();
+
+    // 检查着色器编译错误
+    glGetShaderiv(m_pShaderProgram->programId(), GL_COMPILE_STATUS, &success);
+    if (!success)
+    {
+        char infoLog[1024];
+        // 获取错误日志
+        glGetShaderInfoLog(m_pShaderProgram->programId(), 1024, NULL, infoLog);
+        qDebug() << "ERROR::SHADER_COMPILATION_ERROR program" << "\n" << infoLog << "\n -- --------------------------------------------------- -- ";
+    }
     //激活所有链接
     m_pShaderProgram->bind();
+//绑定属性vertexIn到指定位置ATTRIB_VERTEX,该属性在顶点着色源码其中有声明
+    int vertsLocation = m_pShaderProgram->attributeLocation("vertexIn");
+    //绑定属性textureIn到指定位置ATTRIB_TEXTURE,该属性在顶点着色源码其中有声明
+    int textureLocation = m_pShaderProgram->attributeLocation("textureIn");
+
+
 
     //读取着色器中的数据变量tex_y, tex_u, tex_v的位置,这些变量的声明可以在
     //片段着色器源码中可以看到
@@ -58,13 +89,13 @@ void OpenglRender::initialize()
 
 
     //设置属性ATTRIB_VERTEX的顶点矩阵值以及格式
-    glVertexAttribPointer(ATTRIB_VERTEX, 2, GL_FLOAT, 0, 0, vertexVertices);
+    glVertexAttribPointer(vertsLocation, 2, GL_FLOAT, 0, 0, vertexVertices);
     //设置属性ATTRIB_TEXTURE的纹理矩阵值以及格式
-    glVertexAttribPointer(ATTRIB_TEXTURE, 2, GL_FLOAT, 0, 0, textureVertices);
+    glVertexAttribPointer(textureLocation, 2, GL_FLOAT, 0, 0, textureVertices);
     //启用ATTRIB_VERTEX属性的数据,默认是关闭的
-    glEnableVertexAttribArray(ATTRIB_VERTEX);
+    glEnableVertexAttribArray(vertsLocation);
     //启用ATTRIB_TEXTURE属性的数据,默认是关闭的
-    glEnableVertexAttribArray(ATTRIB_TEXTURE);
+    glEnableVertexAttribArray(textureLocation);
 
     //分别创建y,u,v纹理对象
     y.m_pTexture = new QOpenGLTexture(QOpenGLTexture::Target2D);
