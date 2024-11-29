@@ -5,12 +5,14 @@
 #include <QDebug>
 #include <QTimer>
 #include <QFile>
+#include <mutex>
 #include "opengl/OpenglRender.h"
 #include <QtOpenGLWidgets/QOpenGLWidget>
+#include "justplayer/ffinc.h"
 
 
 
-
+struct AVFrame;
 
 class XVideoWidget : public QOpenGLWidget
 {
@@ -19,11 +21,16 @@ class XVideoWidget : public QOpenGLWidget
 public:
     XVideoWidget(QWidget* parent);
     ~XVideoWidget();
+    void Init(int width, int height);
+    virtual void Repaint(AVFrame *frame);
 
 protected:
     void paintGL(); //刷新现实
     void initializeGL();    //初始化
     void resizeGL(int width,int height);    //窗口大小变化
+
+
+
 
 private:
     void bindGL(int index);
@@ -37,13 +44,11 @@ private:
     FILE *fp;
 
     QTimer *timer;
+    std::mutex mux;
 
 
-    unsigned char* m_pBufYuv;
 
-    std::string filename;
-    int video_width; //视频分辨率宽
-    int video_height; //视频分辨率高
+
 
 
 };

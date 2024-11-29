@@ -629,6 +629,7 @@ F:/github/JustPlayer/qt/JustPlayer/src/XVideoWidget.h
  mdp:E:/qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/sstream.tcc
  mdp:E:/qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/std_abs.h
  mdp:E:/qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/std_function.h
+ mdp:E:/qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/std_mutex.h
  mdp:E:/qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/stl_algo.h
  mdp:E:/qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/stl_algobase.h
  mdp:E:/qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/stl_bvector.h
@@ -655,6 +656,7 @@ F:/github/JustPlayer/qt/JustPlayer/src/XVideoWidget.h
  mdp:E:/qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/string_view.tcc
  mdp:E:/qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/stringfwd.h
  mdp:E:/qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/uniform_int_dist.h
+ mdp:E:/qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/unique_lock.h
  mdp:E:/qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/unique_ptr.h
  mdp:E:/qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/unordered_map.h
  mdp:E:/qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/uses_allocator.h
@@ -700,7 +702,9 @@ F:/github/JustPlayer/qt/JustPlayer/src/XVideoWidget.h
  mdp:E:/qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/list
  mdp:E:/qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/locale
  mdp:E:/qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/map
+ mdp:E:/qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/math.h
  mdp:E:/qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/memory
+ mdp:E:/qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/mutex
  mdp:E:/qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/new
  mdp:E:/qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/numeric
  mdp:E:/qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/optional
@@ -770,6 +774,7 @@ F:/github/JustPlayer/qt/JustPlayer/src/XVideoWidget.h
  mdp:E:/qt/Tools/mingw1310_64/x86_64-w64-mingw32/include/crtdefs.h
  mdp:E:/qt/Tools/mingw1310_64/x86_64-w64-mingw32/include/ctype.h
  mdp:E:/qt/Tools/mingw1310_64/x86_64-w64-mingw32/include/errno.h
+ mdp:E:/qt/Tools/mingw1310_64/x86_64-w64-mingw32/include/inttypes.h
  mdp:E:/qt/Tools/mingw1310_64/x86_64-w64-mingw32/include/locale.h
  mdp:E:/qt/Tools/mingw1310_64/x86_64-w64-mingw32/include/process.h
  mdp:E:/qt/Tools/mingw1310_64/x86_64-w64-mingw32/include/pthread.h
@@ -793,15 +798,50 @@ F:/github/JustPlayer/qt/JustPlayer/src/XVideoWidget.h
  mdp:E:/qt/Tools/mingw1310_64/x86_64-w64-mingw32/include/wchar.h
  mdp:E:/qt/Tools/mingw1310_64/x86_64-w64-mingw32/include/wctype.h
  mdp:F:/github/JustPlayer/qt/JustPlayer/build/Desktop_Qt_6_8_0_MinGW_64_bit-Debug/JustPlayer_autogen/moc_predefs.h
+ mdp:F:/github/JustPlayer/qt/JustPlayer/ffmpeg/win64/include/libavcodec/avcodec.h
+ mdp:F:/github/JustPlayer/qt/JustPlayer/ffmpeg/win64/include/libavcodec/codec.h
+ mdp:F:/github/JustPlayer/qt/JustPlayer/ffmpeg/win64/include/libavcodec/codec_desc.h
+ mdp:F:/github/JustPlayer/qt/JustPlayer/ffmpeg/win64/include/libavcodec/codec_id.h
+ mdp:F:/github/JustPlayer/qt/JustPlayer/ffmpeg/win64/include/libavcodec/codec_par.h
+ mdp:F:/github/JustPlayer/qt/JustPlayer/ffmpeg/win64/include/libavcodec/defs.h
+ mdp:F:/github/JustPlayer/qt/JustPlayer/ffmpeg/win64/include/libavcodec/packet.h
+ mdp:F:/github/JustPlayer/qt/JustPlayer/ffmpeg/win64/include/libavcodec/version.h
+ mdp:F:/github/JustPlayer/qt/JustPlayer/ffmpeg/win64/include/libavcodec/version_major.h
+ mdp:F:/github/JustPlayer/qt/JustPlayer/ffmpeg/win64/include/libavformat/avformat.h
+ mdp:F:/github/JustPlayer/qt/JustPlayer/ffmpeg/win64/include/libavformat/avio.h
+ mdp:F:/github/JustPlayer/qt/JustPlayer/ffmpeg/win64/include/libavformat/version.h
+ mdp:F:/github/JustPlayer/qt/JustPlayer/ffmpeg/win64/include/libavformat/version_major.h
+ mdp:F:/github/JustPlayer/qt/JustPlayer/ffmpeg/win64/include/libavutil/attributes.h
+ mdp:F:/github/JustPlayer/qt/JustPlayer/ffmpeg/win64/include/libavutil/avconfig.h
+ mdp:F:/github/JustPlayer/qt/JustPlayer/ffmpeg/win64/include/libavutil/avutil.h
+ mdp:F:/github/JustPlayer/qt/JustPlayer/ffmpeg/win64/include/libavutil/buffer.h
+ mdp:F:/github/JustPlayer/qt/JustPlayer/ffmpeg/win64/include/libavutil/channel_layout.h
+ mdp:F:/github/JustPlayer/qt/JustPlayer/ffmpeg/win64/include/libavutil/common.h
+ mdp:F:/github/JustPlayer/qt/JustPlayer/ffmpeg/win64/include/libavutil/dict.h
+ mdp:F:/github/JustPlayer/qt/JustPlayer/ffmpeg/win64/include/libavutil/error.h
+ mdp:F:/github/JustPlayer/qt/JustPlayer/ffmpeg/win64/include/libavutil/frame.h
+ mdp:F:/github/JustPlayer/qt/JustPlayer/ffmpeg/win64/include/libavutil/hwcontext.h
+ mdp:F:/github/JustPlayer/qt/JustPlayer/ffmpeg/win64/include/libavutil/intfloat.h
+ mdp:F:/github/JustPlayer/qt/JustPlayer/ffmpeg/win64/include/libavutil/log.h
+ mdp:F:/github/JustPlayer/qt/JustPlayer/ffmpeg/win64/include/libavutil/macros.h
+ mdp:F:/github/JustPlayer/qt/JustPlayer/ffmpeg/win64/include/libavutil/mathematics.h
+ mdp:F:/github/JustPlayer/qt/JustPlayer/ffmpeg/win64/include/libavutil/mem.h
+ mdp:F:/github/JustPlayer/qt/JustPlayer/ffmpeg/win64/include/libavutil/pixfmt.h
+ mdp:F:/github/JustPlayer/qt/JustPlayer/ffmpeg/win64/include/libavutil/rational.h
+ mdp:F:/github/JustPlayer/qt/JustPlayer/ffmpeg/win64/include/libavutil/samplefmt.h
+ mdp:F:/github/JustPlayer/qt/JustPlayer/ffmpeg/win64/include/libavutil/version.h
  mdp:F:/github/JustPlayer/qt/JustPlayer/src/XVideoWidget.h
+ mdp:F:/github/JustPlayer/qt/JustPlayer/src/justplayer/ffinc.h
  mdp:F:/github/JustPlayer/qt/JustPlayer/src/opengl/OpenglRender.h
 F:/github/JustPlayer/qt/JustPlayer/src/justplayer/JustDemux.h
+F:/github/JustPlayer/qt/JustPlayer/src/justplayer/JustDecodec.cpp
 F:/github/JustPlayer/qt/JustPlayer/src/justplayer/ffinc.h
 F:/github/JustPlayer/qt/JustPlayer/src/opengl/OpenglRender.h
-F:/github/JustPlayer/qt/JustPlayer/main.cpp
 F:/github/JustPlayer/qt/JustPlayer/mainwindow.cpp
  uic:./ui_mainwindow.h
+F:/github/JustPlayer/qt/JustPlayer/main.cpp
 F:/github/JustPlayer/qt/JustPlayer/src/test/TestCase.h
 F:/github/JustPlayer/qt/JustPlayer/src/XVideoWidget.cpp
 F:/github/JustPlayer/qt/JustPlayer/src/justplayer/JustDemux.cpp
 F:/github/JustPlayer/qt/JustPlayer/src/opengl/OpenglRender.cpp
+F:/github/JustPlayer/qt/JustPlayer/src/justplayer/JustDecodec.h

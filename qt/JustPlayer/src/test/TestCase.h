@@ -2,8 +2,70 @@
 #define TESTCASE_H
 
 #include <string>
+#include <QThread>
+#include <iostream>
+#include "justplayer/ffinc.h"
+#include "justplayer/JustDecodec.h"
+#include "justplayer/JustDemux.h"
+#include "XVideoWidget.h"
+using namespace std;
 
+class TestThread :public QThread
+{
+public:
+    void Init()
+    {
+        //�������
+        // char *url = "rtmp://58.200.131.2:1935/livetv/hunantv";
+        char *url = "test_1.mp4";
+        cout << "demux.Open = " << demux.Open(url);
+        demux.Read();
+        demux.Flush();
+        demux.Close();
 
+        cout << "demux.Open = " << demux.Open(url);
+        cout << "CopyVPara = " << demux.CopyVPara() << endl;
+        cout << "CopyAPara = " << demux.CopyAPara() << endl;
+        //cout << "seek=" << demux.Seek(0.95) << endl;
+
+        /////////////////////////////
+
+        cout << "vdecode.Open() = " << vdecode.Open(demux.CopyVPara()) << endl;
+        //vdecode.Clear();
+        //vdecode.Close();
+        cout << "adecode.Open() = " << adecode.Open(demux.CopyAPara()) << endl;
+
+    }
+    void run()
+    {
+        for (;;)
+        {
+            AVPacket *pkt = demux.Read();
+            if (demux.isAudio(pkt))
+            {
+                //adecode.Send(pkt);
+                //AVFrame *frame = adecode.Recv();
+                //cout << "Audio:" << frame << endl;
+            }
+            else
+            {
+                vdecode.Send(pkt);
+                AVFrame *frame = vdecode.Recv();
+                video->Repaint(frame);
+                msleep(40);
+                //cout << "Video:" << frame << endl;
+            }
+            if (!pkt)break;
+        }
+    }
+    ///����XDemux
+    JustDemux demux;
+    ///�������
+    JustDecodec vdecode;
+    JustDecodec adecode;
+    XVideoWidget *video;
+
+};
 
 
 struct TestCase
