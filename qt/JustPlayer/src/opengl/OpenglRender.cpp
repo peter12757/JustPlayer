@@ -132,7 +132,7 @@ void OpenglRender::paintGL()
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    qDebug()<<"-y.id:"<<y.id<<"-y.textureUniform:"<<y.textureUniform<<"-y.m_nBufW:"<<y.data->m_nBufW<<"-y.m_nBufH:"<<y.data->m_nBufH;
+    // qDebug()<<"-y.id:"<<y.id<<"-y.textureUniform:"<<y.textureUniform<<"-y.m_nBufW:"<<y.data->m_nBufW<<"-y.m_nBufH:"<<y.data->m_nBufH;
     //加载u数据纹理
     glActiveTexture(GL_TEXTURE1);//激活纹理单元GL_TEXTURE1
     glBindTexture(GL_TEXTURE_2D, u.id);
@@ -141,7 +141,7 @@ void OpenglRender::paintGL()
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    qDebug()<<"-u.id:"<<u.id<<"-u.textureUniform:"<<u.textureUniform<<"-u.m_nBufW:"<<u.data->m_nBufW<<"-u.m_nBufH:"<<u.data->m_nBufH;
+    // qDebug()<<"-u.id:"<<u.id<<"-u.textureUniform:"<<u.textureUniform<<"-u.m_nBufW:"<<u.data->m_nBufW<<"-u.m_nBufH:"<<u.data->m_nBufH;
     //加载v数据纹理
     glActiveTexture(GL_TEXTURE2);//激活纹理单元GL_TEXTURE2
     glBindTexture(GL_TEXTURE_2D, v.id);
@@ -150,7 +150,7 @@ void OpenglRender::paintGL()
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    qDebug()<<"-v.id:"<<v.id<<"-v.textureUniform:"<<v.textureUniform<<"-v.m_nBufW:"<<v.data->m_nBufW<<"-v.m_nBufH:"<<v.data->m_nBufH;
+    // qDebug()<<"-v.id:"<<v.id<<"-v.textureUniform:"<<v.textureUniform<<"-v.m_nBufW:"<<v.data->m_nBufW<<"-v.m_nBufH:"<<v.data->m_nBufH;
     //指定y纹理要使用新值 只能用0,1,2等表示纹理单元的索引，这是opengl不人性化的地方
     //0对应纹理单元GL_TEXTURE0 1对应纹理单元GL_TEXTURE1 2对应纹理的单元
     glUniform1i(y.textureUniform, 0);

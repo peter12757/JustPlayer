@@ -48,6 +48,8 @@ set(OLD_GLOB
   "F:/github/JustPlayer/qt/JustPlayer/main.cpp"
   "F:/github/JustPlayer/qt/JustPlayer/mainwindow.cpp"
   "F:/github/JustPlayer/qt/JustPlayer/src/XVideoWidget.cpp"
+  "F:/github/JustPlayer/qt/JustPlayer/src/justplayer/JustDecodec.cpp"
+  "F:/github/JustPlayer/qt/JustPlayer/src/justplayer/JustDemux.cpp"
   "F:/github/JustPlayer/qt/JustPlayer/src/opengl/OpenglRender.cpp"
   )
 if(NOT "${NEW_GLOB}" STREQUAL "${OLD_GLOB}")
@@ -138,6 +140,7 @@ set(OLD_GLOB
   "F:/github/JustPlayer/qt/JustPlayer/ffmpeg/win64/include/libavutil/error.h"
   "F:/github/JustPlayer/qt/JustPlayer/ffmpeg/win64/include/libavutil/eval.h"
   "F:/github/JustPlayer/qt/JustPlayer/ffmpeg/win64/include/libavutil/executor.h"
+  "F:/github/JustPlayer/qt/JustPlayer/ffmpeg/win64/include/libavutil/fftime.h"
   "F:/github/JustPlayer/qt/JustPlayer/ffmpeg/win64/include/libavutil/ffversion.h"
   "F:/github/JustPlayer/qt/JustPlayer/ffmpeg/win64/include/libavutil/fifo.h"
   "F:/github/JustPlayer/qt/JustPlayer/ffmpeg/win64/include/libavutil/file.h"
@@ -191,7 +194,6 @@ set(OLD_GLOB
   "F:/github/JustPlayer/qt/JustPlayer/ffmpeg/win64/include/libavutil/stereo3d.h"
   "F:/github/JustPlayer/qt/JustPlayer/ffmpeg/win64/include/libavutil/tea.h"
   "F:/github/JustPlayer/qt/JustPlayer/ffmpeg/win64/include/libavutil/threadmessage.h"
-  "F:/github/JustPlayer/qt/JustPlayer/ffmpeg/win64/include/libavutil/time.h"
   "F:/github/JustPlayer/qt/JustPlayer/ffmpeg/win64/include/libavutil/timecode.h"
   "F:/github/JustPlayer/qt/JustPlayer/ffmpeg/win64/include/libavutil/timestamp.h"
   "F:/github/JustPlayer/qt/JustPlayer/ffmpeg/win64/include/libavutil/tree.h"
@@ -213,6 +215,9 @@ set(OLD_GLOB
   "F:/github/JustPlayer/qt/JustPlayer/ffmpeg/win64/include/libswscale/version_major.h"
   "F:/github/JustPlayer/qt/JustPlayer/mainwindow.h"
   "F:/github/JustPlayer/qt/JustPlayer/src/XVideoWidget.h"
+  "F:/github/JustPlayer/qt/JustPlayer/src/justplayer/JustDecodec.h"
+  "F:/github/JustPlayer/qt/JustPlayer/src/justplayer/JustDemux.h"
+  "F:/github/JustPlayer/qt/JustPlayer/src/justplayer/ffinc.h"
   "F:/github/JustPlayer/qt/JustPlayer/src/opengl/OpenglRender.h"
   "F:/github/JustPlayer/qt/JustPlayer/src/test/TestCase.h"
   )

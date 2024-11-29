@@ -1,22 +1,11 @@
-cmake_minimum_required(VERSION 3.16)
-
-project(JustPlayer VERSION 0.1 LANGUAGES CXX)
-
-set(CMAKE_AUTOUIC ON)
-set(CMAKE_AUTOMOC ON)
-set(CMAKE_AUTORCC ON)
-
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets LinguistTools)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets LinguistTools)
-
-set(TS_FILES JustPlayer_zh_CN.ts)
-
-SET(LIBNAME FFLIB)
-SET(FFLIB_DIR libs)
+SET(FFLIB_DIR win64/lib)
+SET(FFINCLUDE_DIR win64/include)
+message("LIBRARY_OUTPUT_PATH : ${LIBRARY_OUTPUT_PATH}")
+SET(LIBRARY_OUTPUT_PATH ${LIBRARY_OUTPUT_PATH}/lib)
 message("FFLIB_DIR : ${FFLIB_DIR}")
+message("FFINCLUDE_DIR : ${FFINCLUDE_DIR}")
+message("CMAKE_CURRENT_SOURCE_DIR: ${CMAKE_CURRENT_SOURCE_DIR}")
+message("LIBRARY_OUTPUT_PATH : ${LIBRARY_OUTPUT_PATH}")
 
 set(AVCODEC  libavcodec)
 add_library(${AVCODEC} SHARED IMPORTED)
@@ -26,7 +15,7 @@ set_target_properties(${AVCODEC}
         # Provides the path to the library you want to import.
         ${FFLIB_DIR}/avcodec-61.dll)
 target_include_directories(${AVCODEC} INTERFACE
-        include/libavcodec
+        ${FFINCLUDE_DIR}/libavcodec
         )
 
 
@@ -37,7 +26,7 @@ target_include_directories(${AVCODEC} INTERFACE
             PROPERTIES IMPORTED_LOCATION
             # Provides the path to the library you want to import.
             ${FFLIB_DIR}/avdevice-61.dll)
-    target_include_directories(${AVDEVICE} INTERFACE ffmpeginc/libavdevice)
+    target_include_directories(${AVDEVICE} INTERFACE ${FFINCLUDE_DIR}/libavdevice)
 
     set(AVFILTER libavfilter)
     add_library(${AVFILTER} SHARED IMPORTED)
@@ -46,16 +35,17 @@ target_include_directories(${AVCODEC} INTERFACE
             PROPERTIES IMPORTED_LOCATION
             # Provides the path to the library you want to import.
             ${FFLIB_DIR}/avfilter-10.dll)
-    target_include_directories(${AVFILTER} INTERFACE ffmpeginc/libavfilter)
+    target_include_directories(${AVFILTER} INTERFACE ${FFINCLUDE_DIR}/libavfilter)
 
+
+    message("CMAKE_CURRENT_SOURCE_DIR: ${CMAKE_CURRENT_SOURCE_DIR}")
     set(AVFORMAT libavformat)
-    add_library(${AVFORMAT} SHARED IMPORTED)
-    set_target_properties(${AVFORMAT}
-            # Specifies the parameter you want to define.
-            PROPERTIES IMPORTED_LOCATION
-            # Provides the path to the library you want to import.
-            ${FFLIB_DIR}/avformat-61.dll)
-    target_include_directories(${AVFORMAT} INTERFACE ffmpeginc/libavformat)
+    add_library(${AVFORMAT} STATIC IMPORTED)
+    set_target_properties(${AVFORMAT} PROPERTIES
+        IMPORTED_LOCATION   ${FFLIB_DIR}/libavformat.dll.a
+        IMPORTED_IMPLIB     ${FFLIB_DIR}/avformat.lib)
+    target_include_directories(${AVFORMAT} INTERFACE ${FFINCLUDE_DIR}/libavformat)
+    message("AVFORMAT: ${AVFORMAT}")
 
     set(AVUTIL libavutil)
     add_library(${AVUTIL} SHARED IMPORTED)
@@ -64,7 +54,7 @@ target_include_directories(${AVCODEC} INTERFACE
             PROPERTIES IMPORTED_LOCATION
             # Provides the path to the library you want to import.
             ${FFLIB_DIR}/avutil-59.dll)
-    target_include_directories(${AVUTIL} INTERFACE ffmpeginc/libavutil)
+    target_include_directories(${AVUTIL} INTERFACE ${FFINCLUDE_DIR}/libavutil)
 
     set(SWRESAMPLE libswresample)
     add_library(${SWRESAMPLE} SHARED IMPORTED)
@@ -73,7 +63,7 @@ target_include_directories(${AVCODEC} INTERFACE
             PROPERTIES IMPORTED_LOCATION
             # Provides the path to the library you want to import.
             ${FFLIB_DIR}/swresample-5.dll)
-    target_include_directories(${SWRESAMPLE} INTERFACE ffmpeginc/libswresample)
+    target_include_directories(${SWRESAMPLE} INTERFACE ${FFINCLUDE_DIR}/libswresample)
 
     set(SWSCALE libswscale)
     add_library(${SWSCALE} SHARED IMPORTED)
@@ -82,4 +72,4 @@ target_include_directories(${AVCODEC} INTERFACE
             PROPERTIES IMPORTED_LOCATION
             # Provides the path to the library you want to import.
             ${FFLIB_DIR}/swscale-8.dll)
-    target_include_directories(${SWSCALE} INTERFACE ffmpeginc/libswscale)
+    target_include_directories(${SWSCALE} INTERFACE ${FFINCLUDE_DIR}/libswscale)

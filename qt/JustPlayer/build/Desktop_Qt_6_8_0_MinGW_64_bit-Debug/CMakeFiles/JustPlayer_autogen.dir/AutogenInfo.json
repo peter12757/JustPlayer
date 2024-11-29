@@ -292,6 +292,7 @@
 		"E:/qt/6.8.0/mingw_64/lib/cmake/Qt6OpenGLWidgets/Qt6OpenGLWidgetsTargets-relwithdebinfo.cmake",
 		"E:/qt/6.8.0/mingw_64/lib/cmake/Qt6OpenGLWidgets/Qt6OpenGLWidgetsAdditionalTargetInfo.cmake",
 		"E:/qt/6.8.0/mingw_64/lib/cmake/Qt6OpenGLWidgets/Qt6OpenGLWidgetsVersionlessAliasTargets.cmake",
+		"F:/github/JustPlayer/qt/JustPlayer/ff_win64.cmake",
 		"E:/qt/Tools/CMake_64/share/cmake-3.29/Modules/GNUInstallDirs.cmake"
 	],
 	"CMAKE_SOURCE_DIR" : "F:/github/JustPlayer/qt/JustPlayer",
@@ -310,6 +311,24 @@
 			"F:/github/JustPlayer/qt/JustPlayer/src/XVideoWidget.h",
 			"MU",
 			"UVLADIE3JM/moc_XVideoWidget.cpp",
+			null
+		],
+		[
+			"F:/github/JustPlayer/qt/JustPlayer/src/justplayer/JustDecodec.h",
+			"MU",
+			"2AS6NDAMB6/moc_JustDecodec.cpp",
+			null
+		],
+		[
+			"F:/github/JustPlayer/qt/JustPlayer/src/justplayer/JustDemux.h",
+			"MU",
+			"2AS6NDAMB6/moc_JustDemux.cpp",
+			null
+		],
+		[
+			"F:/github/JustPlayer/qt/JustPlayer/src/justplayer/ffinc.h",
+			"MU",
+			"2AS6NDAMB6/moc_ffinc.cpp",
 			null
 		],
 		[
@@ -353,6 +372,13 @@
 	],
 	"MOC_INCLUDES" : 
 	[
+		"F:/github/JustPlayer/qt/JustPlayer/libavcodec",
+		"F:/github/JustPlayer/qt/JustPlayer/libavdevice",
+		"F:/github/JustPlayer/qt/JustPlayer/libavfilter",
+		"F:/github/JustPlayer/qt/JustPlayer/libavformat",
+		"F:/github/JustPlayer/qt/JustPlayer/libavutil",
+		"F:/github/JustPlayer/qt/JustPlayer/libswresample",
+		"F:/github/JustPlayer/qt/JustPlayer/libswscale",
 		"F:/github/JustPlayer/qt/JustPlayer/src",
 		"E:/qt/6.8.0/mingw_64/include/QtCore",
 		"E:/qt/6.8.0/mingw_64/include",
@@ -361,6 +387,8 @@
 		"E:/qt/6.8.0/mingw_64/include/QtGui",
 		"E:/qt/6.8.0/mingw_64/include/QtOpenGLWidgets",
 		"E:/qt/6.8.0/mingw_64/include/QtOpenGL",
+		"F:/github/JustPlayer/qt/JustPlayer/ffmpeg/win64/include/libavdevice",
+		"F:/github/JustPlayer/qt/JustPlayer/ffmpeg/win64/include",
 		"E:/qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++",
 		"E:/qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/x86_64-w64-mingw32",
 		"E:/qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/backward",
@@ -404,6 +432,16 @@
 		[ "F:/github/JustPlayer/qt/JustPlayer/main.cpp", "MU", null ],
 		[ "F:/github/JustPlayer/qt/JustPlayer/mainwindow.cpp", "MU", null ],
 		[ "F:/github/JustPlayer/qt/JustPlayer/src/XVideoWidget.cpp", "MU", null ],
+		[
+			"F:/github/JustPlayer/qt/JustPlayer/src/justplayer/JustDecodec.cpp",
+			"MU",
+			null
+		],
+		[
+			"F:/github/JustPlayer/qt/JustPlayer/src/justplayer/JustDemux.cpp",
+			"MU",
+			null
+		],
 		[
 			"F:/github/JustPlayer/qt/JustPlayer/src/opengl/OpenglRender.cpp",
 			"MU",

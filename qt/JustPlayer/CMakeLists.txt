@@ -9,11 +9,35 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+set(CMAKE_C_FLAGS "-g -Wall -stdlib=libc++")
+
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets LinguistTools)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets LinguistTools OpenGLWidgets)
 
-add_subdirectory(ffmpeg)
+SET(FFLIB_DIR ${CMAKE_CURRENT_SOURCE_DIR}/ffmpeg/win64/lib)
+SET(FFINCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/ffmpeg/win64/include)
 
+# ffmpeg var
+set(AVCODEC  libavcodec)
+set(AVDEVICE  libavdevice)
+set(AVFILTER libavfilter) 
+set(AVFORMAT libavformat)
+set(AVUTIL libavutil)
+set(SWRESAMPLE libswresample)
+set(SWSCALE libswscale)
+
+# message("CMAKE_CURRENT_SOURCE_DIR: ${CMAKE_CURRENT_SOURCE_DIR}")
+# set(AVFORMAT libavformat)
+# add_library(${AVFORMAT} STATIC IMPORTED)
+# set_target_properties(${AVFORMAT} PROPERTIES
+#     IMPORTED_LOCATION   ${FFLIB_DIR}/libavformat.dll.a
+#     IMPORTED_IMPLIB     ${FFLIB_DIR}/avformat.lib)
+# target_include_directories(${AVFORMAT} INTERFACE ${FFINCLUDE_DIR}/libavformat)
+# message("AVFORMAT: ${AVFORMAT}")
+
+
+# 使用子项目的话局部变量还是有一些问题的。
+# add_subdirectory(ffmpeg)
 set(TS_FILES JustPlayer_zh_CN.ts)
 
 
@@ -34,6 +58,8 @@ message("--------------------------SRC:${SRC}")
 
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
+
+    include(ff_win64.cmake)
     qt_add_executable(JustPlayer
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
@@ -69,7 +95,7 @@ target_include_directories(JustPlayer PUBLIC
     ${AVCODEC}
     ${AVDEVICE}
     ${AVFILTER}
-    ${AVFORMAT} 
+    ${AVFORMAT}
     ${AVUTIL}
     ${SWRESAMPLE}
     ${SWSCALE}

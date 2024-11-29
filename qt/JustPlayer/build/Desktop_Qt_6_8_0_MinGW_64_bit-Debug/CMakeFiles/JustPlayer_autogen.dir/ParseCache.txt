@@ -795,10 +795,13 @@ F:/github/JustPlayer/qt/JustPlayer/src/XVideoWidget.h
  mdp:F:/github/JustPlayer/qt/JustPlayer/build/Desktop_Qt_6_8_0_MinGW_64_bit-Debug/JustPlayer_autogen/moc_predefs.h
  mdp:F:/github/JustPlayer/qt/JustPlayer/src/XVideoWidget.h
  mdp:F:/github/JustPlayer/qt/JustPlayer/src/opengl/OpenglRender.h
+F:/github/JustPlayer/qt/JustPlayer/src/justplayer/JustDemux.h
+F:/github/JustPlayer/qt/JustPlayer/src/justplayer/ffinc.h
 F:/github/JustPlayer/qt/JustPlayer/src/opengl/OpenglRender.h
+F:/github/JustPlayer/qt/JustPlayer/main.cpp
 F:/github/JustPlayer/qt/JustPlayer/mainwindow.cpp
  uic:./ui_mainwindow.h
-F:/github/JustPlayer/qt/JustPlayer/main.cpp
 F:/github/JustPlayer/qt/JustPlayer/src/test/TestCase.h
 F:/github/JustPlayer/qt/JustPlayer/src/XVideoWidget.cpp
+F:/github/JustPlayer/qt/JustPlayer/src/justplayer/JustDemux.cpp
 F:/github/JustPlayer/qt/JustPlayer/src/opengl/OpenglRender.cpp
