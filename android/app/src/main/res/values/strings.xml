@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">JustPlayer</string>
+    <string name="title_activity_home">HomeActivity</string>
+    <string name="show_more">Show more</string>
+    <string name="show_less">Show less</string>
+
+    <string name="play">play</string>
+    <string name="def_time">00:00:00/00:00:00</string>
+    <string name="play_file">PLAY PHONE FILE</string>
+    <string name="play_net">PLAY NET FILE</string>
 </resources>

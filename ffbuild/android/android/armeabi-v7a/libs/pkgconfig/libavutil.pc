@@ -1,0 +1,14 @@
+prefix=/Users/peterxi/work/github/JustPlayer/ffbuild/android/android/armeabi-v7a
+exec_prefix=${prefix}
+libdir=/Users/peterxi/work/github/JustPlayer/ffbuild/android/android/armeabi-v7a/libs
+includedir=/Users/peterxi/work/github/JustPlayer/ffbuild/android/android/armeabi-v7a/include
+
+Name: libavutil
+Description: FFmpeg utility library
+Version: 59.8.100
+Requires: 
+Requires.private: 
+Conflicts:
+Libs: -L${libdir}  -lavutil 
+Libs.private: -pthread -lm -latomic -landroid
+Cflags: -I${includedir}
