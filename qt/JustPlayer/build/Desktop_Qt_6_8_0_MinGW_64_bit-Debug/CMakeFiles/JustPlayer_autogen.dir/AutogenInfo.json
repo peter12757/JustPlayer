@@ -326,6 +326,12 @@
 			null
 		],
 		[
+			"F:/github/JustPlayer/qt/JustPlayer/src/justplayer/audio/JustReSample.h",
+			"MU",
+			"HYSX36XTDQ/moc_JustReSample.cpp",
+			null
+		],
+		[
 			"F:/github/JustPlayer/qt/JustPlayer/src/justplayer/ffinc.h",
 			"MU",
 			"2AS6NDAMB6/moc_ffinc.cpp",
@@ -439,6 +445,11 @@
 		],
 		[
 			"F:/github/JustPlayer/qt/JustPlayer/src/justplayer/JustDemux.cpp",
+			"MU",
+			null
+		],
+		[
+			"F:/github/JustPlayer/qt/JustPlayer/src/justplayer/audio/JustReSample.cpp",
 			"MU",
 			null
 		],

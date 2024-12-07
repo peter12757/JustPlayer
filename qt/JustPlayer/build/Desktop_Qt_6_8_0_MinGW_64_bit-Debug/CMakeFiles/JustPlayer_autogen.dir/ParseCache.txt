@@ -830,18 +830,23 @@ F:/github/JustPlayer/qt/JustPlayer/src/XVideoWidget.h
  mdp:F:/github/JustPlayer/qt/JustPlayer/ffmpeg/win64/include/libavutil/rational.h
  mdp:F:/github/JustPlayer/qt/JustPlayer/ffmpeg/win64/include/libavutil/samplefmt.h
  mdp:F:/github/JustPlayer/qt/JustPlayer/ffmpeg/win64/include/libavutil/version.h
+ mdp:F:/github/JustPlayer/qt/JustPlayer/ffmpeg/win64/include/libswresample/swresample.h
+ mdp:F:/github/JustPlayer/qt/JustPlayer/ffmpeg/win64/include/libswresample/version.h
+ mdp:F:/github/JustPlayer/qt/JustPlayer/ffmpeg/win64/include/libswresample/version_major.h
  mdp:F:/github/JustPlayer/qt/JustPlayer/src/XVideoWidget.h
  mdp:F:/github/JustPlayer/qt/JustPlayer/src/justplayer/ffinc.h
  mdp:F:/github/JustPlayer/qt/JustPlayer/src/opengl/OpenglRender.h
 F:/github/JustPlayer/qt/JustPlayer/src/justplayer/JustDemux.h
+F:/github/JustPlayer/qt/JustPlayer/src/justplayer/JustDecodec.h
+F:/github/JustPlayer/qt/JustPlayer/src/justplayer/audio/JustReSample.h
 F:/github/JustPlayer/qt/JustPlayer/src/justplayer/JustDecodec.cpp
 F:/github/JustPlayer/qt/JustPlayer/src/justplayer/ffinc.h
+F:/github/JustPlayer/qt/JustPlayer/src/justplayer/audio/JustReSample.cpp
 F:/github/JustPlayer/qt/JustPlayer/src/opengl/OpenglRender.h
+F:/github/JustPlayer/qt/JustPlayer/src/test/TestCase.h
 F:/github/JustPlayer/qt/JustPlayer/mainwindow.cpp
  uic:./ui_mainwindow.h
 F:/github/JustPlayer/qt/JustPlayer/main.cpp
-F:/github/JustPlayer/qt/JustPlayer/src/test/TestCase.h
 F:/github/JustPlayer/qt/JustPlayer/src/XVideoWidget.cpp
 F:/github/JustPlayer/qt/JustPlayer/src/justplayer/JustDemux.cpp
 F:/github/JustPlayer/qt/JustPlayer/src/opengl/OpenglRender.cpp
-F:/github/JustPlayer/qt/JustPlayer/src/justplayer/JustDecodec.h

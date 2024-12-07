@@ -670,6 +670,9 @@ JustPlayer_autogen/timestamp: \
 	F:/github/JustPlayer/qt/JustPlayer/ffmpeg/win64/include/libavutil/rational.h \
 	F:/github/JustPlayer/qt/JustPlayer/ffmpeg/win64/include/libavutil/samplefmt.h \
 	F:/github/JustPlayer/qt/JustPlayer/ffmpeg/win64/include/libavutil/version.h \
+	F:/github/JustPlayer/qt/JustPlayer/ffmpeg/win64/include/libswresample/swresample.h \
+	F:/github/JustPlayer/qt/JustPlayer/ffmpeg/win64/include/libswresample/version.h \
+	F:/github/JustPlayer/qt/JustPlayer/ffmpeg/win64/include/libswresample/version_major.h \
 	F:/github/JustPlayer/qt/JustPlayer/main.cpp \
 	F:/github/JustPlayer/qt/JustPlayer/mainwindow.cpp \
 	F:/github/JustPlayer/qt/JustPlayer/mainwindow.h \
@@ -679,6 +682,8 @@ JustPlayer_autogen/timestamp: \
 	F:/github/JustPlayer/qt/JustPlayer/src/justplayer/JustDecodec.h \
 	F:/github/JustPlayer/qt/JustPlayer/src/justplayer/JustDemux.cpp \
 	F:/github/JustPlayer/qt/JustPlayer/src/justplayer/JustDemux.h \
+	F:/github/JustPlayer/qt/JustPlayer/src/justplayer/audio/JustReSample.cpp \
+	F:/github/JustPlayer/qt/JustPlayer/src/justplayer/audio/JustReSample.h \
 	F:/github/JustPlayer/qt/JustPlayer/src/justplayer/ffinc.h \
 	F:/github/JustPlayer/qt/JustPlayer/src/opengl/OpenglRender.cpp \
 	F:/github/JustPlayer/qt/JustPlayer/src/opengl/OpenglRender.h \
