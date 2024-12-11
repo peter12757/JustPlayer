@@ -14,8 +14,6 @@ set(CMAKE_C_FLAGS "-g -Wall -stdlib=libc++")
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets LinguistTools)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets LinguistTools OpenGLWidgets)
 
-SET(FFLIB_DIR ${CMAKE_CURRENT_SOURCE_DIR}/ffmpeg/win64/lib)
-SET(FFINCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/ffmpeg/win64/include)
 
 # ffmpeg var
 set(AVCODEC  libavcodec)
@@ -25,15 +23,6 @@ set(AVFORMAT libavformat)
 set(AVUTIL libavutil)
 set(SWRESAMPLE libswresample)
 set(SWSCALE libswscale)
-
-# message("CMAKE_CURRENT_SOURCE_DIR: ${CMAKE_CURRENT_SOURCE_DIR}")
-# set(AVFORMAT libavformat)
-# add_library(${AVFORMAT} STATIC IMPORTED)
-# set_target_properties(${AVFORMAT} PROPERTIES
-#     IMPORTED_LOCATION   ${FFLIB_DIR}/libavformat.dll.a
-#     IMPORTED_IMPLIB     ${FFLIB_DIR}/avformat.lib)
-# target_include_directories(${AVFORMAT} INTERFACE ${FFINCLUDE_DIR}/libavformat)
-# message("AVFORMAT: ${AVFORMAT}")
 
 
 # 使用子项目的话局部变量还是有一些问题的。
@@ -53,7 +42,7 @@ set(PROJECT_SOURCES
 
 file(GLOB_RECURSE SRC ./src/*.cpp ./src/*.h)    #file会把var中的变量重置，GLOB_RECURSE 会递归的把src文件中的所有文件都添加进去
 file(GLOB_RECURSE TESTSRC ./src/test/*.cpp ./src/test/*.h)
-message("--------------------------SRC:${SRC}")
+# message("SRC:${SRC}")
 
 
 
@@ -70,7 +59,6 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
 #    set_property(TARGET JustPlayer APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
 #                 ${CMAKE_CURRENT_SOURCE_DIR}/android)
 # For more information, see https://doc.qt.io/qt-6/qt-add-executable.html#target-creation
-
     qt_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILES})
 else()
     if(ANDROID)
@@ -90,8 +78,9 @@ endif()
 
 target_link_libraries(JustPlayer PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt6::OpenGLWidgets)
 
-
-target_include_directories(JustPlayer PUBLIC
+find_library(AVFORMAT_PATH NAMES ${AVFILTER} PATHS ${CMAKE_CURRENT_SOURCE_DIR}/ffmpeg/win64/lib)
+message("AVFORMAT_PATH  ${MY_LIBRARY_PATH}")
+target_include_directories(JustPlayer PRIVATE
     ${AVCODEC}
     ${AVDEVICE}
     ${AVFILTER}

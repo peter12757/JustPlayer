@@ -8,6 +8,7 @@
 #include "justplayer/JustDecodec.h"
 #include "justplayer/JustDemux.h"
 #include "XVideoWidget.h"
+#include "justplayer/audio/JustReSample.h"
 using namespace std;
 
 class TestThread :public QThread
@@ -17,7 +18,7 @@ public:
     {
         //�������
         // char *url = "rtmp://58.200.131.2:1935/livetv/hunantv";
-        char *url = "test_1.mp4";
+        char *url = "test_2.mp4";
         cout << "demux.Open = " << demux.Open(url);
         demux.Read();
         demux.Flush();
@@ -34,8 +35,9 @@ public:
         //vdecode.Clear();
         //vdecode.Close();
         cout << "adecode.Open() = " << adecode.Open(demux.CopyAPara()) << endl;
-
+        resample.Open(demux.CopyAPara());
     }
+    uint8_t *pcm = new unsigned char[1024 * 1024];
     void run()
     {
         for (;;)
@@ -43,9 +45,11 @@ public:
             AVPacket *pkt = demux.Read();
             if (demux.isAudio(pkt))
             {
-                //adecode.Send(pkt);
-                //AVFrame *frame = adecode.Recv();
-                //cout << "Audio:" << frame << endl;
+                adecode.Send(pkt);
+                AVFrame *frame = adecode.Recv();
+
+                int len = resample.Resample(frame,pcm);
+                qDebug()<<"Resample:"<<len<<" ";
             }
             else
             {
@@ -64,6 +68,7 @@ public:
     JustDecodec vdecode;
     JustDecodec adecode;
     XVideoWidget *video;
+    JustResample resample;
 
 };
 

@@ -53,6 +53,9 @@ bool JustDemux::Open(const string url)
 
     //获取流信息
     re = avformat_find_stream_info(ic, 0);
+    if(re !=0) {
+        cout << "avformat_find_stream_info  failed! :" << re << endl;
+    }
 
     //总时长，ms
     int totalMs = ic->duration / (AV_TIME_BASE / 1000);
@@ -145,7 +148,7 @@ AVCodecParameters *JustDemux::CopyAPara()
         return nullptr;
     }
     AVCodecParameters *apa = avcodec_parameters_alloc();
-    avcodec_parameters_copy(apa,ic->streams[videoStream]->codecpar);
+    avcodec_parameters_copy(apa,ic->streams[audioStream]->codecpar);
 
     mux.unlock();
     return apa;
