@@ -34,6 +34,7 @@ public:
     std::mutex mux;
     struct SwrContext *actx = nullptr;
     AudioParams audio_params;         // audio filter graph
+    AVFilterContext *avfilterctx;
 };
 
 #endif // JUSTRESAMPLE_H

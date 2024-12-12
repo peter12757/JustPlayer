@@ -16,6 +16,9 @@ bool JustResample::Open(AVCodecParameters *para,bool isClearPara)
     mux.lock();
     int ret = 0;
 
+    AVFilterGraph *graph = avfilter_graph_alloc();
+    avfilterctx = avfilter_graph_alloc_filter(graph, avfilter_get_by_name("buffersink"),
+                                              "ffplay_buffersink");
     //初始化audiopara
     audio_params.fmt = AV_SAMPLE_FMT_S16;
     audio_params.freq = 44100;

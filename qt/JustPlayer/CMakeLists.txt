@@ -18,7 +18,7 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets LinguistTools Ope
 # ffmpeg var
 set(AVCODEC  libavcodec)
 set(AVDEVICE  libavdevice)
-set(AVFILTER libavfilter) 
+set(AVFILTER libavfilter)
 set(AVFORMAT libavformat)
 set(AVUTIL libavutil)
 set(SWRESAMPLE libswresample)
@@ -42,7 +42,7 @@ set(PROJECT_SOURCES
 
 file(GLOB_RECURSE SRC ./src/*.cpp ./src/*.h)    #file会把var中的变量重置，GLOB_RECURSE 会递归的把src文件中的所有文件都添加进去
 file(GLOB_RECURSE TESTSRC ./src/test/*.cpp ./src/test/*.h)
-# message("SRC:${SRC}")
+message("SRC:${SRC}")
 
 
 
@@ -78,24 +78,18 @@ endif()
 
 target_link_libraries(JustPlayer PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt6::OpenGLWidgets)
 
-find_library(AVFORMAT_PATH NAMES ${AVFILTER} PATHS ${CMAKE_CURRENT_SOURCE_DIR}/ffmpeg/win64/lib)
-message("AVFORMAT_PATH  ${MY_LIBRARY_PATH}")
+find_library(AVFILTER_PATH NAMES ${AVFILTER} PATHS ${CMAKE_CURRENT_SOURCE_DIR}/ffmpeg/win64/lib)
+message("AVFILTER_PATH  ${AVFILTER_PATH}")
 target_include_directories(JustPlayer PRIVATE
-    ${AVCODEC}
-    ${AVDEVICE}
-    ${AVFILTER}
-    ${AVFORMAT}
-    ${AVUTIL}
-    ${SWRESAMPLE}
-    ${SWSCALE}
+    ${FFINCLUDE_DIR}
     ./src/)
 
 target_link_libraries(JustPlayer PRIVATE
+    ${AVUTIL}
     ${AVCODEC}
     ${AVDEVICE}
-    ${AVFILTER}
+    ${AVFILTER_PATH}
     ${AVFORMAT}
-    ${AVUTIL}
     ${SWRESAMPLE}
     ${SWSCALE}
     )

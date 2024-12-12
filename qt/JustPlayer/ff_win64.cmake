@@ -1,3 +1,5 @@
+# ffmpeg var
+
 SET(FFLIB_DIR ${CMAKE_CURRENT_SOURCE_DIR}/ffmpeg/win64/lib)
 SET(FFINCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/ffmpeg/win64/include)
 # message("LIBRARY_OUTPUT_PATH : ${LIBRARY_OUTPUT_PATH}")
@@ -15,11 +17,13 @@ set_target_properties(${AVCODEC}    PROPERTIES
     IMPORTED_IMPLIB     ${FFLIB_DIR}/avcodec.lib)
 # target_include_directories(${AVCODEC} INTERFACE ${FFINCLUDE_DIR}/libavcodec)
 
+
 add_library(${AVDEVICE} STATIC IMPORTED)
 set_target_properties(${AVDEVICE}   PROPERTIES
     IMPORTED_LOCATION   ${FFLIB_DIR}/libavdevice.dll.a
     IMPORTED_IMPLIB     ${FFLIB_DIR}/avdevice.lib)
-target_include_directories(${AVDEVICE} INTERFACE ${FFINCLUDE_DIR}/libavdevice)
+# target_include_directories(${AVDEVICE} INTERFACE ${FFINCLUDE_DIR}/libavdevice)
+
 
 add_library(${AVFILTER} STATIC IMPORTED)
 set_target_properties(${AVFILTER}   PROPERTIES
@@ -33,8 +37,6 @@ set_target_properties(${AVFORMAT} PROPERTIES
     IMPORTED_LOCATION   ${FFLIB_DIR}/libavformat.dll.a
     IMPORTED_IMPLIB     ${FFLIB_DIR}/avformat.lib)
 # target_include_directories(${AVFORMAT} INTERFACE ${FFINCLUDE_DIR}/libavformat)
-
-
 
 
 add_library(${AVUTIL} STATIC IMPORTED)
@@ -57,4 +59,4 @@ set_target_properties(${SWSCALE}    PROPERTIES
     IMPORTED_IMPLIB     ${FFLIB_DIR}/swscale.lib)
 # target_include_directories(${SWSCALE} INTERFACE ${FFINCLUDE_DIR}/libswscale)
 
-target_include_directories(${SWRESAMPLE} INTERFACE ${FFINCLUDE_DIR})
+
