@@ -11,8 +11,10 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(CMAKE_C_FLAGS "-g -Wall -stdlib=libc++")
 
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets LinguistTools)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets LinguistTools OpenGLWidgets)
+find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets LinguistTools OpenGLWidgets
+Multimedia)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets LinguistTools OpenGLWidgets
+Multimedia)
 
 
 # ffmpeg var
@@ -76,7 +78,9 @@ else()
     qt5_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILES})
 endif()
 
-target_link_libraries(JustPlayer PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt6::OpenGLWidgets)
+target_link_libraries(JustPlayer PRIVATE Qt${QT_VERSION_MAJOR}::Widgets
+    Qt6::OpenGLWidgets
+    Qt6::Multimedia)
 
 find_library(AVFILTER_PATH NAMES ${AVFILTER} PATHS ${CMAKE_CURRENT_SOURCE_DIR}/ffmpeg/win64/lib)
 message("AVFILTER_PATH  ${AVFILTER_PATH}")
