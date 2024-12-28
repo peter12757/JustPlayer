@@ -5,10 +5,11 @@
 #include <QThread>
 #include <iostream>
 #include "justplayer/ffinc.h"
-#include "justplayer/JustDecodec.h"
-#include "justplayer/JustDemux.h"
+#include "justplayer/JDecodec.h"
+#include "justplayer/JDemux.h"
 #include "XVideoWidget.h"
-#include "justplayer/audio/JustReSample.h"
+#include "justplayer/audio/JResample.h"
+#include "justplayer/audio/JAudioPlayer.h"
 using namespace std;
 
 class TestThread :public QThread
@@ -36,6 +37,9 @@ public:
         //vdecode.Close();
         cout << "adecode.Open() = " << adecode.Open(demux.CopyAPara()) << endl;
         resample.Open(demux.CopyAPara());
+        audio_player = new JAudioPlayer(demux.sampleRate,demux.channels);
+        audio_player->Open();
+
     }
     uint8_t *pcm = new unsigned char[1024 * 1024];
     void run()
@@ -49,6 +53,14 @@ public:
                 AVFrame *frame = adecode.Recv();
 
                 int len = resample.Resample(frame,pcm);
+                while( len>0) {
+                    if(audio_player->getFree() >= len){
+                        audio_player->write((char *)pcm,len);
+                        break;
+                    }
+                    msleep(1);
+                }
+
                 qDebug()<<"Resample:"<<len<<" ";
             }
             else
@@ -63,12 +75,13 @@ public:
         }
     }
     ///����XDemux
-    JustDemux demux;
+    JDemux demux;
     ///�������
-    JustDecodec vdecode;
-    JustDecodec adecode;
+    JDecodec vdecode;
+    JDecodec adecode;
     XVideoWidget *video;
-    JustResample resample;
+    JResample resample;
+    JAudioPlayer *audio_player;
 
 };
 

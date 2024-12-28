@@ -1,5 +1,5 @@
-#ifndef JUSTDEMUX_H
-#define JUSTDEMUX_H
+#ifndef JDemux_H
+#define JDemux_H
 
 #include <stdio.h>
 #include <mutex>
@@ -15,11 +15,11 @@ struct AVPacket;
 struct AVCodecParameters;
 
 //打开媒体文件，或者流媒体
-class JustDemux
+class JDemux
 {
 public:
-    JustDemux();
-    virtual ~JustDemux();
+    JDemux();
+    virtual ~JDemux();
 
 
     virtual bool Open(const string url);
@@ -53,10 +53,15 @@ public:
     int videoStream = 0;
     int audioStream = 1;
 
+    //video
     int width = 0;
     int height = 0;
     int totalMs = 0;
 
+    //audio
+    int sampleRate = 0;
+    int sampleSize = 0;
+    int channels = 0;
 };
 
-#endif // JUSTDEMUX_H
+#endif // JDemux_H

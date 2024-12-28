@@ -1,5 +1,5 @@
-#ifndef JUSTRESAMPLE_H
-#define JUSTRESAMPLE_H
+#ifndef JResample_H
+#define JResample_H
 
 #include "../ffinc.h"
 #include <QDebug>
@@ -16,14 +16,14 @@ typedef struct AudioParams {
 
 
 
-class JustResample
+class JResample
 {
 public:
-    JustResample();
-    ~JustResample();
+    JResample();
+    ~JResample();
 
     //输出参数和输入参数一致除了采样格式，实处为S16
-    virtual bool Open(AVCodecParameters *para,bool isClearPara = true);
+    virtual bool Open(AVCodecParameters *para,bool isClearPara = false);
     virtual void Close();
 
     //返回重采样后的大小 不管成功与否都释放frame空间
@@ -37,4 +37,4 @@ public:
     AVFilterContext *avfilterctx;
 };
 
-#endif // JUSTRESAMPLE_H
+#endif // JResample_H

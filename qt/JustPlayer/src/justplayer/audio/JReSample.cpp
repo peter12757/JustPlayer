@@ -1,16 +1,16 @@
-#include "JustResample.h"
+#include "JResample.h"
 
-JustResample::JustResample() {
+JResample::JResample() {
     //音频重采样  上下文初始化
     actx = swr_alloc();
 }
 
-JustResample::~JustResample()
+JResample::~JResample()
 {
 
 }
 
-bool JustResample::Open(AVCodecParameters *para,bool isClearPara)
+bool JResample::Open(AVCodecParameters *para,bool isClearPara)
 {
     if (!para)return false;
     mux.lock();
@@ -73,7 +73,7 @@ bool JustResample::Open(AVCodecParameters *para,bool isClearPara)
     return true;
 }
 
-void JustResample::Close()
+void JResample::Close()
 {
      mux.lock();
 
@@ -81,7 +81,7 @@ void JustResample::Close()
 
 }
 
-int JustResample::Resample(AVFrame *frame, unsigned char *data)
+int JResample::Resample(AVFrame *frame, unsigned char *data)
 {
     if(!frame || !data) {
         if (frame) {

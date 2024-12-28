@@ -1,5 +1,5 @@
-#ifndef JUSTDECODEC_H
-#define JUSTDECODEC_H
+#ifndef JDecodec_H
+#define JDecodec_H
 
 
 #include "ffinc.h"
@@ -11,11 +11,11 @@ struct AVCodecContext;
 struct AVFrame;
 struct AVPacket;
 
-class JustDecodec
+class JDecodec
 {
 public:
-    JustDecodec();
-    virtual ~JustDecodec();
+    JDecodec();
+    virtual ~JDecodec();
 
     //打开解码器
     virtual bool Open(AVCodecParameters *para);
@@ -37,4 +37,4 @@ public:
     std::mutex mux;
 };
 
-#endif // JUSTDECODEC_H
+#endif // JDecodec_H

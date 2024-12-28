@@ -1,4 +1,4 @@
-#include "JustDemux.h"
+#include "JDemux.h"
 
 // #include <iostream>
 // using namespace std;
@@ -7,13 +7,13 @@
 // }
 
 
-JustDemux::JustDemux() {
+JDemux::JDemux() {
     //初始化封装库
     avformat_network_init();
 
 }
 
-JustDemux::~JustDemux()
+JDemux::~JDemux()
 {
 
 }
@@ -21,7 +21,7 @@ JustDemux::~JustDemux()
 
 
 
-bool JustDemux::Open(const string url)
+bool JDemux::Open(const string url)
 {
 
     Close();
@@ -81,6 +81,8 @@ bool JustDemux::Open(const string url)
     cout << "video fps = " << r2d(as->avg_frame_rate) << endl;
 
 
+    sampleRate = as->codecpar->sample_rate;
+    channels = as->codecpar->ch_layout.nb_channels;
     cout << "=======================================================" << endl;
     cout << audioStream << "audio stream info" << endl;
     //获取音频流
@@ -99,7 +101,7 @@ bool JustDemux::Open(const string url)
     return true;
 }
 
-AVPacket *JustDemux::Read()
+AVPacket *JDemux::Read()
 {
     mux.lock();
     if(!ic) {
@@ -123,7 +125,7 @@ AVPacket *JustDemux::Read()
 
 }
 
-AVCodecParameters *JustDemux::CopyVPara()
+AVCodecParameters *JDemux::CopyVPara()
 {
     mux.lock();
     if(!ic) {
@@ -139,7 +141,7 @@ AVCodecParameters *JustDemux::CopyVPara()
     return vpa;
 }
 
-AVCodecParameters *JustDemux::CopyAPara()
+AVCodecParameters *JDemux::CopyAPara()
 {
     mux.lock();
     if(!ic) {
@@ -155,7 +157,7 @@ AVCodecParameters *JustDemux::CopyAPara()
 
 }
 
-bool JustDemux::isAudio(AVPacket *pkt)
+bool JDemux::isAudio(AVPacket *pkt)
 {
     if( !pkt) {
         return false;
@@ -165,7 +167,7 @@ bool JustDemux::isAudio(AVPacket *pkt)
     return true;
 }
 
-bool JustDemux::Seek(double pos)
+bool JDemux::Seek(double pos)
 {
     long long seekpos = 0;
     mux.lock();
@@ -186,7 +188,7 @@ bool JustDemux::Seek(double pos)
     return true;
 }
 
-bool JustDemux::Flush()
+bool JDemux::Flush()
 {
     mux.lock();
     if(!ic) {
@@ -200,7 +202,7 @@ bool JustDemux::Flush()
     return true;
 }
 
-bool JustDemux::Close()
+bool JDemux::Close()
 {
     mux.lock();
     if(!ic) {

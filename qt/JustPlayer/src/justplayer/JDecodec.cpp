@@ -1,16 +1,16 @@
-#include "JustDecodec.h"
+#include "JDecodec.h"
 
-JustDecodec::JustDecodec()
+JDecodec::JDecodec()
 {
 
 }
 
-JustDecodec::~JustDecodec()
+JDecodec::~JDecodec()
 {
 
 }
 
-bool JustDecodec::Open(AVCodecParameters *para)
+bool JDecodec::Open(AVCodecParameters *para)
 {
     if(!para){
         return false;
@@ -49,7 +49,7 @@ bool JustDecodec::Open(AVCodecParameters *para)
     return true;
 }
 
-bool JustDecodec::Send(AVPacket *pkt)
+bool JDecodec::Send(AVPacket *pkt)
 {
     //容错处理
     if (!pkt || pkt->size <= 0 || !pkt->data)return false;
@@ -67,7 +67,7 @@ bool JustDecodec::Send(AVPacket *pkt)
 
 }
 
-AVFrame *JustDecodec::Recv()
+AVFrame *JDecodec::Recv()
 {
     mux.lock();
     if (!codec)
@@ -87,7 +87,7 @@ AVFrame *JustDecodec::Recv()
     return frame;
 }
 
-void JustDecodec::Close()
+void JDecodec::Close()
 {
     mux.lock();
     if (codec)
@@ -97,7 +97,7 @@ void JustDecodec::Close()
     mux.unlock();
 }
 
-void JustDecodec::Clear()
+void JDecodec::Clear()
 {
     mux.lock();
     //清理解码缓冲
