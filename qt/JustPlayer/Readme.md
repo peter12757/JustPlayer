@@ -18,7 +18,7 @@ Paragraph.
 
 Some *italic* and **bold** text and `inline code`.
 
-An empty line starts a new paragraph.
+An empty line starts a new paragraph. 
 
 Use two spaces at the end  
 to force a line break.
@@ -49,3 +49,7 @@ Second Level Heading in Alternate Style
 Paragraph.
 
 [1]: https://www.qt.io
+
+
+
+

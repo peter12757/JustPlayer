@@ -1,14 +1,48 @@
 #include "JAudioThread.h"
 
-JAudioThread::JAudioThread() {}
+JAudioThread::JAudioThread() {
+    pcm = new unsigned char[pcm_size];  //pc端
+}
 
 JAudioThread::~JAudioThread()
 {
-
+    delete pcm;
+    pcm = nullptr;
 }
 
 void JAudioThread::run()
 {
+    while (!isExited) {
+        mux.lock();
+        if(pkt_list.empty() && isAviliable()) {
+            mux.unlock();
+            msleep(1);
+            continue;
+        }
+        AVPacket *pkt = pkt_list.front();
+        pkt_list.pop_back();
+        bool ret = audio_decodec->Send(pkt);
+        if (!ret) {
+            mux.unlock();
+            msleep(1);
+            continue;
+        }
+        while (AVFrame *frame = audio_decodec->Recv()) {
+            memset(pcm,0,pcm_size);
+            //重采样
+            int size = audio_resample->Resample(frame,pcm);
+            //播放
+            if( audio_player->getFree() <size) {
+                msleep(1);
+                continue;
+            }
+            audio_player->write((const char *)pcm,size);
+
+        }
+
+        mux.unlock();
+
+    }
 
 }
 
@@ -48,6 +82,22 @@ void JAudioThread::push(AVPacket *pkt)
         qDebug()<<"push pkt is null";
         return;
     }
-    pkt_list.push_back((pkt));
+    while (!isExited)
+    {
+        mux.lock();
+        if (pkt_list.size() < maxList)
+        {
+            pkt_list.push_back(pkt);
+            mux.unlock();
+            break;
+        }
+        mux.unlock();
+        msleep(1);
+    }
 
+}
+
+bool JAudioThread::isAviliable()
+{
+    return audio_decodec && audio_resample && audio_player;
 }
