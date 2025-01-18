@@ -6,6 +6,8 @@ JAudioThread::JAudioThread() {
 
 JAudioThread::~JAudioThread()
 {
+    isExited = true;
+    wait();
     delete pcm;
     pcm = nullptr;
 }
