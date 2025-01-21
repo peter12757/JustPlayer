@@ -19,12 +19,11 @@ public:
     virtual void push(AVPacket *pkt);
     virtual bool isAviliable();
 
-    void asdasd();
 
 
 
 public:
-    JDecodec *audio_decodec = nullptr;
+    JDecodec *video_decodec = nullptr;
     std::mutex mux;
     std::list <AVPacket *> pkt_list;
     bool isExited =false;
