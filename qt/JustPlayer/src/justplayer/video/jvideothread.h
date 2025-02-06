@@ -5,6 +5,7 @@
 #include "QDebug"
 #include <QThread>
 #include "../ffinc.h"
+#include "IJVideocall.h"
 
 class JVideoThread : public QThread
 {
@@ -15,9 +16,8 @@ public:
     void run();
 
     //打开解码器
-    virtual bool Open(AVCodecParameters *para);
+    virtual bool Open(AVCodecParameters *para,IJVideoCall *call,int width,int height);
     virtual void push(AVPacket *pkt);
-    virtual bool isAviliable();
 
 
 
@@ -28,6 +28,7 @@ public:
     std::list <AVPacket *> pkt_list;
     bool isExited =false;
     int maxList = 100;
+    IJVideoCall *videocall = nullptr;
 
 
 };

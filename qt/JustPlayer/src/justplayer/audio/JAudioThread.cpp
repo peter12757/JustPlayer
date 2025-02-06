@@ -16,7 +16,7 @@ void JAudioThread::run()
 {
     while (!isExited) {
         mux.lock();
-        if(pkt_list.empty() && isAviliable()) {
+        if(pkt_list.empty() || !isAviliable()) {
             mux.unlock();
             msleep(1);
             continue;
@@ -48,7 +48,7 @@ void JAudioThread::run()
 
 }
 
-bool JAudioThread::Open(AVCodecParameters *para)
+bool JAudioThread::Open(AVCodecParameters *para,int sampleRate,int channels)
 {
     if(!para) return false;
     mux.lock();
@@ -59,7 +59,7 @@ bool JAudioThread::Open(AVCodecParameters *para)
         audio_resample = new JResample();
     }
     if(!audio_player) {
-        audio_player = new JAudioPlayer(para->sample_rate,para->ch_layout.nb_channels);
+        audio_player = new JAudioPlayer(sampleRate,channels);
     }
     if(!audio_decodec || !audio_resample || !audio_player) return false;
     bool ret = audio_resample->Open(para);

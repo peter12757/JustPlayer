@@ -9,19 +9,20 @@
 #include "opengl/OpenglRender.h"
 #include <QtOpenGLWidgets/QOpenGLWidget>
 #include "justplayer/ffinc.h"
+#include <justplayer/video/IJVideocall.h>
 
 
 
 struct AVFrame;
 
-class XVideoWidget : public QOpenGLWidget
+class XVideoWidget : public QOpenGLWidget,public IJVideoCall
 {
     Q_OBJECT
 
 public:
     XVideoWidget(QWidget* parent);
     ~XVideoWidget();
-    void Init(int width, int height);
+    virtual void Init(int width, int height);
     virtual void Repaint(AVFrame *frame);
 
 protected:

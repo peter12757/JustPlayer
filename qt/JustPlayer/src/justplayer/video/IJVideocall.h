@@ -3,11 +3,11 @@
 
 #include "../ffinc.h"
 
-class IVideoCall
+class IJVideoCall
 {
 public:
     virtual void Init(int width,int height) = 0;
-    virtual void Repain(AVFrame *frame) = 0;
+    virtual void Repaint(AVFrame *frame) = 0;
 };
 
 #endif // IJVIDEOCALL_H

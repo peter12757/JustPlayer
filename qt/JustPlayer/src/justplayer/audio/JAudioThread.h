@@ -18,7 +18,7 @@ public:
     void run();
 
     //打开解码器
-    virtual bool Open(AVCodecParameters *para);
+    virtual bool Open(AVCodecParameters *para,int sampleRate,int channels);
     virtual void push(AVPacket *pkt);
     virtual bool isAviliable();
 
