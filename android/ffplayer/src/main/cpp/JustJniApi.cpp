@@ -102,32 +102,40 @@ Java_com_eathemeat_player_ffmpeg_FFPlayer_invoke(JNIEnv *env, jobject thiz,jlong
             }
                 break;
             case METHOD_START:{
-//                ret = player->start();
+                ret = player->start();
             }
                 break;
             case METHOD_PAUSE: {
-//                ret = player->pause();
+                ret = player->pause();
             }
                 break;
             case METHOD_RESET: {
-
+                ret = player->reset();
             }
                 break;
             case METHOD_SEEK: {
-
+                long pos = up.pop_uint32();
+                ret = player->seek(pos);
             }
                 break;
             case METHOD_GET_POSITION: {
-
+                ret = player->getPosition();
             }
                 break;
             case METHOD_STOP: {
+                ret = player->stop();
+
+            }
+                break;
+            case METHOD_GET_RELEASE: {
+                logOs<< "release player ...";
+                free(player);
 
             }
                 break;
             default:
+                logOs<<"cmd is not supported or is not complete!!! cmd is :"<<methodId;
                 break;
-
         }
     }
     LOGD("ffmpeg_FFPlayer_invoke:method:%s",logOs.str().c_str());

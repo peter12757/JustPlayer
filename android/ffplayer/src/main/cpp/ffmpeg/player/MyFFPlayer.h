@@ -69,11 +69,18 @@ public:
 
     int prepare_async();
     int stop();
-    int pause(bool pause);
+    int pause();
+    bool isPause();
     int seek(long pos);
     void buffering(bool isBuffering);
 
     void checkbuffering();
+
+    int start();
+
+    int reset();
+
+    int getPosition();
 
 private:
     void changeState(PLAYER_STATE state);

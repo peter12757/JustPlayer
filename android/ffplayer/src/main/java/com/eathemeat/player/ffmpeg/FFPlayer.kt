@@ -16,6 +16,8 @@ class FFPlayer(override var callback: MediaPlayerCallBack?) : IMediaPlayer {
         nativeHandler = createPlayer("".encodeToByteArray())
     }
 
+    
+
     override fun prepareAsyc() {
         Log.d(TAG, "prepareAsyc() called")
         checkNativeAvalible()

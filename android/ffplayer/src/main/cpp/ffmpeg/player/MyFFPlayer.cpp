@@ -147,9 +147,12 @@ int MyFFPlayer::stop() {
     return 0;
 }
 
-int MyFFPlayer::pause(bool pause) {
+int MyFFPlayer::pause() {
     //todo
     return 0;
+}
+bool MyFFPlayer::isPause() {
+    return false;
 }
 
 int MyFFPlayer::seek(long pos) {
@@ -164,3 +167,17 @@ void MyFFPlayer::buffering(bool isBuffering) {
 void MyFFPlayer::checkbuffering() {
 
 }
+
+int MyFFPlayer::start() {
+    return 0;
+}
+
+int MyFFPlayer::reset() {
+    return 0;
+}
+
+int MyFFPlayer::getPosition() {
+    return 0;
+}
+
+
