@@ -129,7 +129,7 @@ Java_com_eathemeat_player_ffmpeg_FFPlayer_invoke(JNIEnv *env, jobject thiz,jlong
                 break;
             case METHOD_GET_RELEASE: {
                 logOs<< "release player ...";
-                free(player);
+                delete player;
 
             }
                 break;
