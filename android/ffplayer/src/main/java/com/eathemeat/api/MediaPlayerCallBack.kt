@@ -22,6 +22,4 @@ interface MediaPlayerCallBack {
     fun onProgressUpdate(mediaPlayer: IMediaPlayer, progress: Long)
 
 
-
-
 }

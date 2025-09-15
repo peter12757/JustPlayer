@@ -14,6 +14,7 @@ import com.eathemeat.base.IMediaPlayer
 import com.eathemeat.base.MediaPlayerCallBack
 import com.eathemeat.justplayer.data.PlayItem
 import com.eathemeat.justplayer.data.SDcardFileGetter
+import com.eathemeat.player.ffmpeg.FFPlayer
 import com.eathemeat.player.sys.AndroidMediaPlayer
 import com.eathemeat.util.media.PositionGetter
 import java.net.URI
@@ -25,20 +26,35 @@ class PlayViewModel: ViewModel(), MediaPlayerCallBack, PositionGetter.OnPosition
 
 
     var mPlayList = MutableLiveData<List<PlayItem>>()
-    private var mPlayer: IMediaPlayer? = null
-    //    private var mPlayer: IMediaPlayer = JustPlayer(JustData.JustContext(JustPlayerType.FFPlayer),this)
+//    private var mPlayer: IMediaPlayer = FFPlayer(this)      //default player
+    private var mPlayer: IMediaPlayer = AndroidMediaPlayer(this)      //default player
+
     private var surface:Surface? = null
     var mCurPlayItem:PlayItem? = null
     val fileGetter = SDcardFileGetter()
     val videoSize = MutableLiveData<Pair<Int,Int>>()
-    var posGetter: PositionGetter? = null
+    var posGetter: PositionGetter = PositionGetter(player = mPlayer, listener = this@PlayViewModel)
     val mPos = MutableLiveData<Long>()
     val mDuration = MutableLiveData<Long>()
 
 
+    /**
+     *  fffplayer & sysplayer should be switch in config
+     *  not implement
+     */
+    fun switchPlayer() {
+        NotImplementedError()
+    }
+
     fun setSurface(surface: Surface?) {
         Log.d(TAG, "setSurface() called with: surface = $surface")
-        this.surface = surface
+        surface?.run {
+            this@PlayViewModel.surface = this
+            mPlayer.setSurface(this)
+        }
+        surface?:run {
+            stop()
+        }
     }
 
     fun play(item:PlayItem?) {
@@ -46,10 +62,7 @@ class PlayViewModel: ViewModel(), MediaPlayerCallBack, PositionGetter.OnPosition
         stop()
         item?.let { it ->
             mCurPlayItem = it
-            mPlayer?: let {
-                mPlayer = createPlayer()
-            }
-            mPlayer?.apply {
+            mPlayer.apply {
                 setSurface(surface)
                 setDataSource(URI.create(it.url))
                 prepareAsyc()
@@ -59,39 +72,21 @@ class PlayViewModel: ViewModel(), MediaPlayerCallBack, PositionGetter.OnPosition
 
     fun seekTo(position: Long): Unit {
         Log.d(TAG, "seekTo() called with: position = $position")
-        mPlayer?.seekTo(position)
+        mPlayer.seekTo(position)
     }
 
     fun stop() {
         Log.d(TAG, "stop() called")
-        mPlayer = mPlayer?.let { player->
-            player.stop()
-            player.release()
-            null
-        }
-    }
-
-    private fun createPlayer(): IMediaPlayer? {
-        Log.d(TAG, "createPlayer() called")
-        mPlayer?.let {player->
-            player.stop()
-            player.release()
-            posGetter?.recycle()
-        }
-        var player = AndroidMediaPlayer(this@PlayViewModel)
-        posGetter = PositionGetter(player = player, listener = this@PlayViewModel)
-        return player
+        mPlayer.stop()
     }
 
     override fun onPrepared() {
         Log.d(TAG, "onPrepared() called")
-        mPlayer?.let{ player ->
+        mPlayer.let{ player ->
             mDuration.value = player.getDuration()
             player.start()
             posGetter?.start()
-
         }
-
     }
 
     override fun onBufferring() {
@@ -118,12 +113,12 @@ class PlayViewModel: ViewModel(), MediaPlayerCallBack, PositionGetter.OnPosition
 
     override fun onError(mp: IMediaPlayer, what: Int, extra: Int) {
         Log.d(TAG, "onError() called with: mp = $mp, what = $what, extra = $extra")
-        posGetter?.stop()
-        mPlayer?.stop()
+        posGetter.stop()
+        mPlayer.stop()
     }
 
-    override fun onTimedText(mp: IMediaPlayer, text: TimedText?) {
-        Log.d(TAG, "onTimedText() called with: mp = $mp, text = $text")
+    override fun onTimedText(iMediaPlayer: IMediaPlayer, text: TimedText?) {
+        Log.d(TAG, "onTimedText() called with: iMediaPlayer = $iMediaPlayer, text = $text")
     }
 
     override fun onVideoSizeChanged(iMediaPlayer: IMediaPlayer, width: Int, height: Int) {
