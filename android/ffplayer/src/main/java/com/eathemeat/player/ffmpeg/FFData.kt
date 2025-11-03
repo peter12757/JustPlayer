@@ -19,7 +19,6 @@ open class FFData {
         JUSTMETHOD_SEEK(JUSTMETHOD_SET_DATA_SOURCE.value+1),
         JUSTMETHOD_GET_DURATION(JUSTMETHOD_SEEK.value+1),
         JUSTMETHOD_GET_POSITION(JUSTMETHOD_GET_DURATION.value+1),
-//        METHOD_SET_DATA_SOURCE(METHOD_GET_POSITION.value+1),
     }
 
 
@@ -54,6 +53,7 @@ open class FFData {
         }
 
         override fun marshal(out: ByteBuffer): ByteBuffer {
+             
             return super.marshal(out)+prograss
         }
 
@@ -71,6 +71,7 @@ open class FFData {
         override fun marshal(out: ByteBuffer): ByteBuffer {
             return super.marshal(out)+source
         }
+
     }
 
 
