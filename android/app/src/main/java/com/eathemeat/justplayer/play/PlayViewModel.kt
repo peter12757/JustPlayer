@@ -33,6 +33,8 @@ class PlayViewModel: ViewModel(), MediaPlayerCallBack, PositionGetter.OnPosition
     var mCurPlayItem:PlayItem? = null
     val fileGetter = SDcardFileGetter()
     val videoSize = MutableLiveData<Pair<Int,Int>>()
+
+
     var posGetter: PositionGetter = PositionGetter(player = mPlayer, listener = this@PlayViewModel)
     val mPos = MutableLiveData<Long>()
     val mDuration = MutableLiveData<Long>()
