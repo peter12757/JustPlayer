@@ -27,5 +27,6 @@ interface IMediaPlayer{
     fun getDuration(): Long
 
     fun getPosition():Long
+    fun isPause(): Boolean
 
 }
