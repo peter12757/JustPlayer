@@ -19,6 +19,7 @@ open class FFData {
         JUSTMETHOD_SEEK(JUSTMETHOD_SET_DATA_SOURCE.value+1),
         JUSTMETHOD_GET_DURATION(JUSTMETHOD_SEEK.value+1),
         JUSTMETHOD_GET_POSITION(JUSTMETHOD_GET_DURATION.value+1),
+        JUSTMETHOD_IS_PAUSE(JUSTMETHOD_GET_POSITION.value+1),
     }
 
 
@@ -62,6 +63,8 @@ open class FFData {
     class GetDurationMethod(): MethodBase(JUST_Method.JUSTMETHOD_GET_DURATION.value)
 
     class GetPositionMethod(): MethodBase(JUST_Method.JUSTMETHOD_GET_POSITION.value)
+
+    class IsPauseMethod(): MethodBase(JUST_Method.JUSTMETHOD_IS_PAUSE.value)
 
     class SetDataSourceMethod(var source:String): MethodBase(JUST_Method.JUSTMETHOD_SET_DATA_SOURCE.value){
         override fun size(): Int {

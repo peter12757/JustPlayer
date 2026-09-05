@@ -26,8 +26,6 @@ import com.eathemeat.justplayer.launcher.screen.MainContainScreen
 import com.eathemeat.justplayer.ui.theme.JustPlayerTheme
 
 class LauncherActivity : ComponentActivity() {
-    
-    private var wait_time = mutableIntStateOf(5)
 
     val REQUEST_EXTERNAL_STORAGE =1
     val PERMISSIONS_STORAGE = arrayOf(

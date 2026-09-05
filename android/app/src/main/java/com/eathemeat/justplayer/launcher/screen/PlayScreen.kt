@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.SurfaceHolder
 import android.view.SurfaceHolder.Callback
 import android.view.SurfaceView
+import android.widget.FrameLayout
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.icons.Icons
@@ -29,9 +30,12 @@ import androidx.constraintlayout.compose.Visibility
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.eathemeat.justplayer.R
 import com.eathemeat.justplayer.launcher.MainViewModel
+import com.eathemeat.justplayer.launcher.TAG
 import com.eathemeat.justplayer.launcher.screen.play.PlayControlScreen
 import com.eathemeat.justplayer.launcher.screen.play.PlayListScreen
+import com.eathemeat.justplayer.launcher.screen.play.PlayTitleScreen
 import com.eathemeat.justplayer.ui.theme.JustPlayerTheme
+import java.nio.file.WatchEvent
 
 const val TAG = "PlayScreen"
 
@@ -46,18 +50,14 @@ fun PlayScreen(modifier: Modifier = Modifier, viewModule: MainViewModel = viewMo
     {
         config.orientation = Configuration.ORIENTATION_LANDSCAPE
     }
-
-    val showPlayList = remember {
-        mutableStateOf(Visibility.Gone)
-    }
     val showPlayControl = remember {
         mutableStateOf(Visibility.Visible)
     }
 
     ConstraintLayout {
         val context = LocalContext.current
-        val (list, listBtn, control,surface) = createRefs()
-//surface
+        val (title, listBtn, control,surface) = createRefs()
+        // sufaceview
         AndroidView(modifier = Modifier
             .constrainAs(surface) {
                 start.linkTo(parent.start)
@@ -88,46 +88,43 @@ fun PlayScreen(modifier: Modifier = Modifier, viewModule: MainViewModel = viewMo
                 })
             }
         })
+        // title
+        var titleBottom = createGuidelineFromTop(0.1f)
+        PlayTitleScreen(modifier = Modifier.constrainAs(title){
+            start.linkTo(parent.start)
+            top.linkTo(parent.top)
+            end.linkTo(parent.end)
+            bottom.linkTo(titleBottom)
+        },showPlayList = {
+        },showPlayMenu = {
 
-        PlayListScreen(modifier = Modifier.constrainAs(list) {
+        })
+
+
+        //control
+
+        var controlTop = createGuidelineFromBottom(0.2f)
+        PlayControlScreen(modifier = Modifier.constrainAs(control) {
+            start.linkTo(parent.start)
+            end.linkTo(parent.end)
+            bottom.linkTo(parent.bottom)
+            top.linkTo(controlTop)
+            visibility = showPlayControl.value
+        })
+
+        //list
+        PlayListScreen(modifier = Modifier.constrainAs(title) {
             start.linkTo(parent.start)
             top.linkTo(parent.top)
             bottom.linkTo(parent.bottom)
             end.linkTo(listBtn.start)
             width = Dimension.ratio("8:10")
-            visibility = showPlayList.value
+            visibility = Visibility.Gone
 
         }, playItems = viewModule.playItems) {
             Log.d(TAG, "PlayScreen: ${it}")
             return@PlayListScreen 0
         }
-        IconButton(onClick = {
-            if (showPlayList.value == Visibility.Visible) showPlayList.value = Visibility.Gone
-            else  showPlayList.value = Visibility.Visible },
-            modifier = Modifier.background(color = Color.White).constrainAs(listBtn) {
-                start.linkTo(when (showPlayList.value) {
-                    Visibility.Visible -> list.end
-                    else -> parent.end
-                })
-                top.linkTo(parent.top, margin = 20.dp)
-            }) {
-            Icon(
-                imageVector = when (showPlayList.value) {
-                    Visibility.Visible -> Icons.Filled.KeyboardArrowLeft
-                    else -> Icons.Filled.KeyboardArrowRight },
-                contentDescription = when (showPlayList.value) {
-                    Visibility.Visible -> stringResource(R.string.show_less)
-                    else -> stringResource(R.string.show_more)}
-            )
-        }
-        PlayControlScreen(modifier = Modifier.constrainAs(control) {
-            start.linkTo(surface.start)
-            end.linkTo(surface.end)
-            bottom.linkTo(surface.bottom)
-            top.linkTo(surface.bottom)
-            visibility = showPlayControl.value
-        })
-
     }
 }
 
@@ -135,6 +132,6 @@ fun PlayScreen(modifier: Modifier = Modifier, viewModule: MainViewModel = viewMo
 @Composable
 fun PlayScreenPreview() {
     JustPlayerTheme {
-        PlayScreen(viewModule = MainViewModel.test())
+        PlayScreen()
     }
 }

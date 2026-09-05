@@ -7,7 +7,7 @@ plugins {
 
 android {
     namespace = "com.eathemeat.justplayer"
-    compileSdk = 34
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.eathemeat.justplayer"
@@ -32,8 +32,8 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
     }
     buildFeatures {
         compose = true
@@ -66,8 +66,6 @@ dependencies {
     implementation("com.google.android.material:material:1.13.0")
     implementation("androidx.activity:activity:1.12.0")
     implementation("androidx.constraintlayout:constraintlayout:2.2.1")
-    implementation("io.github.peter12757:androidWidget:1.0.3")
-    implementation("io.github.peter12757:StateMachine:1.0.0")
     
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.3.0")

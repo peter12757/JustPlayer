@@ -5,6 +5,7 @@ import androidx.compose.material.icons.twotone.PlayArrow
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.ProgressIndicatorDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -27,44 +28,53 @@ import com.eathemeat.justplayer.ui.theme.JustPlayerTheme
  */
 @Composable
 fun PlayControlScreen(modifier: Modifier = Modifier, viewModule: MainViewModel = viewModel()) {
-    ConstraintLayout {
+    ConstraintLayout(modifier = modifier) {
         val (preBtn,pauseBtn,nextBtn,progressBar,timeTxt) = createRefs()
         IconButton(modifier = Modifier.constrainAs(preBtn) {
             start.linkTo(parent.start, margin = 2.dp)
+            end.linkTo(pauseBtn.start, margin = 2.dp)
             centerVerticallyTo(parent)
         }
             ,onClick = { /*TODO*/ }) {
             Icon(
                 imageVector = PIcons.Play.PlayArrowLeft,
                 contentDescription =
-                stringResource(R.string.show_more))
+                stringResource(R.string.play_pre))
         }
         IconButton(modifier = Modifier.constrainAs(pauseBtn) {
             start.linkTo(preBtn.end)
+            end.linkTo(nextBtn.start, margin = 2.dp)
             centerVerticallyTo(parent)
         }
             ,onClick = { /*TODO*/ }) {
             Icon(
                 imageVector = Icons.TwoTone.PlayArrow,
                 contentDescription =
-                    stringResource(R.string.show_more))
+                    stringResource(R.string.play_pause))
         }
         IconButton(modifier = Modifier.constrainAs(nextBtn) {
             start.linkTo(pauseBtn.end)
+            end.linkTo(progressBar.start, margin = 2.dp)
             centerVerticallyTo(parent)
         }
             ,onClick = { /*TODO*/ }) {
             Icon(
                 imageVector = PIcons.Play.PlayArrowRight,
                 contentDescription =
-                stringResource(R.string.show_more))
+                stringResource(R.string.play_next))
         }
-        LinearProgressIndicator(progress = 0.5f,modifier = Modifier.constrainAs(progressBar) {
-            start.linkTo(nextBtn.end)
-            end.linkTo(timeTxt.start)
-            width =fillToConstraints
-            centerVerticallyTo(parent)
-        })
+        LinearProgressIndicator(
+        progress = { 0.5f },
+        modifier = Modifier.constrainAs(progressBar) {
+                    start.linkTo(nextBtn.end, margin = 2.dp)
+                    end.linkTo(timeTxt.start, margin = 2.dp)
+//                    width =fillToConstraints
+                    centerVerticallyTo(parent)
+                },
+        color = ProgressIndicatorDefaults.linearColor,
+        trackColor = ProgressIndicatorDefaults.linearTrackColor,
+        strokeCap = ProgressIndicatorDefaults.LinearStrokeCap,
+        )
         Text(modifier = Modifier.constrainAs(timeTxt) {
             start.linkTo(progressBar.end)
             end.linkTo(parent.end, margin = 2.dp)

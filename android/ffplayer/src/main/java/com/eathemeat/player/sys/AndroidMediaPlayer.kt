@@ -126,4 +126,9 @@ class AndroidMediaPlayer(override var callback: MediaPlayerCallBack?) : IMediaPl
         return mediaPlayer.currentPosition.toLong()
     }
 
+    override fun isPause(): Boolean {
+        Log.d(TAG, "isPause() called")
+        return !mediaPlayer.isPlaying
+    }
+
 }

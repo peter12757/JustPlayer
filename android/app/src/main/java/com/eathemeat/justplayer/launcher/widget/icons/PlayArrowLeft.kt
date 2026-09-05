@@ -1,8 +1,13 @@
 package com.eathemeat.justplayer.launcher.widget.icons
 
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.materialPath
+import androidx.compose.material3.Icon
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.PathFillType
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 /**
@@ -49,6 +54,14 @@ public val PIcons.Play.PlayArrowLeft: ImageVector
         return _playArrowLeft!!
     }
 
-
+@Preview(showBackground = true, widthDp = 100, heightDp = 100)
+@Composable
+fun PlayArrowLeftPreview() {
+    Icon(
+        imageVector = PIcons.Play.PlayArrowLeft,
+        contentDescription = "",
+        modifier = Modifier.size(48.dp)
+    )
+}
 
 private var _playArrowLeft:ImageVector? = null

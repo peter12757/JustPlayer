@@ -102,6 +102,15 @@ class FFPlayer(override var callback: MediaPlayerCallBack?) : IMediaPlayer {
         return 0
     }
 
+    override fun isPause(): Boolean {
+        Log.d(TAG, "isPause() called")
+        checkNativeAvalible()
+        var method = FFData.IsPauseMethod()
+        var result = invoke(nativeHandler, MarshallHelper.packageToByteBuffer(method).array())
+        // TODO:
+        return result == 1
+    }
+
     fun checkNativeAvalible(): Unit {
 //        assert(nativeHandler > 0)
     }

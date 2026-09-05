@@ -94,7 +94,7 @@ fun PlayItemScreen(modifier: Modifier = Modifier,playItem:PlayItem,play:(item:Pl
                 Icon(
                     imageVector = if (expanded.value) Icons.Filled.KeyboardArrowDown else Icons.Filled.KeyboardArrowUp,
                     contentDescription = if (expanded.value) {
-                        stringResource(R.string.show_less)
+                        stringResource(R.string.show_playlist)
                     } else {
                         stringResource(R.string.show_more)
                     }
