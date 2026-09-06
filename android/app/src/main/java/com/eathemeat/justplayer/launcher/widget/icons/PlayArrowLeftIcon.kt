@@ -1,14 +1,20 @@
 package com.eathemeat.justplayer.launcher.widget.icons
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.materialPath
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.PathFillType
+import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.StrokeJoin
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.graphics.vector.path
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.eathemeat.justplayer.ui.theme.Black50
 
 /**
  * author:PeterX
@@ -21,32 +27,27 @@ public val PIcons.Play.PlayArrowLeft: ImageVector
             return _playArrowLeft!!
         _playArrowLeft = ImageVector.Builder(
             name = "Play.PlayArrowLeft",
-            defaultWidth = 24.dp,
-            defaultHeight = 24.dp,
-            viewportWidth = 960f,
-            viewportHeight = 960f
+            defaultWidth = 48.dp,
+            defaultHeight = 48.dp,
+            viewportWidth = 48f,
+            viewportHeight = 48f,
         ).apply {
-            materialPath(fillAlpha = 1f, pathFillType =  PathFillType.NonZero) {
-                moveTo(220f,720f)
-                lineTo(220f,240f)
-                lineTo(300f,240f)
-                lineTo(300f,720f)
-                lineTo(220f,720f)
-                close()
-                moveTo(740f,720f)
-                lineTo(380f,480f)
-                lineTo(740f,240f)
-                lineTo(740f,720f)
-                close()
-                moveTo(660f,480f)
-                lineTo(660f,480f)
-                lineTo(660f,480f)
-                lineTo(660f,480f)
-                close()
-                moveTo(660f,570f)
-                lineTo(660f,390f)
-                lineTo(524f,480f)
-                lineTo(660f,570f)
+            path(
+                fill = SolidColor(Color.White),
+                fillAlpha = 1f,
+                stroke = null,
+                strokeAlpha = 1f,
+                strokeLineWidth = 1f,
+                strokeLineCap = StrokeCap.Butt,
+                strokeLineJoin = StrokeJoin.Bevel,
+                strokeLineMiter = 1f,
+                pathFillType = PathFillType.Companion.NonZero,
+            )
+            {
+                moveTo(33.3f, 40.45f)
+                lineTo(7.65f, 24.15f)
+                lineTo(33.3f, 7.85f)
+                verticalLineToRelative(32.6f)
                 close()
 
             }
@@ -60,7 +61,8 @@ fun PlayArrowLeftPreview() {
     Icon(
         imageVector = PIcons.Play.PlayArrowLeft,
         contentDescription = "",
-        modifier = Modifier.size(48.dp)
+        tint = Color.Unspecified,
+        modifier = Modifier.size(48.dp).background(Black50)
     )
 }
 

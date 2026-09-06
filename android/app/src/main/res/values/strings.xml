@@ -9,6 +9,7 @@
     <string name="def_time">00:00:00/00:00:00</string>
     <string name="play_file">PLAY PHONE FILE</string>
     <string name="play_net">PLAY NET FILE</string>
+    <string name="play_menu">PLAY Menu</string>
 
     <string name="play_pre">PLAY Pre Video</string>
     <string name="play_pause">Pause</string>

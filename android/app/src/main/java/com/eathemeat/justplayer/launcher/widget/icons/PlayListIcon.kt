@@ -1,5 +1,6 @@
 package com.eathemeat.justplayer.launcher.widget.icons
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
@@ -30,7 +31,7 @@ public val PIcons.Play.PlayListIcon: ImageVector
             )
                 .apply {
                     path(
-                        fill = SolidColor(Color.Black),
+                        fill = SolidColor(Color.White),
                         fillAlpha = 1f,
                         stroke = null,
                         strokeAlpha = 1f,
@@ -100,7 +101,8 @@ fun PlayListIconPreview() {
     Icon(
         imageVector = PIcons.Play.PlayListIcon,
         contentDescription = "",
-        modifier = Modifier.size(48.dp)
+        modifier = Modifier.size(48.dp).background(Color.Black),
+        tint = Color.Unspecified
     )
 }
 private var _list: ImageVector? = null

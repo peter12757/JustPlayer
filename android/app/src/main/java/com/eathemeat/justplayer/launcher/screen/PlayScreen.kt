@@ -8,6 +8,7 @@ import android.view.SurfaceView
 import android.widget.FrameLayout
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.KeyboardArrowRight
@@ -26,6 +27,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import androidx.constraintlayout.compose.Dimension.Companion.matchParent
+import androidx.constraintlayout.compose.Dimension.Companion.preferredWrapContent
 import androidx.constraintlayout.compose.Visibility
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.eathemeat.justplayer.R
@@ -56,7 +59,7 @@ fun PlayScreen(modifier: Modifier = Modifier, viewModule: MainViewModel = viewMo
 
     ConstraintLayout {
         val context = LocalContext.current
-        val (title, listBtn, control,surface) = createRefs()
+        val (title, list, control,surface) = createRefs()
         // sufaceview
         AndroidView(modifier = Modifier
             .constrainAs(surface) {
@@ -95,29 +98,28 @@ fun PlayScreen(modifier: Modifier = Modifier, viewModule: MainViewModel = viewMo
             top.linkTo(parent.top)
             end.linkTo(parent.end)
             bottom.linkTo(titleBottom)
+            width = matchParent
+            height = preferredWrapContent
         },showPlayList = {
         },showPlayMenu = {
-
         })
-
-
         //control
-
-        var controlTop = createGuidelineFromBottom(0.2f)
+        var controlTop = createGuidelineFromBottom(0.1f)
         PlayControlScreen(modifier = Modifier.constrainAs(control) {
             start.linkTo(parent.start)
             end.linkTo(parent.end)
             bottom.linkTo(parent.bottom)
             top.linkTo(controlTop)
+            width = matchParent
+            height = preferredWrapContent
             visibility = showPlayControl.value
         })
 
         //list
-        PlayListScreen(modifier = Modifier.constrainAs(title) {
+        PlayListScreen(modifier = Modifier.constrainAs(list) {
             start.linkTo(parent.start)
             top.linkTo(parent.top)
             bottom.linkTo(parent.bottom)
-            end.linkTo(listBtn.start)
             width = Dimension.ratio("8:10")
             visibility = Visibility.Gone
 
