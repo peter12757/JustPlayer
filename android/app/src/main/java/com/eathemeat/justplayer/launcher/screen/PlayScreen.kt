@@ -36,11 +36,11 @@ import com.eathemeat.justplayer.launcher.MainViewModel
 import com.eathemeat.justplayer.launcher.TAG
 import com.eathemeat.justplayer.launcher.screen.play.PlayControlScreen
 import com.eathemeat.justplayer.launcher.screen.play.PlayListScreen
+import com.eathemeat.justplayer.launcher.screen.play.PlayMenuScreen
 import com.eathemeat.justplayer.launcher.screen.play.PlayTitleScreen
 import com.eathemeat.justplayer.ui.theme.JustPlayerTheme
 import java.nio.file.WatchEvent
 
-const val TAG = "PlayScreen"
 
 /**
  * author:PeterX
@@ -48,6 +48,7 @@ const val TAG = "PlayScreen"
  */
 @Composable
 fun PlayScreen(modifier: Modifier = Modifier, viewModule: MainViewModel = viewModel()) {
+    val TAG = "PlayScreen"
     val config = LocalConfiguration.current
     if (config.orientation != Configuration.ORIENTATION_LANDSCAPE)
     {
@@ -59,7 +60,7 @@ fun PlayScreen(modifier: Modifier = Modifier, viewModule: MainViewModel = viewMo
 
     ConstraintLayout {
         val context = LocalContext.current
-        val (title, list, control,surface) = createRefs()
+        val (title, list, control,menu,surface) = createRefs()
         // sufaceview
         AndroidView(modifier = Modifier
             .constrainAs(surface) {
@@ -114,19 +115,25 @@ fun PlayScreen(modifier: Modifier = Modifier, viewModule: MainViewModel = viewMo
             height = preferredWrapContent
             visibility = showPlayControl.value
         })
-
         //list
         PlayListScreen(modifier = Modifier.constrainAs(list) {
             start.linkTo(parent.start)
             top.linkTo(parent.top)
             bottom.linkTo(parent.bottom)
-            width = Dimension.ratio("8:10")
+            width = preferredWrapContent
             visibility = Visibility.Gone
-
         }, playItems = viewModule.playItems) {
             Log.d(TAG, "PlayScreen: ${it}")
             return@PlayListScreen 0
         }
+        //menu
+        PlayMenuScreen(modifier = Modifier.constrainAs(list) {
+            end.linkTo(parent.end)
+            top.linkTo(parent.top)
+            bottom.linkTo(parent.bottom)
+            width = preferredWrapContent
+            visibility = Visibility.Gone
+        })
     }
 }
 

@@ -90,7 +90,8 @@ fun PlayItemScreen(modifier: Modifier = Modifier,playItem:PlayItem,play:(item:Pl
                     contentDescription = stringResource(R.string.play)
                 )
             }
-            IconButton(onClick = { expanded.value = !expanded.value }) {
+            IconButton(onClick = { expanded.value = !expanded.value })
+             {
                 Icon(
                     imageVector = if (expanded.value) Icons.Filled.KeyboardArrowDown else Icons.Filled.KeyboardArrowUp,
                     contentDescription = if (expanded.value) {
