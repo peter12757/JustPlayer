@@ -28,9 +28,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.eathemeat.justplayer.R
-import com.eathemeat.justplayer.data.PlayItem
+import com.eathemeat.justplayer.data.FileItem
+import com.eathemeat.justplayer.data.Playitem
+import com.eathemeat.justplayer.launcher.MainViewModel
 import com.eathemeat.justplayer.ui.theme.JustPlayerTheme
+import kotlinx.coroutines.flow.StateFlow
 
 const val TAG = "PlayListScreen"
 /**
@@ -39,19 +43,18 @@ const val TAG = "PlayListScreen"
  */
 @Composable
 fun PlayListScreen(
-    modifier: Modifier = Modifier, playItems: List<PlayItem>,
-    index:Int = -1,
-    play: (item: PlayItem) -> Int
+    modifier: Modifier = Modifier, viewModel: MainViewModel = viewModel(),onclick:(item: Playitem)-> Unit
 ) {
     LazyColumn(modifier = modifier.padding(vertical = 4.dp)) {
-        items(items = playItems) {
-            PlayItemScreen(playItem = it, play = play)
+        items(items = viewModel.playItems.value) { playItem->
+            PlayItemScreen(item = playItem)
         }
     }
 }
 
+
 @Composable
-fun PlayItemScreen(modifier: Modifier = Modifier,playItem:PlayItem,play:(item:PlayItem)->Int) {
+fun PlayItemScreen(modifier: Modifier = Modifier,item: Playitem) {
     Card(colors =  CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer)
     , modifier = modifier.padding(vertical = Dp(4f), horizontal = Dp(8f))
     ) {
@@ -73,7 +76,7 @@ fun PlayItemScreen(modifier: Modifier = Modifier,playItem:PlayItem,play:(item:Pl
                     .padding(12.dp)
             ) {
                 Text(
-                    text = playItem.name, style = MaterialTheme.typography.headlineMedium.copy(
+                    text = item.title, style = MaterialTheme.typography.headlineMedium.copy(
                         fontWeight = FontWeight.ExtraBold
                     )
                 )
@@ -84,7 +87,11 @@ fun PlayItemScreen(modifier: Modifier = Modifier,playItem:PlayItem,play:(item:Pl
                     )
                 }
             }
-            IconButton(onClick = { play(playItem) }) {
+            IconButton(onClick = {
+                Log.d(TAG, "PlayItemScreen: ${item}")
+//                play(item)
+                // TODO: play 
+            }) {
                 Icon(
                     imageVector = Icons.Filled.PlayArrow,
                     contentDescription = stringResource(R.string.play)
@@ -105,25 +112,12 @@ fun PlayItemScreen(modifier: Modifier = Modifier,playItem:PlayItem,play:(item:Pl
     }
 }
 
-val previewPlayList = mutableListOf<PlayItem>().apply {
-    add(PlayItem("1","11111","123123123"))
-    add(PlayItem("2","11111","123123123"))
-    add(PlayItem("3","11111","123123123"))
-    add(PlayItem("4","11111","123123123"))
-    add(PlayItem("5","11111","123123123"))
-    add(PlayItem("6","11111","123123123"))
-    add(PlayItem("7","11111","123123123"))
-    add(PlayItem("8","11111","123123123"))
-    add(PlayItem("9","11111","123123123"))
-}
-
 @Preview(showBackground = true)
 @Composable
 fun PlaylistScreenPreview() {
     JustPlayerTheme {
-        PlayListScreen(playItems = previewPlayList) {
+        PlayListScreen() {
             Log.d(TAG, "PlaylistScreenPreview: ${it}")
-            return@PlayListScreen 0
         }
     }
 }

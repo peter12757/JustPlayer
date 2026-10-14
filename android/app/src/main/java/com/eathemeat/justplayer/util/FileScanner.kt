@@ -1,5 +1,6 @@
 package com.eathemeat.justplayer.util
 
+import com.eathemeat.justplayer.data.FileItem
 import java.io.File
 
 /**
@@ -7,15 +8,6 @@ import java.io.File
  * time: 2026/9/8 9:10
  */
 object DirScanner {
-
-
-    data class FileItem(
-        val name: String,
-        val isDirectory: Boolean,
-        val path: String,
-        val size: Long
-    )
-
     fun listFiles(directory: File): List<FileItem> {
         if (!directory.exists() || !directory.isDirectory) return emptyList()
 
@@ -24,16 +16,9 @@ object DirScanner {
                 name = file.name,
                 isDirectory = file.isDirectory,
                 path = file.absolutePath,
-                size = if (file.isFile) file.length() else 0L
+                size = if (file.isFile) file.length() else 0L,
+                file =file
             )
         } ?: emptyList()
     }
-
-
-
-
-
-
-
-
 }

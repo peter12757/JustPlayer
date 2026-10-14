@@ -1,8 +1,8 @@
 package com.eathemeat.justplayer.launcher
 
 import androidx.lifecycle.ViewModel
-import com.eathemeat.justplayer.data.PlayItem
-import com.eathemeat.justplayer.launcher.screen.play.previewPlayList
+import com.eathemeat.justplayer.data.FileItem
+import com.eathemeat.justplayer.data.Playitem
 import com.eathemeat.justplayer.util.DirScanner
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -18,16 +18,11 @@ class MainViewModel : ViewModel() {
 
     var launcherTime = 5000L
 
-    val _playItems = MutableStateFlow(mutableListOf<DirScanner.FileItem>())
-    val playItems: MutableList<DirScanner.FileItem> = _playItems.asStateFlow()
+    val _playItems = MutableStateFlow(mutableListOf<Playitem>())
+    val playItems: StateFlow<MutableList<Playitem>> = _playItems.asStateFlow()
 
+    init {
 
-    companion object {
-        fun test(): MainViewModel {
-            return MainViewModel().apply {
-                playItems.addAll(previewPlayList)
-            }
-        }
     }
 
 }
