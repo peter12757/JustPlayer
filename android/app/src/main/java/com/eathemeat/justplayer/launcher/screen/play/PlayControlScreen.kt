@@ -98,6 +98,6 @@ fun PlayControlScreen(modifier: Modifier = Modifier, viewModule: MainViewModel =
 @Composable
 fun PlayControlScreenPreview() {
     JustPlayerTheme {
-        PlayControlScreen(modifier = Modifier, viewModule = MainViewModel.test())
+        PlayControlScreen(modifier = Modifier)
     }
 }

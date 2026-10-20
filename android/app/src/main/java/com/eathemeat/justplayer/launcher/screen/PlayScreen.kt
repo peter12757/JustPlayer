@@ -122,9 +122,9 @@ fun PlayScreen(modifier: Modifier = Modifier, viewModule: MainViewModel = viewMo
             bottom.linkTo(parent.bottom)
             width = preferredWrapContent
             visibility = Visibility.Gone
-        }, playItems = viewModule.playItems) {
+        }) {
             Log.d(TAG, "PlayScreen: ${it}")
-            return@PlayListScreen 0
+//            return@PlayListScreen 0
         }
         //menu
         PlayMenuScreen(modifier = Modifier.constrainAs(list) {

@@ -1,13 +1,13 @@
-prefix=/Users/peterxi/work/study/ffbuild/android/arm64-v8a
+prefix=/home/peterx/work/github/JustPlayer/ffbuild/android/linux/android/arm64
 exec_prefix=${prefix}
-libdir=/Users/peterxi/work/study/ffbuild/android/arm64-v8a/libs
-includedir=/Users/peterxi/work/study/ffbuild/android/arm64-v8a/include
+libdir=/home/peterx/work/github/JustPlayer/ffbuild/android/linux/android/arm64/libs
+includedir=/home/peterx/work/github/JustPlayer/ffbuild/android/linux/android/arm64/include
 
 Name: libavcodec
 Description: FFmpeg codec library
-Version: 59.18.100
+Version: 63.1.102
 Requires: 
-Requires.private: libavutil >= 57.17.100
+Requires.private: libavutil >= 61.1.102
 Conflicts:
 Libs: -L${libdir}  -lavcodec 
 Libs.private: -pthread -lm -latomic -lz

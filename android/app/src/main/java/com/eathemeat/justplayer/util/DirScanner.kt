@@ -21,4 +21,19 @@ object DirScanner {
             )
         } ?: emptyList()
     }
+
+    fun listFiles(dirPath: String): List<FileItem> {
+        var directory:File = File(dirPath)
+        if (!directory.exists() || !directory.isDirectory) return emptyList()
+
+        return directory.listFiles()?.map { file ->
+            FileItem(
+                name = file.name,
+                isDirectory = file.isDirectory,
+                path = file.absolutePath,
+                size = if (file.isFile) file.length() else 0L,
+                file =file
+            )
+        } ?: emptyList()
+    }
 }
