@@ -12,10 +12,12 @@ SET(LIBNAME JustPlayer)
 
 set (CMAKE_CXX_STANDARD 11)
 set (CMAKE_C_STANDARD 99)
+set(ANDROID_PLATFORM 24)
 
 
 include(AndroidNdkModules)
 android_ndk_import_module_cpufeatures()
+add_compile_definitions(__STDC_CONSTANT_MACROS)
 add_definitions(-D_ANDROID)
 set(CMAKE_C_FLAGS_RELEASE       "${CMAKE_C_FLAGS_RELEASE}   -fvisibility=hidden")
 set(CMAKE_CXX_FLAGS_RELEASE     "${CMAKE_CXX_FLAGS_RELEASE} -fvisibility=hidden")

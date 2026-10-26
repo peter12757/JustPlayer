@@ -1,0 +1,14 @@
+prefix=/home/peterx/work/github/JustPlayer/ffbuild/android/linux/../../..//prefix/armeabi-v7a
+exec_prefix=${prefix}
+libdir=/home/peterx/work/github/JustPlayer/ffbuild/android/linux/../../..//prefix/armeabi-v7a/lib
+includedir=/home/peterx/work/github/JustPlayer/ffbuild/android/linux/../../..//prefix/armeabi-v7a/include
+
+Name: libswresample
+Description: FFmpeg audio resampling library
+Version: 7.1.102
+Requires: 
+Requires.private: libavutil >= 61.1.102
+Conflicts:
+Libs: -L${libdir}  -lswresample 
+Libs.private: -lm -latomic
+Cflags: -I${includedir}

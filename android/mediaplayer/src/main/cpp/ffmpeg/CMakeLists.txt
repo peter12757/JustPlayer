@@ -10,7 +10,6 @@ message("FFLIB_DIR : ${FFLIB_DIR}")
 
 
 set(FFMPEG_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/ffmpeginc)
-include_directories(${FFMPEG_INCLUDE_DIR})
 
 set(AVCODEC  libavcodec)
 add_library(${AVCODEC} SHARED IMPORTED)
@@ -19,9 +18,9 @@ set_target_properties(${AVCODEC}
         PROPERTIES IMPORTED_LOCATION
         # Provides the path to the library you want to import.
         ${FFLIB_DIR}/${ANDROID_ABI}/libavcodec.so)
-#target_include_directories(${AVCODEC} INTERFACE
-#        ffmpeginc/libavcodec
-#        )
+target_include_directories(${AVCODEC} INTERFACE
+        ffmpeginc/libavcodec
+        )
 
 
 set(AVDEVICE  libavdevice)
@@ -31,7 +30,7 @@ set_target_properties(${AVDEVICE}
         PROPERTIES IMPORTED_LOCATION
         # Provides the path to the library you want to import.
         ${FFLIB_DIR}/${ANDROID_ABI}/libavdevice.so)
-#target_include_directories(${AVDEVICE} INTERFACE ffmpeginc/libavdevice)
+target_include_directories(${AVDEVICE} INTERFACE ffmpeginc/libavdevice)
 
 set(AVFILTER libavfilter)
 add_library(${AVFILTER} SHARED IMPORTED)
@@ -40,7 +39,7 @@ set_target_properties(${AVFILTER}
         PROPERTIES IMPORTED_LOCATION
         # Provides the path to the library you want to import.
         ${FFLIB_DIR}/${ANDROID_ABI}/libavfilter.so)
-#target_include_directories(${AVFILTER} INTERFACE ffmpeginc/libavfilter)
+target_include_directories(${AVFILTER} INTERFACE ffmpeginc/libavfilter)
 
 set(AVFORMAT libavformat)
 add_library(${AVFORMAT} SHARED IMPORTED)
@@ -49,7 +48,7 @@ set_target_properties(${AVFORMAT}
         PROPERTIES IMPORTED_LOCATION
         # Provides the path to the library you want to import.
         ${FFLIB_DIR}/${ANDROID_ABI}/libavformat.so)
-#target_include_directories(${AVFORMAT} INTERFACE ffmpeginc/libavformat)
+target_include_directories(${AVFORMAT} INTERFACE ffmpeginc/libavformat)
 
 set(AVUTIL libavutil)
 add_library(${AVUTIL} SHARED IMPORTED)
@@ -58,7 +57,7 @@ set_target_properties(${AVUTIL}
         PROPERTIES IMPORTED_LOCATION
         # Provides the path to the library you want to import.
         ${FFLIB_DIR}/${ANDROID_ABI}/libavutil.so)
-#target_include_directories(${AVUTIL} INTERFACE ffmpeginc/libavutil)
+target_include_directories(${AVUTIL} INTERFACE ${FFMPEG_INCLUDE_DIR})
 
 set(SWRESAMPLE libswresample)
 add_library(${SWRESAMPLE} SHARED IMPORTED)
@@ -67,7 +66,7 @@ set_target_properties(${SWRESAMPLE}
         PROPERTIES IMPORTED_LOCATION
         # Provides the path to the library you want to import.
         ${FFLIB_DIR}/${ANDROID_ABI}/libswresample.so)
-#target_include_directories(${SWRESAMPLE} INTERFACE ffmpeginc/libswresample)
+target_include_directories(${SWRESAMPLE} INTERFACE ffmpeginc/libswresample)
 
 set(SWSCALE libswscale)
 add_library(${SWSCALE} SHARED IMPORTED)
@@ -76,7 +75,7 @@ set_target_properties(${SWSCALE}
         PROPERTIES IMPORTED_LOCATION
         # Provides the path to the library you want to import.
         ${FFLIB_DIR}/${ANDROID_ABI}/libswscale.so)
-#target_include_directories(${SWSCALE} INTERFACE ffmpeginc/libswscale)
+target_include_directories(${SWSCALE} INTERFACE ffmpeginc/libswscale)
 
 
 AUX_SOURCE_DIRECTORY(player FFlayerSrc)

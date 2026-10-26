@@ -47,7 +47,7 @@ android {
             keepDebugSymbols += arrayOf("*/armeabi-v7a/*.so", "*/arm64-v8a/*.so", "*/x86/*.so", "**.so")
         }
     }
-    ndkVersion = "27.0.11718014 rc1"
+    ndkVersion = "30.0.16248370"
 }
 
 dependencies {

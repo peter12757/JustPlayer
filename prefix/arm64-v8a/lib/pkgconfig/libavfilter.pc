@@ -1,0 +1,14 @@
+prefix=/home/peterx/work/github/JustPlayer/ffbuild/android/linux/../../..//prefix/arm64-v8a
+exec_prefix=${prefix}
+libdir=/home/peterx/work/github/JustPlayer/ffbuild/android/linux/../../..//prefix/arm64-v8a/lib
+includedir=/home/peterx/work/github/JustPlayer/ffbuild/android/linux/../../..//prefix/arm64-v8a/include
+
+Name: libavfilter
+Description: FFmpeg audio/video filtering library
+Version: 12.1.102
+Requires: 
+Requires.private: libswscale >= 10.1.102, libavformat >= 63.1.102, libavcodec >= 63.1.102, libswresample >= 7.1.102, libavutil >= 61.1.102
+Conflicts:
+Libs: -L${libdir}  -lavfilter 
+Libs.private: -pthread -lm -latomic -lz
+Cflags: -I${includedir}
