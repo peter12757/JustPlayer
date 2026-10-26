@@ -36,16 +36,11 @@ extern "C"
 JNIEXPORT jlong
 Java_com_eathemeat_player_ffmpeg_FFPlayer_createPlayer(
         JNIEnv* env,
-        jobject /* this */,
-        jbyteArray jContext) {
+        jobject /* this */) {
     jlong result = 0L;
     ostringstream log;
-    string strData = JniHelper::jbyteArray2str(env, jContext);
-    Unpack up(strData.data(),strData.size());
-    JustContext data;
-    JUST_UNMARSHAL(data,up);
-    MyFFPlayer* player = nullptr;
-    player = new MyFFPlayer();
+    FFPlayer* player = nullptr;
+    player = new FFPlayer();
     result = NativeToJavaPoint(player);
     LOGD("create player %ld,%ld",&player,result);
     return result;
@@ -57,7 +52,7 @@ JNIEXPORT void JNICALL
 Java_com_eathemeat_player_ffmpeg_FFPlayer_destory(JNIEnv *env, jobject thiz,jlong jplayer) {
     LOGD("destory player");
     if(jplayer <0) return;
-    auto* player = reinterpret_cast<MyFFPlayer*>(jplayer);
+    auto* player = reinterpret_cast<FFPlayer*>(jplayer);
     delete player;
 }
 
@@ -66,7 +61,7 @@ JNIEXPORT jint JNICALL
 Java_com_eathemeat_player_ffmpeg_FFPlayer_setSurface(JNIEnv *env, jobject thiz,jlong handle, jobject android_surface) {
     std::ostringstream logOs;
     if(handle <0 || android_surface == nullptr) logOs<< "handle <0 || android_surface == nullptr\n";
-    auto* player = reinterpret_cast<MyFFPlayer*>(handle);
+    auto* player = reinterpret_cast<FFPlayer*>(handle);
     ANativeWindow *native_window = ANativeWindow_fromSurface(env, android_surface);
     if (!native_window) {
         logOs<<"ANativeWindow_fromSurface: failed\n";
@@ -84,60 +79,60 @@ JNIEXPORT jint JNICALL
 Java_com_eathemeat_player_ffmpeg_FFPlayer_invoke(JNIEnv *env, jobject thiz,jlong handle,jbyteArray data) {
     std::ostringstream logOs;
     std::string strData = JniHelper::jbyteArray2str(env, data);
-    JustPackage::Unpack up(strData.data(), strData.size());
-    int ret =-1;
-    auto* player = reinterpret_cast<MyFFPlayer*>(handle);
-    if(player){
-        uint32_t methodId = up.pop_uint32();
-        logOs<<" methodId: "<<methodId;
-        switch (methodId) {
-            case METHOD_SET_DATA_SOURCE: {
-                string source = up.pop_varstr32();
-                logOs<<"setDataSource:"<< source.c_str();
-                ret = player->setDataSource(source);
-            }
-                break;
-            case METHOD_PREPARE: {
-                ret = player->prepare_async();
-            }
-                break;
-            case METHOD_START:{
-                ret = player->start();
-            }
-                break;
-            case METHOD_PAUSE: {
-                ret = player->pause();
-            }
-                break;
-            case METHOD_RESET: {
-                ret = player->reset();
-            }
-                break;
-            case METHOD_SEEK: {
-                long pos = up.pop_uint32();
-                ret = player->seek(pos);
-            }
-                break;
-            case METHOD_GET_POSITION: {
-                ret = player->getPosition();
-            }
-                break;
-            case METHOD_STOP: {
-                ret = player->stop();
-
-            }
-                break;
-            case METHOD_GET_RELEASE: {
-                logOs<< "release player ...";
-                delete player;
-
-            }
-                break;
-            default:
-                logOs<<"cmd is not supported or is not complete!!! cmd is :"<<methodId;
-                break;
-        }
-    }
+//    JustPackage::Unpack up(strData.data(), strData.size());
+//    int ret =-1;
+//    auto* player = reinterpret_cast<MyFFPlayer*>(handle);
+//    if(player){
+//        uint32_t methodId = up.pop_uint32();
+//        logOs<<" methodId: "<<methodId;
+//        switch (methodId) {
+//            case METHOD_SET_DATA_SOURCE: {
+//                string source = up.pop_varstr32();
+//                logOs<<"setDataSource:"<< source.c_str();
+//                ret = player->setDataSource(source);
+//            }
+//                break;
+//            case METHOD_PREPARE: {
+//                ret = player->prepare_async();
+//            }
+//                break;
+//            case METHOD_START:{
+//                ret = player->start();
+//            }
+//                break;
+//            case METHOD_PAUSE: {
+//                ret = player->pause();
+//            }
+//                break;
+//            case METHOD_RESET: {
+//                ret = player->reset();
+//            }
+//                break;
+//            case METHOD_SEEK: {
+//                long pos = up.pop_uint32();
+//                ret = player->seek(pos);
+//            }
+//                break;
+//            case METHOD_GET_POSITION: {
+//                ret = player->getPosition();
+//            }
+//                break;
+//            case METHOD_STOP: {
+//                ret = player->stop();
+//
+//            }
+//                break;
+//            case METHOD_GET_RELEASE: {
+//                logOs<< "release player ...";
+//                delete player;
+//
+//            }
+//                break;
+//            default:
+//                logOs<<"cmd is not supported or is not complete!!! cmd is :"<<methodId;
+//                break;
+//        }
+//    }
     LOGD("ffmpeg_FFPlayer_invoke:method:%s",logOs.str().c_str());
     return ret;
 }
@@ -147,7 +142,7 @@ JNIEXPORT void JNICALL
 Java_com_eathemeat_player_ffmpeg_FFPlayer_setCallBack(JNIEnv *env, jobject thiz, jlong handle,jobject jcallback) {
     std::ostringstream logOs;
     logOs<<"ffmpeg_FFPlayer_setCallBack";
-    auto* player = reinterpret_cast<MyFFPlayer*>(handle);
+    auto* player = reinterpret_cast<FFPlayer*>(handle);
     jobject  callback = env->NewLocalRef(jcallback);
 //    player->setCallBack(env,callback);
     LOGD("%s",logOs.str().c_str());

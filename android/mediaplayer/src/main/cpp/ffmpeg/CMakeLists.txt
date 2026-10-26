@@ -22,16 +22,6 @@ target_include_directories(${AVCODEC} INTERFACE
         ffmpeginc/libavcodec
         )
 
-
-set(AVDEVICE  libavdevice)
-add_library(${AVDEVICE} SHARED IMPORTED)
-set_target_properties(${AVDEVICE}
-        # Specifies the parameter you want to define.
-        PROPERTIES IMPORTED_LOCATION
-        # Provides the path to the library you want to import.
-        ${FFLIB_DIR}/${ANDROID_ABI}/libavdevice.so)
-target_include_directories(${AVDEVICE} INTERFACE ffmpeginc/libavdevice)
-
 set(AVFILTER libavfilter)
 add_library(${AVFILTER} SHARED IMPORTED)
 set_target_properties(${AVFILTER}
