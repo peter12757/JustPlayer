@@ -39,7 +39,7 @@ add_subdirectory(ffmpeg)
 
 
 add_library(${LIBNAME} SHARED
-        JustJniApi.cpp
+        FFPlayerJNI.cpp
         )
 
 #base

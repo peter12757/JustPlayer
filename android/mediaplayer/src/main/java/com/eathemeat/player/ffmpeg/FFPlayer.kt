@@ -16,8 +16,6 @@ class FFPlayer(override var callback: MediaPlayerCallBack?) : IMediaPlayer {
         nativeHandler = createPlayer("".encodeToByteArray())
     }
 
-    
-
     override fun prepareAsyc() {
         Log.d(TAG, "prepareAsyc() called")
         checkNativeAvalible()
@@ -123,7 +121,6 @@ class FFPlayer(override var callback: MediaPlayerCallBack?) : IMediaPlayer {
      */
     external fun createPlayer(context: ByteArray): Long
 
-
     external fun destory(player:Long): Unit
 
 
@@ -144,7 +141,6 @@ class FFPlayer(override var callback: MediaPlayerCallBack?) : IMediaPlayer {
             System.loadLibrary("JustApi")
             System.loadLibrary("swscale")
             System.loadLibrary("avformat")
-            System.loadLibrary("avdevice")
             System.loadLibrary("avfilter")
             System.loadLibrary("avutil")
             System.loadLibrary("avcodec")

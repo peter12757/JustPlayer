@@ -99,7 +99,7 @@ target_include_directories(${LIBNAME} PUBLIC
         player/data
         player/data/audio
         player/data/video
-        player/data/statistic
+#        player/data/statistic
         player/config
         player/audio
         player/decodec)

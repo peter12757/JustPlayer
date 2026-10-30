@@ -6,10 +6,39 @@
 #define JUSTPLAYER_FFPLAYER_H
 
 
+#include "data/FFContext.h"
+#include <string>
+#include "LogUtil.h"
+
+using namespace std;
+
 class FFPlayer {
+protected:
+    FFContext *ctx;
 
 
+public:
+    FFPlayer();
+    virtual ~FFPlayer();
 
+
+    virtual int getState();
+
+    virtual int setDataSource(string source);
+
+    virtual int prepare_async();
+
+    virtual int start();
+
+    virtual int reset();
+
+    virtual int seek(long pos);
+
+    virtual int getPosition();
+
+    virtual int stop();
+
+    virtual int pause();
 };
 
 
