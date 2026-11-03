@@ -8,6 +8,7 @@
 
 #include "data/FFContext.h"
 #include <string>
+#include <android/native_window.h>
 #include "LogUtil.h"
 
 using namespace std;
@@ -39,6 +40,8 @@ public:
     virtual int stop();
 
     virtual int pause();
+
+    virtual int setSurface(ANativeWindow *native_window);
 };
 
 

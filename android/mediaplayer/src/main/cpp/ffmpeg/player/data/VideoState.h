@@ -9,10 +9,7 @@
 #include <avformat.h>
 #include <libavutil/tx.h>
 #include <avfilter.h>
-#include "Clock.h"
-#include "FrameQueue.h"
-#include "Decoder.h"
-#include "AudioParams.h"
+#include "FFdef.h"
 
 class VideoState {
 //    SDL_Thread *read_tid;

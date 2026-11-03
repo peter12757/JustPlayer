@@ -7,10 +7,16 @@
 
 
 #include <avformat.h>
+#include <android/native_window.h>
 #include "FFdef.h"
 
 class FFContext {
-/* options specified by the user */
+
+
+public:
+    ANativeWindow *native_window = nullptr;
+
+    /* options specified by the user */
     const AVInputFormat *file_iformat;
     const char *input_filename;
     const char *window_title;
@@ -96,6 +102,7 @@ class FFContext {
 //            { AV_PIX_FMT_YUYV422,        SDL_PIXELFORMAT_YUY2 },
 //            { AV_PIX_FMT_UYVY422,        SDL_PIXELFORMAT_UYVY },
 //    };
+
 };
 
 

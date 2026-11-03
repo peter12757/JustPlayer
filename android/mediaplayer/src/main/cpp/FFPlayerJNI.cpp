@@ -68,7 +68,7 @@ Java_com_eathemeat_player_ffmpeg_FFPlayer_setSurface(JNIEnv *env, jobject thiz,j
         logOs<<"ANativeWindow_fromSurface: failed\n";
         // do not return fail here;
     }
-//    player->setSurface(native_window);
+    player->setSurface(native_window);
     if (native_window) ANativeWindow_release(native_window);
     LOGD("%s",logOs.str().c_str());
     return 1;   //always ok

@@ -86,3 +86,17 @@ int FFPlayer::pause() {
     LOGD("%s",logOs.str().c_str());
     return 0;
 }
+
+int FFPlayer::setSurface(ANativeWindow *native_window) {
+    std::ostringstream logOs;
+    logOs<<"setSurface->"<<native_window;
+    if (native_window == ctx->native_window) {
+        if (!native_window) {
+            logOs<<"native_window is null reset";
+            videObj->resetAllMediaCodecBuffers();
+        }
+        return 1;
+    }
+    LOGD("%s",logOs.str().c_str());
+
+}
