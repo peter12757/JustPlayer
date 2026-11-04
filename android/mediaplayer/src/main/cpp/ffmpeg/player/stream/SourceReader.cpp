@@ -3,3 +3,14 @@
 //
 
 #include "SourceReader.h"
+
+SourceReader::SourceReader(FFContext *ctx):
+ctx(ctx){
+
+
+
+}
+
+SourceReader::~SourceReader() {
+
+}

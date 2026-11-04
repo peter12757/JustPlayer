@@ -1,87 +1,62 @@
 #request project define
 cmake_minimum_required(VERSION 3.18.0)
 
+add_subdirectory(ffmpeginc)
+
 SET(LIBNAME FFPlayer)
 project(${LIBNAME})
-
 
 SET(FFLIB_DIR ${CMAKE_SOURCE_DIR}/../../../libs)
 message("FFLIB_DIR : ${FFLIB_DIR}")
 
-
 set(FFMPEG_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/ffmpeginc)
+message("CMAKE_CURRENT_SOURCE_DIR : ${CMAKE_CURRENT_SOURCE_DIR}")
 
-set(AVCODEC  libavcodec)
-add_library(${AVCODEC} SHARED IMPORTED)
-set_target_properties(${AVCODEC}
-        # Specifies the parameter you want to define.
-        PROPERTIES IMPORTED_LOCATION
-        # Provides the path to the library you want to import.
-        ${FFLIB_DIR}/${ANDROID_ABI}/libavcodec.so)
-target_include_directories(${AVCODEC} INTERFACE
-        ffmpeginc/libavcodec
-        )
+# 导入动态库
+add_library(avcodec SHARED IMPORTED)
+add_library(avformat SHARED IMPORTED)
+add_library(avutil SHARED IMPORTED)
+add_library(avfilter SHARED IMPORTED)
+add_library(swresample SHARED IMPORTED)
+add_library(swscale SHARED IMPORTED)
 
-set(AVFILTER libavfilter)
-add_library(${AVFILTER} SHARED IMPORTED)
-set_target_properties(${AVFILTER}
+set_target_properties(avcodec PROPERTIES
+        IMPORTED_LOCATION ${FFLIB_DIR}/${ANDROID_ABI}/libavcodec.so
+)
+set_target_properties(avformat PROPERTIES
+        IMPORTED_LOCATION ${FFLIB_DIR}/${ANDROID_ABI}/libavformat.so
+)
+set_target_properties(avutil PROPERTIES
+        IMPORTED_LOCATION ${FFLIB_DIR}/${ANDROID_ABI}/libavutil.so
+)
+set_target_properties(avfilter
         # Specifies the parameter you want to define.
         PROPERTIES IMPORTED_LOCATION
         # Provides the path to the library you want to import.
         ${FFLIB_DIR}/${ANDROID_ABI}/libavfilter.so)
-target_include_directories(${AVFILTER} INTERFACE ffmpeginc/libavfilter)
 
-set(AVFORMAT libavformat)
-add_library(${AVFORMAT} SHARED IMPORTED)
-set_target_properties(${AVFORMAT}
-        # Specifies the parameter you want to define.
-        PROPERTIES IMPORTED_LOCATION
-        # Provides the path to the library you want to import.
-        ${FFLIB_DIR}/${ANDROID_ABI}/libavformat.so)
-target_include_directories(${AVFORMAT} INTERFACE ffmpeginc/libavformat)
-
-set(AVUTIL libavutil)
-add_library(${AVUTIL} SHARED IMPORTED)
-set_target_properties(${AVUTIL}
-        # Specifies the parameter you want to define.
-        PROPERTIES IMPORTED_LOCATION
-        # Provides the path to the library you want to import.
-        ${FFLIB_DIR}/${ANDROID_ABI}/libavutil.so)
-target_include_directories(${AVUTIL} INTERFACE ${FFMPEG_INCLUDE_DIR})
-
-set(SWRESAMPLE libswresample)
-add_library(${SWRESAMPLE} SHARED IMPORTED)
-set_target_properties(${SWRESAMPLE}
+set_target_properties(swresample
         # Specifies the parameter you want to define.
         PROPERTIES IMPORTED_LOCATION
         # Provides the path to the library you want to import.
         ${FFLIB_DIR}/${ANDROID_ABI}/libswresample.so)
-target_include_directories(${SWRESAMPLE} INTERFACE ffmpeginc/libswresample)
 
-set(SWSCALE libswscale)
-add_library(${SWSCALE} SHARED IMPORTED)
-set_target_properties(${SWSCALE}
+set_target_properties(swscale
         # Specifies the parameter you want to define.
         PROPERTIES IMPORTED_LOCATION
         # Provides the path to the library you want to import.
         ${FFLIB_DIR}/${ANDROID_ABI}/libswscale.so)
-target_include_directories(${SWSCALE} INTERFACE ffmpeginc/libswscale)
 
 
 AUX_SOURCE_DIRECTORY(player FFlayerSrc)
 AUX_SOURCE_DIRECTORY(player/data FFlayerSrc)
-AUX_SOURCE_DIRECTORY(player/data/audio FFlayerSrc)
-AUX_SOURCE_DIRECTORY(player/data/mediacodec FFlayerSrc)
-AUX_SOURCE_DIRECTORY(player/data/meta FFlayerSrc)
-AUX_SOURCE_DIRECTORY(player/data/base FFlayerSrc)
-AUX_SOURCE_DIRECTORY(player/data/video FFlayerSrc)
-AUX_SOURCE_DIRECTORY(player/data/statistic FFlayerSrc)
+AUX_SOURCE_DIRECTORY(player/stream FFlayerSrc)
 AUX_SOURCE_DIRECTORY(player/config FFlayerSrc)
 
 
 #audio c
 #aux_source_directory(player/audio FFlayerSrc)
-aux_source_directory(player/decodec FFlayerSrc)
+#aux_source_directory(player/decodec FFlayerSrc)
 
 
 #aux_source_directory(../net FFlayerSrc)
@@ -89,57 +64,27 @@ aux_source_directory(player/decodec FFlayerSrc)
 add_library(${LIBNAME} SHARED ${FFlayerSrc})
 
 target_include_directories(${LIBNAME} PUBLIC
-        ../base/const
-        ../base/statemachine
-        ../base/thread
-        ../base/util
-        ../base/log
-        ../base/protocol
-        player
-        player/data
-        player/data/audio
-        player/data/video
-#        player/data/statistic
-        player/config
-        player/audio
-        player/decodec)
+        player)
 
 target_include_directories(${LIBNAME} PRIVATE
-        ${AVCODEC}
-        ${AVDEVICE}
-        ${AVFILTER}
-        ${AVFORMAT}
-        ${AVUTIL}
-        ${SWRESAMPLE}
-        ${SWSCALE}
-        player
-        player/data
-        player/data/audio
-        player/data/video
-        player/data/base
-        player/data/mediacodec
-        player/data/meta
-        player/data/statistic
-        player/config
-        player/audio
-        player/decodec)
+        ${FFMPEG_INCLUDE_DIR}
+        JustBase
+        player)
 
 
 
-
-MESSAGE("ffplayer dir : ${CMAKE_CURRENT_SOURCE_DIR}")
 
 
 target_link_libraries(${LIBNAME} PRIVATE
+        avformat
+        avcodec
+        avutil
+        avfilter
+        swresample
+        swscale
         ${JustBase}
-        ${AVCODEC}
-        ${AVDEVICE}
-        ${AVFILTER}
-        ${AVFORMAT}
-        ${AVUTIL}
-        ${SWRESAMPLE}
-        ${SWSCALE}
         log
+        android
 )
 
 

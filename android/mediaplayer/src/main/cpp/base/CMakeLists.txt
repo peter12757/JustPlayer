@@ -24,7 +24,7 @@ add_library(${LIBNAME}  SHARED
 
 #include
 target_include_directories(${LIBNAME} PUBLIC
-        ${JustBase_SRC}
+        ${CMAKE_CURRENT_SOURCE_DIR}
         )
 
 target_link_libraries(${LIBNAME} PRIVATE log)

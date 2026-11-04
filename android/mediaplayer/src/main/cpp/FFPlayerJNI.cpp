@@ -2,11 +2,10 @@
 
 #include <android/native_window_jni.h>
 #include <string>
-#include "LogUtil.h"
-#include "JniHelper.h"
+#include "log/LogUtil.h"
+#include "util/JniHelper.h"
 #include "JustData.h"
-#include "base/cpptest/InvokeMain.h"
-#include "common.h"
+#include "const/common.h"
 #include "FFPlayer.h"
 #include "package.h"
 

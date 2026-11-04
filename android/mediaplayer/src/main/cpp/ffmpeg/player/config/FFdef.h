@@ -5,12 +5,13 @@
 #ifndef JUSTPLAYER_FFDEF_H
 #define JUSTPLAYER_FFDEF_H
 
-#include <packet.h>
-#include <libavutil/fifo.h>
-#include <libavutil/channel_layout.h>
-#include <libavutil/samplefmt.h>
-#include <libavutil/frame.h>
-#include <avcodec.h>
+
+#include "libavutil/channel_layout.h"
+#include "libavutil/samplefmt.h"
+#include "libavutil/pixfmt.h"
+#include "libavcodec/avcodec.h"
+#include "libavutil/fifo.h"
+#include "libavfilter/avfilter.h"
 
 #define DEFAULT_HIGH_WATER_MARK_IN_BYTES        (256 * 1024)
 
@@ -93,7 +94,7 @@ typedef struct PacketQueue {
 #define FRAME_QUEUE_SIZE FFMAX(SAMPLE_QUEUE_SIZE, FFMAX(VIDEO_PICTURE_QUEUE_SIZE, SUBPICTURE_QUEUE_SIZE))
 
 
-ypedef struct AudioParams {
+typedef struct AudioParams {
     int freq;
     AVChannelLayout ch_layout;
     enum AVSampleFormat fmt;
@@ -172,7 +173,7 @@ enum ShowMode {
 struct TextureFormatEntry {
     enum AVPixelFormat format;
     int texture_fmt;
-}
+};
 
 
 

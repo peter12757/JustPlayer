@@ -3,3 +3,18 @@
 //
 
 #include "VideoState.h"
+
+VideoState::VideoState() {
+    ytop = 0;
+    xleft = 0;
+
+}
+
+VideoState::~VideoState() {
+
+}
+
+
+
+
+

@@ -6,15 +6,32 @@
 #define JUSTPLAYER_FFCONTEXT_H
 
 
-#include <avformat.h>
 #include <android/native_window.h>
-#include "FFdef.h"
+#include <string>
+#include "config/FFdef.h"
+#include "VideoState.h"
+#include "AudioState.h"
+#include "MediaMeta.h"
+#include "const/common.h"
+
+using namespace std;
 
 class FFContext {
 
 
 public:
     ANativeWindow *native_window = nullptr;
+
+
+    string mURI;
+    VideoState *videoState;
+    AudioState *audioState;
+    MediaMeta *meta;
+
+
+    FFContext(string uri);
+    virtual ~FFContext();
+
 
     /* options specified by the user */
     const AVInputFormat *file_iformat;

@@ -11,7 +11,7 @@
 
 FFPlayer::FFPlayer() {
 //    avformat_network_init();
-    ctx = new FFContext();
+
     std::ostringstream logOs;
     logOs<<"create instance";
     LOGD("%s",logOs.str().c_str());
@@ -32,6 +32,9 @@ int FFPlayer::getState() {
 }
 
 int FFPlayer::setDataSource(string source) {
+    if (!ctx)
+        SafeDelete(ctx);
+    ctx = new FFContext(source);
     std::ostringstream logOs;
     logOs<<"setDataSource"<<source;
     LOGD("%s",logOs.str().c_str());
@@ -47,6 +50,12 @@ int FFPlayer::start() {
 
 int FFPlayer::prepare_async() {
     std::ostringstream logOs;
+    if (!ctx) {
+        logOs<<"err: ctx == null";
+        LOGD("%s",logOs.str().c_str());
+        return -1;
+    }
+
     logOs<<"prepare_async";
     LOGD("%s",logOs.str().c_str());
     return 0;
@@ -93,10 +102,9 @@ int FFPlayer::setSurface(ANativeWindow *native_window) {
     if (native_window == ctx->native_window) {
         if (!native_window) {
             logOs<<"native_window is null reset";
-            videObj->resetAllMediaCodecBuffers();
         }
         return 1;
     }
     LOGD("%s",logOs.str().c_str());
-
+    return 0;
 }

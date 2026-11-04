@@ -44,12 +44,7 @@ add_library(${LIBNAME} SHARED
 
 #base
 target_include_directories(${LIBNAME} PRIVATE
-        base/const
-        base/net
-        base/util
-        base/log
-        base/protocol
-        base/thread
+        JustBase
         )
 
 
