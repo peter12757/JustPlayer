@@ -45,13 +45,12 @@ add_library(${LIBNAME} SHARED
 #base
 target_include_directories(${LIBNAME} PRIVATE
         JustBase
-        )
-
-
-
-target_include_directories(${LIBNAME} PRIVATE
         ffmpeg/player
+        ffmpeg/ffmpeginc
         )
+
+
+
 
 find_library( # 定位 Android 特定的日志支持库并将其路径存储在 log-lib 中
         log-lib

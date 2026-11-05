@@ -130,12 +130,6 @@ class FFPlayer(override var callback: MediaPlayerCallBack?) : IMediaPlayer {
 
     external fun setCallBack(handle:Long,callback:FFMsgHandler): Unit
 
-//    external fun testmain(name:ByteArray,desc:ByteArray):Unit
-//
-//    fun testmain(name:ByteArray,desc:ByteArray):Unit {
-//
-//    }
-
     companion object {
         init {
             System.loadLibrary("JustApi")
@@ -146,7 +140,6 @@ class FFPlayer(override var callback: MediaPlayerCallBack?) : IMediaPlayer {
             System.loadLibrary("avcodec")
             System.loadLibrary("swresample")
             System.loadLibrary("JUSTPlayer")
-            System.loadLibrary("CPPTest")
         }
     }
 }

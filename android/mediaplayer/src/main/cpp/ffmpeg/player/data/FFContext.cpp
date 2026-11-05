@@ -12,6 +12,7 @@ mURI(uri){
     meta = new MediaMeta();
 
     file_iformat = av_find_input_format(mURI.c_str());
+    eof =0;
 
 
 }

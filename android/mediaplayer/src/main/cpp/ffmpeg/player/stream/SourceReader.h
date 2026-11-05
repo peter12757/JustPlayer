@@ -6,20 +6,40 @@
 #define JUSTPLAYER_SOURCEREADER_H
 
 
-#include "../data/FFContext.h"
-#include "FFdef.h"
-#include "../ffmpeginc/libavformat/avformat.h"
+#include "data/FFContext.h"
+#include "config/FFdef.h"
+#include "thread/XThread.h"
+#include "config/FFConfig.h"
 
-class SourceReader {
+
+class SourceReader :XThread {
 public:
     SourceReader(FFContext *ctx);
     virtual ~SourceReader();
 
+
+    //thread
+    void onCreate();
+    virtual void onThreadRun(uint32_t now);
+    void onStop();
+
+    void stopThread();
+    void startThread();
+    void wakeUp();
+    void resetInterval(uint32_t interval);
+    bool isQuit() const;
+    void resetWakeUpEvent();
+    void setMode(ThreadMode mode);
+
+    //callback
+    static int decode_interrupt_cb(void *ctx);
+
+
     FFContext *ctx;
-//    AVFormatContext *ic = nullptr;
-    int st_index[AVMEDIA_TYPE_NB];
+    AVFormatContext *ic = nullptr;
+    array<int,AVMEDIA_TYPE_NB> st_index = {};
     int err,i,ret;
-    AvPacket *pkt = nullptr;
+    AVPacket *pkt = nullptr;
     int64_t streaam_start_time;
     char metadata_descrition[96];
     int pkt_in_play_range = 0;

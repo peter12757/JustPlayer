@@ -7,7 +7,6 @@
 #include "JustData.h"
 #include "const/common.h"
 #include "FFPlayer.h"
-#include "package.h"
 
 using namespace JniHelper;
 
@@ -125,7 +124,7 @@ Java_com_eathemeat_player_ffmpeg_FFPlayer_invoke(JNIEnv *env, jobject thiz,jlong
             case METHOD_RELEASE: {
                 logOs<< "release player ...";
                 delete player;
-                ret = 0
+                ret = 0;
             }
                 break;
             default:
@@ -146,17 +145,4 @@ Java_com_eathemeat_player_ffmpeg_FFPlayer_setCallBack(JNIEnv *env, jobject thiz,
     jobject  callback = env->NewLocalRef(jcallback);
 //    player->setCallBack(env,callback);
     LOGD("%s",logOs.str().c_str());
-}
-
-extern "C"
-JNIEXPORT void JNICALL
-Java_com_eathemeat_player_ffmpeg_FFPlayer_testmain(JNIEnv *env, jobject thiz, jbyteArray name, jbyteArray desc) {
-    std::string nameStr = JniHelper::jbyteArray2str(env,name);
-    std::string descStr = JniHelper::jbyteArray2str(env,desc);
-    std::ostringstream logOs;
-    logOs<<" ffmpeg_FFPlayer_testmain "<<nameStr<<descStr;
-    LOGD("%s",logOs.str().c_str());
-    InvokeMain *test = new InvokeMain();
-    test->createData(nameStr,descStr);
-    SafeDelete(test);
 }

@@ -1,8 +1,6 @@
 #request project define
 cmake_minimum_required(VERSION 3.18.0)
 
-add_subdirectory(ffmpeginc)
-
 SET(LIBNAME FFPlayer)
 project(${LIBNAME})
 
@@ -47,7 +45,6 @@ set_target_properties(swscale
         # Provides the path to the library you want to import.
         ${FFLIB_DIR}/${ANDROID_ABI}/libswscale.so)
 
-
 AUX_SOURCE_DIRECTORY(player FFlayerSrc)
 AUX_SOURCE_DIRECTORY(player/data FFlayerSrc)
 AUX_SOURCE_DIRECTORY(player/stream FFlayerSrc)
@@ -65,10 +62,10 @@ add_library(${LIBNAME} SHARED ${FFlayerSrc})
 
 target_include_directories(${LIBNAME} PUBLIC
         player)
-
+message("FFMPEG_INCLUDE_DIR : ${FFMPEG_INCLUDE_DIR}")
 target_include_directories(${LIBNAME} PRIVATE
         ${FFMPEG_INCLUDE_DIR}
-        JustBase
+        ../base
         player)
 
 

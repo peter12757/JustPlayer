@@ -6,12 +6,32 @@
 #define JUSTPLAYER_FFDEF_H
 
 
+#include "log/LogUtil.h"
+extern "C"{
+#include "libavutil/avutil.h"
+#include "libavcodec/avcodec.h"
+#include "libavformat/avformat.h"
+#include "libavfilter/avfilter.h"
+#include "libavutil/log.h"
+#include "libavutil/dict.h"
 #include "libavutil/channel_layout.h"
 #include "libavutil/samplefmt.h"
-#include "libavutil/pixfmt.h"
-#include "libavcodec/avcodec.h"
+#include "libavutil/bprint.h"
+#include "libavutil/opt.h"
+#include "libavfilter/buffersrc.h"
+#include "libavfilter/buffersink.h"
 #include "libavutil/fifo.h"
-#include "libavfilter/avfilter.h"
+#include "libswscale/swscale.h"
+#include "libavutil/error.h"
+#include "libavutil/frame.h"
+#include "libavutil/dict.h"
+
+#include "libavutil/file.h"
+#include "libavutil/mem.h"
+#include "libavutil/avstring.h"
+#include "libavutil/pixdesc.h"
+#include "libswresample/swresample.h"
+}
 
 #define DEFAULT_HIGH_WATER_MARK_IN_BYTES        (256 * 1024)
 

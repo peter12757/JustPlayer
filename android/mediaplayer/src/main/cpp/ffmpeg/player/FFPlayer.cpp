@@ -3,11 +3,6 @@
 //
 
 #include "FFPlayer.h"
-#include "../ffmpeginc/libavformat/avformat.h"
-#include "common.h"
-
-
-
 
 FFPlayer::FFPlayer() {
 //    avformat_network_init();

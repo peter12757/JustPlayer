@@ -8,8 +8,6 @@
 
 #include "data/FFContext.h"
 #include <string>
-#include <android/native_window.h>
-#include "LogUtil.h"
 
 using namespace std;
 

@@ -7,30 +7,25 @@
 
 #include "FFdef.h"
 
-static void* s_instance;
+
+static void *s_instance;
 
 class FFConfig {
 private:
     FFConfig()
-    :dump_format(true)
-    ,genpts(true)
-    ,seek_by_bytes(-1)
-    ,loop(1)
-    ,autoexit(1)
-    ,audio_codec_name("")
-    ,video_codec_name("")
-    ,subtitle_codec_name(""){
+            : dump_format(true), genpts(true), seek_by_bytes(-1), loop(1), autoexit(1),
+              audio_codec_name(""), video_codec_name(""), subtitle_codec_name("") {
 
     };
+
     ~FFConfig() {
 
     };
 
 
-
 public:
-    static FFConfig* Instant() {
-        if(s_instance)
+    static FFConfig *Instant() {
+        if (s_instance)
             s_instance = new FFConfig();
         return static_cast<FFConfig *>(s_instance);
     };
@@ -43,8 +38,13 @@ public:
 
     //force
     const char *audio_codec_name;
-     const char *subtitle_codec_name;
-     const char *video_codec_name;
+    const char *subtitle_codec_name;
+    const char *video_codec_name;
+
+    //ffmpeg option
+    AVDictionary *sws_dict;
+    AVDictionary *swr_opts;
+    AVDictionary *format_opts, *codec_opts;
 
 
 };
