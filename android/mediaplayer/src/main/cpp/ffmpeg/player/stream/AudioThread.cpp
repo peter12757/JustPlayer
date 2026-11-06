@@ -13,3 +13,15 @@ ctx(pContext){
 AudioThread::~AudioThread() {
 
 }
+
+void AudioThread::onCreate() {
+    XThread::onCreate();
+}
+
+void AudioThread::onThreadRun(uint32_t now) {
+
+}
+
+void AudioThread::onStop() {
+    XThread::onStop();
+}

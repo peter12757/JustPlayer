@@ -9,3 +9,19 @@ XThread("VideoThread", 50, TIMER),
 ctx(pContext){
 
 }
+
+VideoThread::~VideoThread() {
+
+}
+
+void VideoThread::onCreate() {
+    XThread::onCreate();
+}
+
+void VideoThread::onThreadRun(uint32_t now) {
+
+}
+
+void VideoThread::onStop() {
+    XThread::onStop();
+}

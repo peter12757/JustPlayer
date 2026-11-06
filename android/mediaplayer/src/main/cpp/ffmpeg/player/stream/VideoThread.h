@@ -19,9 +19,9 @@ public:
 
 
     //thread
-    void onCreate();
-    virtual void onThreadRun(uint32_t now);
-    void onStop();
+    void onCreate() override;
+    void onThreadRun(uint32_t now) override;
+    void onStop() override;
 
     void stopThread();
     void startThread();

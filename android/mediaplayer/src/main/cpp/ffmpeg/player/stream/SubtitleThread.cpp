@@ -13,3 +13,15 @@ ctx(pContext){
 SubtitleThread::~SubtitleThread() {
 
 }
+
+void SubtitleThread::onCreate() {
+    XThread::onCreate();
+}
+
+void SubtitleThread::onThreadRun(uint32_t now) {
+
+}
+
+void SubtitleThread::onStop() {
+    XThread::onStop();
+}

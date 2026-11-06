@@ -15,13 +15,13 @@ public:
     FFContext *ctx;
 
     SubtitleThread(FFContext *pContext);
-    virtual ~SubtitleThread();
+    ~SubtitleThread();
 
 
     //thread
-    void onCreate();
-    virtual void onThreadRun(uint32_t now);
-    void onStop();
+    void onCreate() override;
+    virtual void onThreadRun(uint32_t now) override;
+    void onStop() override;
 
     void stopThread();
     void startThread();
