@@ -7,6 +7,10 @@
 
 
 #include "data/FFContext.h"
+#include "stream/SourceReader.h"
+#include "stream/VideoThread.h"
+#include "stream/AudioThread.h"
+#include "stream/SubtitleThread.h"
 #include <string>
 
 using namespace std;
@@ -14,6 +18,10 @@ using namespace std;
 class FFPlayer {
 protected:
     FFContext *ctx;
+    SourceReader *sourceReader;
+    VideoThread *videoThread;
+    AudioThread *audioThread;
+    SubtitleThread *subtitleThread;
 
 
 public:

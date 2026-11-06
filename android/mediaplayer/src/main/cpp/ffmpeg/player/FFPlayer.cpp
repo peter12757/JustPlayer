@@ -31,6 +31,10 @@ int FFPlayer::setDataSource(string source) {
         SafeDelete(ctx);
     ctx = new FFContext(source);
     std::ostringstream logOs;
+    sourceReader = new SourceReader(ctx);
+    audioThread = new AudioThread(ctx);
+    videoThread = new VideoThread(ctx);
+    subtitleThread = new SubtitleThread(nullptr, 0, UNCONDITIONAL, ctx);
     logOs<<"setDataSource"<<source;
     LOGD("%s",logOs.str().c_str());
     return 0;

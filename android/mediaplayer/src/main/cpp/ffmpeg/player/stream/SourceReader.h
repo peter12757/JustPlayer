@@ -36,7 +36,6 @@ public:
 
 
     FFContext *ctx;
-    AVFormatContext *ic = nullptr;
     array<int,AVMEDIA_TYPE_NB> st_index = {};
     int err,i,ret;
     AVPacket *pkt = nullptr;
